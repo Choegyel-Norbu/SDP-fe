@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "../assets/css/Custom.css";
-import { FaUser } from "react-icons/fa";
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggle dropdown
   const [close, setClose] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -112,7 +112,10 @@ export default function HomePage() {
           <p className="lead mt-3">
             Post your service request and we’ll take care of the rest.
           </p>
-          <a href="/login" className="cta-btn fw-bold mt-5 d-inline-block">
+          <a
+            href={loggedIn ? "/client" : "/login"}
+            className="cta-btn fw-bold mt-5 d-inline-block"
+          >
             Schedule a Service
           </a>
         </div>

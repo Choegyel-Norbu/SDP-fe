@@ -5,13 +5,20 @@ import { FaUser } from "react-icons/fa";
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggle dropdown
+  const [close, setClose] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
   const toggleMenu = () => {
-    setIsMenuOpen((prevState) => !prevState);
+    setIsMenuOpen(true);
+    setClose(true);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setClose(false);
   };
 
   return (
@@ -42,7 +49,21 @@ export default function HomePage() {
       </header>
 
       <header className="navbar-custom">
-        <nav className="nav-links ms-9" id="navLinks">
+        {close ? (
+          <>
+            <div className="menu-toggle" onClick={closeMenu} id="menuToggle">
+              &#10005;
+            </div>
+          </>
+        ) : (
+          <div className="menu-toggle" onClick={toggleMenu} id="menuToggle">
+            &#9776;
+          </div>
+        )}
+        {/* <div className="menu-toggle" onClick={toggleMenu} id="menuToggle">
+          &#9776;
+        </div> */}
+        <nav className={`nav-links ${isMenuOpen ? "show" : ""}`} id="navLinks">
           <a href="#">Home</a>
           <a href="#">Services</a>
           <a href="#">About</a>
@@ -78,9 +99,9 @@ export default function HomePage() {
             Login/Register
           </a>
         </div>
-        <div class="menu-toggle" id="menuToggle">
+        {/* <div class="menu-toggle" id="menuToggle" onClick={toggleMenu}>
           &#9776;
-        </div>
+        </div> */}
       </header>
 
       <header className="hero">

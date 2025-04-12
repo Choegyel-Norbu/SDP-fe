@@ -294,27 +294,35 @@ button {
 /* ******************* Media ******************** */
 @media (max-width: 576px) {
   .progress-indicator {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-end;
+    display: flex;
+    flex-direction: row;
   }
   .step {
     margin-left: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   .step {
-    margin-bottom: 1rem;
-    text-align: left;
+    margin: 0;
+    text-align: right;
     display: flex;
     align-items: center;
   }
-
   .step::before {
-    margin: 0 0.5rem 0 0;
+    line-height: 10px;
   }
 
   .progress-indicator::before {
     display: none;
+  }
+  .form-section h2 {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    font-size: 20px;
+  }
+  .form-navigation {
+    margin: 0.5rem 0;
   }
 }
 

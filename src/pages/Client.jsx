@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "../assets/css/Client.css";
+import api from "../services/Api";
+import { toast } from "react-toastify";
+import API_BASE_URL from "../config";
+import axios from "axios";
 
 export default function Client() {
+  const [isClientSaved, setIsClientSaved] = useState(false);
+
   const [formData, setFormData] = useState({
-    // Client Details
     firstName: "",
     lastName: "",
-    email: "",
     phone: "",
-
     // Address Details
     street: "",
     city: "",
@@ -22,13 +25,53 @@ export default function Client() {
     description: "",
   });
 
+  //   const [clientAddress, setClientAddress] = useState({
+  //     streetAddress: "",
+  //     subarb: "",
+  //     state: "",
+  //     unit: "",
+  //   });
+
+  const [clientDetail, setClientDetail] = useState({
+    userId: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    addressDTO: {
+      streetAddress: "",
+      subarb: "",
+      state: "",
+      unit: "",
+    },
+  });
+
+  const [clientServiceDetail, setClientServiceDetail] = useState({
+    serviceType: "",
+    description: "",
+    serviceName: "",
+    description: "",
+    repeatFrequency: "",
+    priority: "",
+  });
+
   const [currentSection, setCurrentSection] = useState(1);
 
-  const handleChange = (e) => {
+  const handleChangeDetail = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setClientDetail((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleChangeAddress = (e) => {
+    const { name, value } = e.target;
+    setClientDetail((prev) => ({
+      ...prev,
+      addressDTO: {
+        ...prev.addressDTO,
+        [name]: value,
+      },
     }));
   };
 
@@ -46,7 +89,44 @@ export default function Client() {
     alert("Service request submitted successfully!");
   };
 
-  const submitClientDetailAddress = () => {};
+  const submitClientDetailAddress = async () => {
+    setClientDetail((prev) => ({
+      ...prev,
+      userId: localStorage.getItem("userId"),
+    }));
+    console.log("User id before requesting " + localStorage.getItem("userId"));
+
+    try {
+      const res = await api.post("/addClient", JSON.stringify(clientDetail), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.data === true) {
+        toast.success("Your information has been successfully recorded.", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+      } else {
+        toast.error("Failed to recorded your information", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+        });
+      }
+    } catch (error) {
+      console.error("Error saving client:", error);
+    }
+  };
 
   return (
     <div>
@@ -84,8 +164,8 @@ export default function Client() {
                   <input
                     type="text"
                     name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
+                    value={clientDetail.firstName}
+                    onChange={handleChangeDetail}
                     required
                   />
                 </div>
@@ -94,18 +174,18 @@ export default function Client() {
                   <input
                     type="text"
                     name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
+                    value={clientDetail.lastName}
+                    onChange={handleChangeDetail}
                     required
                   />
                 </div>
                 <div className="form-group">
                   <label>Phone Number:</label>
                   <input
-                    type="tel"
+                    type="text"
                     name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
+                    value={clientDetail.phone}
+                    onChange={handleChangeDetail}
                     required
                   />
                 </div>
@@ -126,19 +206,19 @@ export default function Client() {
                   <label>Street Address</label>
                   <input
                     type="text"
-                    name="street"
-                    value={formData.street}
-                    onChange={handleChange}
+                    name="streetAddress"
+                    value={clientDetail.addressDTO.streetAddress}
+                    onChange={handleChangeAddress}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>City</label>
+                  <label>Subarb</label>
                   <input
                     type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
+                    name="subarb"
+                    value={clientDetail.addressDTO.subarb}
+                    onChange={handleChangeAddress}
                     required
                   />
                 </div>
@@ -147,18 +227,18 @@ export default function Client() {
                   <input
                     type="text"
                     name="state"
-                    value={formData.state}
-                    onChange={handleChange}
+                    value={clientDetail.addressDTO.state}
+                    onChange={handleChangeAddress}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>ZIP Code</label>
+                  <label>Unit</label>
                   <input
                     type="text"
-                    name="zipCode"
-                    value={formData.zipCode}
-                    onChange={handleChange}
+                    name="unit"
+                    value={clientDetail.addressDTO.unit}
+                    onChange={handleChangeAddress}
                     required
                   />
                 </div>

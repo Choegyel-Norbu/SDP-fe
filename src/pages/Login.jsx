@@ -6,9 +6,10 @@ import API_BASE_URL from "../config";
 
 import "../assets/css/Custom.css";
 import { toast } from "react-toastify";
+import { useAuth } from "../services/AuthProvider";
 
 export default function AuthForm() {
-  // Toggle between login and register
+  const { login } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -127,10 +128,7 @@ export default function AuthForm() {
           draggable: true,
           theme: "light",
         });
-
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("userId", res.data.userDTO.id);
-        localStorage.setItem("userEmail", res.data.userDTO.email);
+        login(res.data.token, res.data.userDTO.email, res.data.userDTO.id);
       }
 
       // Reset form after successful registration

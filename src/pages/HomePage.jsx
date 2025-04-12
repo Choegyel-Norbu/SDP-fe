@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/css/Custom.css";
+import { useAuth } from "../services/AuthProvider";
 
 export default function HomePage() {
+  const { loggedIn, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Toggle dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [close, setClose] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [email, setEmail] = useState("");
+  const [logoutDialog, setLogoutDialog] = useState(false);
+
+  useEffect(() => {
+    setEmail(localStorage.getItem("email"));
+  });
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -19,6 +26,17 @@ export default function HomePage() {
   const closeMenu = () => {
     setIsMenuOpen(false);
     setClose(false);
+  };
+
+  const profileDialog = () => {
+    setLogoutDialog((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    console.log("Closing dialog");
+    setLogoutDialog(false);
+    console.log("Calling logout");
+    logout();
   };
 
   return (
@@ -42,9 +60,9 @@ export default function HomePage() {
           </div>
         </div>
         <div className="header_info d-flex flex-row align-items-center">
-          <h7 className="fw-light info_call" style={{ color: "#4d4d4d" }}>
+          <h5 className="fw-light info_call" style={{ color: "#4d4d4d" }}>
             Call 1209 2093 9884
-          </h7>
+          </h5>
         </div>
       </header>
 
@@ -91,17 +109,64 @@ export default function HomePage() {
           <a href="#">Contact</a>
         </nav>
         <div>
-          <span
-            className="fa fa-user"
-            style={{ marginRight: "8px", color: "#ff8000" }}
-          ></span>
-          <a href="/login" className="cus-anchor">
-            Login/Register
-          </a>
+          {!loggedIn && (
+            <>
+              <span
+                className="fa fa-user"
+                style={{ marginRight: "8px", color: "#ff8000" }}
+              ></span>
+              <a href="/login" className="cus-anchor">
+                Login/Register
+              </a>
+            </>
+          )}
+          {loggedIn && (
+            <button
+              onClick={profileDialog}
+              className="logout_icon"
+              style={{ cursor: "pointer", background: "none", border: "none" }}
+            >
+              <span
+                className="fa fa-user"
+                style={{
+                  color: "#66b3ff",
+                  backgroundColor: "#e6e6e6",
+                  borderRadius: "50%",
+                }}
+              ></span>
+            </button>
+          )}
+          <div className={`logout_dialog ${logoutDialog ? "show" : ""}`}>
+            <div
+              style={{
+                padding: "10px 20px",
+                borderBottom: "1px solid #e6e6e6",
+              }}
+            >
+              <span
+                className="fa fa-envelope"
+                style={{
+                  color: "#66b3ff",
+                }}
+              ></span>
+              <span style={{ marginLeft: "12px" }}>{email}</span>
+            </div>
+            <div
+              style={{
+                padding: "10px 20px",
+              }}
+            >
+              <span
+                className="fa fa-sign-out"
+                style={{
+                  color: "#66b3ff",
+                }}
+              ></span>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+            <div></div>
+          </div>
         </div>
-        {/* <div class="menu-toggle" id="menuToggle" onClick={toggleMenu}>
-          &#9776;
-        </div> */}
       </header>
 
       <header className="hero">
@@ -113,8 +178,7 @@ export default function HomePage() {
             Post your service request and we’ll take care of the rest.
           </p>
           <a
-            // href={loggedIn ? "/client" : "/login"}
-            href="/client"
+            href={loggedIn ? "/client" : "/login"}
             className="cta-btn fw-bold mt-5 d-inline-block"
           >
             Schedule a Service

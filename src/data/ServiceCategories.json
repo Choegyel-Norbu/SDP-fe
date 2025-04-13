@@ -7,7 +7,7 @@
         { "name": "Deep/Initial Cleaning", "icon": "✅" },
         { "name": "Regular Home Cleaning", "icon": "✅" },
         { "name": "Spring Cleaning", "icon": "✅" },
-        { "name": "After-party Cleanup", "icon": "❌" }
+        { "name": "After-party Cleanup", "icon": "✅" }
       ]
     },
     {
@@ -17,7 +17,7 @@
         { "name": "Inside Fridge Cleaning", "icon": "✅" },
         { "name": "Kitchen Cabinet Cleaning", "icon": "✅" },
         { "name": "Microwave Cleaning", "icon": "✅" },
-        { "name": "Dishwashing (Wash Dishes)", "icon": "❌" },
+        { "name": "Dishwashing (Wash Dishes)", "icon": "✅" },
         { "name": "Kitchen Surface Sanitizing", "icon": "✅" },
         { "name": "Range Hood & Exhaust Fan Cleaning", "icon": "✅" }
       ]
@@ -28,7 +28,7 @@
         { "name": "Full Bathroom Deep Cleaning", "icon": "✅" },
         { "name": "Shower & Tile Scrub", "icon": "✅" },
         { "name": "Grout Cleaning", "icon": "✅" },
-        { "name": "Mirror and Glass Polishing", "icon": "❌" },
+        { "name": "Mirror and Glass Polishing", "icon": "✅" },
         { "name": "Toilet & Sink Disinfection", "icon": "✅" }
       ]
     },
@@ -37,7 +37,7 @@
       "services": [
         { "name": "Inside Windows", "icon": "✅" },
         { "name": "Sliding Door Glass Cleaning", "icon": "✅" },
-        { "name": "Outside Window Cleaning", "icon": "❌" },
+        { "name": "Outside Window Cleaning", "icon": "✅" },
         { "name": "Mirror Cleaning", "icon": "✅" }
       ]
     },
@@ -48,7 +48,7 @@
         { "name": "Bed Making", "icon": "✅" },
         { "name": "Curtain Dusting", "icon": "✅" },
         { "name": "Ceiling Fan Cleaning", "icon": "✅" },
-        { "name": "Decluttering Service", "icon": "❌" }
+        { "name": "Decluttering Service", "icon": "✅" }
       ]
     },
     {
@@ -57,7 +57,7 @@
         { "name": "Carpet Vacuuming", "icon": "✅" },
         { "name": "Carpet Shampooing", "icon": "✅" },
         { "name": "Floor Sweeping & Mopping", "icon": "✅" },
-        { "name": "Floor Polishing", "icon": "❌" },
+        { "name": "Floor Polishing", "icon": "✅" },
         { "name": "Rug Cleaning", "icon": "✅" }
       ]
     },
@@ -65,7 +65,7 @@
       "category": "Laundry Services",
       "services": [
         { "name": "Wash & Fold Laundry", "icon": "✅" },
-        { "name": "Ironing Clothes", "icon": "❌" },
+        { "name": "Ironing Clothes", "icon": "✅" },
         { "name": "Pick-up & Drop Laundry", "icon": "✅" }
       ]
     },
@@ -75,7 +75,7 @@
         { "name": "Closet Organization", "icon": "✅" },
         { "name": "Pantry Organization", "icon": "✅" },
         { "name": "Garage Cleanup", "icon": "✅" },
-        { "name": "Toy Room or Kids’ Area Organization", "icon": "❌" }
+        { "name": "Toy Room or Kids’ Area Organization", "icon": "✅" }
       ]
     },
     {
@@ -101,14 +101,14 @@
       "services": [
         { "name": "Pet Hair Removal from Furniture", "icon": "✅" },
         { "name": "Pet Area Cleanup", "icon": "✅" },
-        { "name": "Litter Box Cleaning", "icon": "❌" }
+        { "name": "Litter Box Cleaning", "icon": "✅" }
       ]
     },
     {
       "category": "Elderly or Disability Support Services",
       "services": [
         { "name": "Light Cleaning Support", "icon": "✅" },
-        { "name": "Bedside Assistance", "icon": "❌" },
+        { "name": "Bedside Assistance", "icon": "✅" },
         { "name": "Meal Heating & Serving", "icon": "✅" }
       ]
     },
@@ -118,7 +118,7 @@
         { "name": "Trash Bin Cleaning", "icon": "✅" },
         { "name": "Recycling Separation", "icon": "✅" },
         { "name": "Grocery Unpacking", "icon": "✅" },
-        { "name": "Watering Indoor Plants", "icon": "❌" }
+        { "name": "Watering Indoor Plants", "icon": "✅" }
       ]
     }
   ]

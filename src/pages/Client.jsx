@@ -139,6 +139,14 @@ export default function Client() {
     setIsDialogOpen(false);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setClientServiceDetail((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <div>
       <header className="header-container">
@@ -297,6 +305,89 @@ export default function Client() {
           ))}
         </div>
       </div>
+
+      <form onSubmit={handleSubmit} className="service-form">
+        <div className="form-group">
+          <label htmlFor="serviceType">Service Type</label>
+          <select
+            id="serviceType"
+            name="serviceType"
+            value={clientServiceDetail.serviceType}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a service type</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="maintenance">Maintenance</option>
+            <option value="repair">Repair</option>
+            <option value="consultation">Consultation</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="serviceName">Service Name</label>
+          <input
+            type="text"
+            id="serviceName"
+            name="serviceName"
+            value={clientServiceDetail.serviceName}
+            onChange={handleChange}
+            placeholder="e.g. Deep Cleaning, Electrical Repair"
+            required
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="repeatFrequency">Repeat Frequency</label>
+            <select
+              id="repeatFrequency"
+              name="repeatFrequency"
+              value={clientServiceDetail.repeatFrequency}
+              onChange={handleChange}
+            >
+              <option value="">Select frequency</option>
+              <option value="once">One-time</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Fortnightly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="priority">Priority</label>
+            <select
+              id="priority"
+              name="priority"
+              value={clientServiceDetail.priority}
+              onChange={handleChange}
+            >
+              <option value="">Select priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            value={clientServiceDetail.description}
+            onChange={handleChange}
+            rows="4"
+            placeholder="Please describe the service you need in detail..."
+            required
+          />
+        </div>
+
+        <button type="submit" className="submit-btn">
+          Submit Request
+        </button>
+      </form>
 
       {/* Dialog Box */}
       <div

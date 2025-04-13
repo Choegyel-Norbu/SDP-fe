@@ -299,6 +299,16 @@
   .header_info h5 {
     display: none;
   }
+  .container_info {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0 0 0.5rem;
+    /* padding: 1rem 2rem 0 2rem; */
+    border-bottom: 2px solid #f2f2f2;
+    background-color: #fff;
+  }
 }
 
 @media (max-width: 992px) {
@@ -373,7 +383,7 @@
   }
 
   /*  ******************** Update the existing media query ******************** */
-  @media (max-width: 991.98px) {
+  @media (max-width: 992px) {
     /* Bootstrap's lg breakpoint - 1px */
     .image-section {
       height: 40vh;

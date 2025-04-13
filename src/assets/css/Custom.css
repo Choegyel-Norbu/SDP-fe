@@ -1,7 +1,14 @@
 .container_info {
-  height: 6rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem 0 2rem;
   border-bottom: 2px solid #f2f2f2;
   background-color: #fff;
+}
+.container_info h5 {
+  font-size: 14px;
 }
 .header_logo {
   height: 100%;
@@ -14,12 +21,39 @@
 }
 .logo_desc h3 {
   color: #ff8000;
+  margin: 0;
+}
+.logo_desc p {
+  margin: 0;
 }
 .info_call {
   padding-inline: 1.5rem;
   padding-block: 0.5rem;
   border: 1px solid #b3b3b3;
   border-radius: 10px;
+}
+.operating-hours .label {
+  color: #7f8c8d;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+.contact-container {
+  display: flex;
+  flex-direction: row;
+}
+.operating-hours .hour {
+  color: #fff;
+  font-weight: 500;
+  font-size: 12px;
+  background-color: #ff8000;
+  margin: 0 1rem;
+  padding: 3px 2rem;
+}
+.operating-hours {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Custom Navbar */
@@ -258,8 +292,27 @@
   background-color: #005f92;
 }
 
-/* Responsive adjustments */
+/* ==================== */
+/* RESPONSIVE STYLES */
+/* ==================== */
+@media (max-width: 553px) {
+  .header_info h5 {
+    display: none;
+  }
+}
+
 @media (max-width: 992px) {
+  .container_info {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: center; /* Optional: center text */
+  }
+  .contact-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .image-section {
     height: 40vh;
   }

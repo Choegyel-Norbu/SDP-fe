@@ -48,6 +48,7 @@ export default function Client() {
   });
 
   const [clientServiceDetail, setClientServiceDetail] = useState({
+    userId: "",
     serviceType: "",
     description: "",
     serviceName: "",
@@ -147,6 +148,54 @@ export default function Client() {
     }));
   };
 
+  const handleServiceRequestSubmit = async () => {
+    setClientServiceDetail((prev) => ({
+      ...prev,
+      userId: localStorage.getItem("userId"),
+    }));
+
+    try {
+      const res = await api.post(
+        "/serviceRequest",
+        JSON.stringify(clientServiceDetail),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (res.status === 200) {
+        toast.success(
+          "Your service request has been received successfully. We will notify you with further updates shortly.",
+          {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+          }
+        );
+      } else {
+        toast.error(
+          "Oops! We couldn’t submit your request. Please try again or contact support if the issue persists.",
+          {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error saving client:", error);
+    }
+  };
+
   return (
     <div>
       <header className="header-container">
@@ -175,7 +224,7 @@ export default function Client() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form>
             {currentSection === 1 && (
               <div className="form-section">
                 <h2>Client Information</h2>
@@ -290,7 +339,7 @@ export default function Client() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="service-form">
+      <form className="service-form">
         <div className="form-group">
           <label htmlFor="serviceType">Service Type</label>
           <select
@@ -331,10 +380,10 @@ export default function Client() {
               onChange={handleChange}
             >
               <option value="">Select frequency</option>
-              <option value="once">One-time</option>
-              <option value="weekly">Weekly</option>
-              <option value="biweekly">Fortnightly</option>
-              <option value="monthly">Monthly</option>
+              <option value="Once">One-time</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Fortnightly">Fortnightly</option>
+              <option value="Monthly">Monthly</option>
             </select>
           </div>
 
@@ -348,9 +397,8 @@ export default function Client() {
             >
               <option value="">Select priority</option>
               <option value="low">Low</option>
-              <option value="medium">Medium</option>
+              <option value="normal">Normal</option>
               <option value="high">High</option>
-              <option value="urgent">Urgent</option>
             </select>
           </div>
         </div>
@@ -368,10 +416,11 @@ export default function Client() {
           />
         </div>
 
-        <button type="submit" className="submit-btn">
+        <button onClick={handleServiceRequestSubmit} className="submit-btn">
           Submit Request
         </button>
       </form>
+
       <div className="service-request-container">
         <h2 className="service-title">Categories</h2>
         <div className="categories-grid">

@@ -42,7 +42,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <header className="container-fluid container_info d-flex flex-row justify-content-around">
+      <header className="container_info">
         <div className="header_logo d-flex flex-row align-items-center">
           <img
             src="https://i.pinimg.com/736x/71/b3/e4/71b3e4159892bb319292ab3b76900930.jpg"
@@ -60,10 +60,20 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-        <div className="header_info d-flex flex-row align-items-center">
-          <h5 className="fw-light info_call" style={{ color: "#4d4d4d" }}>
-            Call 1209 2093 9884
-          </h5>
+        <div className="contact-container">
+          <div className="operating-hours">
+            <p className="label">Operating Hours</p>
+            <div>
+              <p className="hour">Mon–Fri: 8AM–6PM</p>
+              <p className="hour">Sat: 9AM–2PM</p>
+            </div>
+          </div>
+
+          <div className="header_info d-flex flex-row align-items-center">
+            <h5 className="fw-light info_call" style={{ color: "#4d4d4d" }}>
+              📞 0411 598 851
+            </h5>
+          </div>
         </div>
       </header>
 

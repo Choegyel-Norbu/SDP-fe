@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/css/Custom.css";
 import { useAuth } from "../services/AuthProvider";
+import { motion } from "framer-motion";
 
 export default function HomePage() {
   const { loggedIn, logout } = useAuth();
@@ -178,7 +179,8 @@ export default function HomePage() {
             Post your service request and we’ll take care of the rest.
           </p>
           <a
-            href={loggedIn ? "/client" : "/login"}
+            // href={loggedIn ? "/client" : "/login"}
+            href="/client"
             className="cta-btn fw-bold mt-5 d-inline-block"
           >
             Schedule a Service

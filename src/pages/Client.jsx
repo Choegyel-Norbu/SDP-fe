@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/css/Client.css";
 import api from "../services/Api";
 import { toast } from "react-toastify";
+import categoriesData from "../data/ServiceCategories.json";
 import API_BASE_URL from "../config";
 import axios from "axios";
 
 export default function Client() {
   const [isClientSaved, setIsClientSaved] = useState(false);
+  const [serviceForm, setServiceForm] = useState(false);
+  const [serviceCategories, setServiceCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    setServiceCategories(categoriesData.serviceCategories);
+  });
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -24,13 +33,6 @@ export default function Client() {
     time: "",
     description: "",
   });
-
-  //   const [clientAddress, setClientAddress] = useState({
-  //     streetAddress: "",
-  //     subarb: "",
-  //     state: "",
-  //     unit: "",
-  //   });
 
   const [clientDetail, setClientDetail] = useState({
     userId: "",
@@ -128,6 +130,15 @@ export default function Client() {
     }
   };
 
+  const handleCardClick = (category) => {
+    setSelectedCategory(category);
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <div>
       <header className="header-container">
@@ -144,120 +155,172 @@ export default function Client() {
           </p>
         </div>
       </header>
-      <div className="service-request-container">
-        <div className="progress-indicator">
-          <div className={`step ${currentSection >= 1 ? "active" : ""}`}>
-            Client Details
+
+      {serviceForm && (
+        <div className="service-request-container">
+          <div className="progress-indicator">
+            <div className={`step ${currentSection >= 1 ? "active" : ""}`}>
+              Client Details
+            </div>
+            <div className={`step ${currentSection >= 2 ? "active" : ""}`}>
+              Address
+            </div>
           </div>
-          <div className={`step ${currentSection >= 2 ? "active" : ""}`}>
-            Address
-          </div>
+
+          <form onSubmit={handleSubmit}>
+            {currentSection === 1 && (
+              <div className="form-section">
+                <h2>Client Information</h2>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>First Name:</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={clientDetail.firstName}
+                      onChange={handleChangeDetail}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Last Name:</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={clientDetail.lastName}
+                      onChange={handleChangeDetail}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Phone Number:</label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={clientDetail.phone}
+                      onChange={handleChangeDetail}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-navigation">
+                  <button
+                    type="button"
+                    className="next-btn"
+                    onClick={handleNext}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {currentSection === 2 && (
+              <div className="form-section">
+                <h2>Address</h2>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>Street Address</label>
+                    <input
+                      type="text"
+                      name="streetAddress"
+                      value={clientDetail.addressDTO.streetAddress}
+                      onChange={handleChangeAddress}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Subarb</label>
+                    <input
+                      type="text"
+                      name="subarb"
+                      value={clientDetail.addressDTO.subarb}
+                      onChange={handleChangeAddress}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>State</label>
+                    <input
+                      type="text"
+                      name="state"
+                      value={clientDetail.addressDTO.state}
+                      onChange={handleChangeAddress}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Unit</label>
+                    <input
+                      type="text"
+                      name="unit"
+                      value={clientDetail.addressDTO.unit}
+                      onChange={handleChangeAddress}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-navigation">
+                  <button
+                    type="button"
+                    className="back-btn"
+                    onClick={handleBack}
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    className="next-btn"
+                    onClick={submitClientDetailAddress}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            )}
+          </form>
         </div>
+      )}
 
-        <form onSubmit={handleSubmit}>
-          {currentSection === 1 && (
-            <div className="form-section">
-              <h2>Client Information</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label>First Name:</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={clientDetail.firstName}
-                    onChange={handleChangeDetail}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Last Name:</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={clientDetail.lastName}
-                    onChange={handleChangeDetail}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Phone Number:</label>
-                  <input
-                    type="text"
-                    name="phone"
-                    value={clientDetail.phone}
-                    onChange={handleChangeDetail}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-navigation">
-                <button type="button" className="next-btn" onClick={handleNext}>
-                  Next
-                </button>
-              </div>
+      <div className="service-request-container">
+        <h2 className="service-title">Categories</h2>
+        <div className="categories-grid">
+          {serviceCategories.map((item, index) => (
+            <div
+              key={index}
+              className="category-card"
+              onClick={() => handleCardClick(item)}
+              onMouseEnter={() => setSelectedCategory(item)}
+            >
+              <h4 className="category-title">{item.category}</h4>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
 
-          {currentSection === 2 && (
-            <div className="form-section">
-              <h2>Address</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label>Street Address</label>
-                  <input
-                    type="text"
-                    name="streetAddress"
-                    value={clientDetail.addressDTO.streetAddress}
-                    onChange={handleChangeAddress}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Subarb</label>
-                  <input
-                    type="text"
-                    name="subarb"
-                    value={clientDetail.addressDTO.subarb}
-                    onChange={handleChangeAddress}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>State</label>
-                  <input
-                    type="text"
-                    name="state"
-                    value={clientDetail.addressDTO.state}
-                    onChange={handleChangeAddress}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Unit</label>
-                  <input
-                    type="text"
-                    name="unit"
-                    value={clientDetail.addressDTO.unit}
-                    onChange={handleChangeAddress}
-                    required
-                  />
-                </div>
+      {/* Dialog Box */}
+      <div
+        className={`dialog-backdrop ${isDialogOpen ? "open" : ""}`}
+        onClick={closeDialog}
+      >
+        <div className="dialog-box" onClick={(e) => e.stopPropagation()}>
+          <button className="close-btn" onClick={closeDialog}>
+            ×
+          </button>
+          {selectedCategory && (
+            <>
+              <h3>{selectedCategory.category}</h3>
+              <div className="services-list">
+                {selectedCategory.services.map((service, i) => (
+                  <div key={i} className="service-item">
+                    <span className="service-icon">{service.icon}</span>
+                    <span className="service-name">{service.name}</span>
+                  </div>
+                ))}
               </div>
-              <div className="form-navigation">
-                <button type="button" className="back-btn" onClick={handleBack}>
-                  Back
-                </button>
-                <button
-                  type="button"
-                  className="next-btn"
-                  onClick={submitClientDetailAddress}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
+            </>
           )}
-        </form>
+        </div>
       </div>
 
       <footer className="footer">

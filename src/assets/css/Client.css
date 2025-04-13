@@ -451,6 +451,12 @@ button {
   }
 }
 
+@media (max-width: 631px) {
+  .service-form {
+    margin-top: 2rem;
+  }
+}
+
 @media (max-width: 817px) {
   .service-form-container {
     padding: 1rem;

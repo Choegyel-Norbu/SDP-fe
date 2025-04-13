@@ -290,22 +290,6 @@ export default function Client() {
         </div>
       )}
 
-      <div className="service-request-container">
-        <h2 className="service-title">Categories</h2>
-        <div className="categories-grid">
-          {serviceCategories.map((item, index) => (
-            <div
-              key={index}
-              className="category-card"
-              onClick={() => handleCardClick(item)}
-              onMouseEnter={() => setSelectedCategory(item)}
-            >
-              <h4 className="category-title">{item.category}</h4>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit} className="service-form">
         <div className="form-group">
           <label htmlFor="serviceType">Service Type</label>
@@ -388,6 +372,21 @@ export default function Client() {
           Submit Request
         </button>
       </form>
+      <div className="service-request-container">
+        <h2 className="service-title">Categories</h2>
+        <div className="categories-grid">
+          {serviceCategories.map((item, index) => (
+            <div
+              key={index}
+              className="category-card"
+              onClick={() => handleCardClick(item)}
+              onMouseEnter={() => setSelectedCategory(item)}
+            >
+              <h4 className="category-title">{item.category}</h4>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Dialog Box */}
       <div

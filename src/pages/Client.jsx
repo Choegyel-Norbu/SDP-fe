@@ -3,42 +3,42 @@ import "../assets/css/Client.css";
 import api from "../services/Api";
 import { toast } from "react-toastify";
 import categoriesData from "../data/ServiceCategories.json";
-import API_BASE_URL from "../config";
-import axios from "axios";
+import Footer from "./Footer";
+import { Alert } from "@mui/material";
+import { useAuth } from "../services/AuthProvider";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useLocation } from "react-router-dom";
 
 export default function Client() {
-  const [isClientSaved, setIsClientSaved] = useState(false);
+  const { userId } = useAuth();
   const [serviceForm, setServiceForm] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     setServiceCategories(categoriesData.serviceCategories);
-  });
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    // Address Details
-    street: "",
-    city: "",
-    state: "",
-    zipCode: "",
-
-    // Service Details
-    serviceType: "",
-    date: "",
-    time: "",
-    description: "",
-  });
+  }, []);
 
   const [clientDetail, setClientDetail] = useState({
     userId: "",
     firstName: "",
     lastName: "",
-    phone: "",
+    phoneNumber: "",
     addressDTO: {
       streetAddress: "",
       subarb: "",
@@ -52,9 +52,9 @@ export default function Client() {
     serviceType: "",
     description: "",
     serviceName: "",
-    description: "",
     repeatFrequency: "",
     priority: "",
+    requestedDate: "",
   });
 
   const [currentSection, setCurrentSection] = useState(1);
@@ -86,35 +86,25 @@ export default function Client() {
     setCurrentSection((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Service request submitted successfully!");
-  };
-
   const submitClientDetailAddress = async () => {
-    setClientDetail((prev) => ({
-      ...prev,
-      userId: localStorage.getItem("userId"),
-    }));
+    const payload = {
+      ...clientDetail,
+      userId: userId,
+    };
     console.log("User id before requesting " + localStorage.getItem("userId"));
 
     try {
-      const res = await api.post("/addClient", JSON.stringify(clientDetail), {
+      const res = await api.post("/addClient", payload, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      if (res.data === true) {
-        toast.success("Your information has been successfully recorded.", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
+      if (res.status === 200) {
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 6000);
+        setServiceForm(true);
       } else {
         toast.error("Failed to recorded your information", {
           position: "top-center",
@@ -149,34 +139,21 @@ export default function Client() {
   };
 
   const handleServiceRequestSubmit = async () => {
-    setClientServiceDetail((prev) => ({
-      ...prev,
-      userId: localStorage.getItem("userId"),
-    }));
+    console.log("UserId from client page@@@- " + userId);
 
     try {
-      const res = await api.post(
-        "/serviceRequest",
-        JSON.stringify(clientServiceDetail),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const payload = {
+        ...clientServiceDetail,
+        userId: userId,
+        requestedDate: clientServiceDetail.requestedDate.toISOString(), // Convert to ISO format
+      };
+      const res = await api.post("/serviceRequest", JSON.stringify(payload));
       if (res.status === 200) {
-        toast.success(
-          "Your service request has been received successfully. We will notify you with further updates shortly.",
-          {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "light",
-          }
-        );
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 6000);
+        console.log("Successfully submitted");
       } else {
         toast.error(
           "Oops! We couldn’t submit your request. Please try again or contact support if the issue persists.",
@@ -198,13 +175,26 @@ export default function Client() {
 
   return (
     <div>
+      {showAlert && (
+        <Alert variant="filled" severity="success">
+          Here is a gentle confirmation that your action was successful.
+        </Alert>
+      )}
+
       <header className="header-container">
         <div>
           <h1 className="title">Service Request Form</h1>
-          <p className="subtitle">
-            Please provide your details so we can arrange the right service for
-            you.
-          </p>
+          {serviceForm ? (
+            <p className="subtitle">
+              Share the service details to help us deliver exactly what you're
+              looking for.
+            </p>
+          ) : (
+            <p className="subtitle">
+              Please provide your details so we can arrange the right service
+              for you.
+            </p>
+          )}
         </div>
         <div className="contact-help">
           <p>
@@ -213,7 +203,118 @@ export default function Client() {
         </div>
       </header>
 
-      {serviceForm && (
+      {/* {serviceForm && (
+        
+      )} */}
+
+      {serviceForm ? (
+        <form className="service-form">
+          <div className="form-group">
+            <label htmlFor="serviceType">Service Type</label>
+            <select
+              id="serviceType"
+              name="serviceType"
+              value={clientServiceDetail.serviceType}
+              onChange={handleChange}
+            >
+              <option value="">Select a service type</option>
+              <option value="cleaning">Cleaning</option>
+              <option value="maintenance">Maintenance</option>
+              <option value="repair">Repair</option>
+              <option value="consultation">Consultation</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="serviceName">Service Name</label>
+            <input
+              type="text"
+              id="serviceName"
+              name="serviceName"
+              value={clientServiceDetail.serviceName}
+              onChange={handleChange}
+              placeholder="e.g. Deep Cleaning, Electrical Repair"
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="repeatFrequency">Repeat Frequency</label>
+              <select
+                id="repeatFrequency"
+                name="repeatFrequency"
+                value={clientServiceDetail.repeatFrequency}
+                onChange={handleChange}
+              >
+                <option value="">Select frequency</option>
+                <option value="Once">One-time</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Fortnightly">Fortnightly</option>
+                <option value="Monthly">Monthly</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="priority">Priority</label>
+              <select
+                id="priority"
+                name="priority"
+                value={clientServiceDetail.priority}
+                onChange={handleChange}
+              >
+                <option value="">Select priority</option>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={clientServiceDetail.description}
+              onChange={handleChange}
+              rows="4"
+              placeholder="Please describe the service you need in detail..."
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Select date and time</label>
+            <DatePicker
+              id="serviceDateTime"
+              selected={clientServiceDetail.requestedDate}
+              onChange={(date) =>
+                setClientServiceDetail((prev) => ({
+                  ...prev,
+                  requestedDate: date,
+                }))
+              }
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15} // 15-minute intervals
+              dateFormat="MMMM d, yyyy h:mm aa"
+              minDate={new Date()} // Prevent past dates
+              placeholderText="Select date and time"
+              className="date-picker-input"
+              required
+            />
+          </div>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleServiceRequestSubmit();
+            }}
+            className="submit-btn"
+          >
+            Submit Request
+          </button>
+        </form>
+      ) : (
         <div className="service-request-container">
           <div className="progress-indicator">
             <div className={`step ${currentSection >= 1 ? "active" : ""}`}>
@@ -236,7 +337,6 @@ export default function Client() {
                       name="firstName"
                       value={clientDetail.firstName}
                       onChange={handleChangeDetail}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -246,17 +346,15 @@ export default function Client() {
                       name="lastName"
                       value={clientDetail.lastName}
                       onChange={handleChangeDetail}
-                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Phone Number:</label>
                     <input
                       type="text"
-                      name="phone"
-                      value={clientDetail.phone}
+                      name="phoneNumber"
+                      value={clientDetail.phoneNumber}
                       onChange={handleChangeDetail}
-                      required
                     />
                   </div>
                 </div>
@@ -283,7 +381,6 @@ export default function Client() {
                       name="streetAddress"
                       value={clientDetail.addressDTO.streetAddress}
                       onChange={handleChangeAddress}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -293,7 +390,6 @@ export default function Client() {
                       name="subarb"
                       value={clientDetail.addressDTO.subarb}
                       onChange={handleChangeAddress}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -303,7 +399,6 @@ export default function Client() {
                       name="state"
                       value={clientDetail.addressDTO.state}
                       onChange={handleChangeAddress}
-                      required
                     />
                   </div>
                   <div className="form-group">
@@ -313,7 +408,6 @@ export default function Client() {
                       name="unit"
                       value={clientDetail.addressDTO.unit}
                       onChange={handleChangeAddress}
-                      required
                     />
                   </div>
                 </div>
@@ -339,89 +433,7 @@ export default function Client() {
         </div>
       )}
 
-      <form className="service-form">
-        <div className="form-group">
-          <label htmlFor="serviceType">Service Type</label>
-          <select
-            id="serviceType"
-            name="serviceType"
-            value={clientServiceDetail.serviceType}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select a service type</option>
-            <option value="cleaning">Cleaning</option>
-            <option value="maintenance">Maintenance</option>
-            <option value="repair">Repair</option>
-            <option value="consultation">Consultation</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="serviceName">Service Name</label>
-          <input
-            type="text"
-            id="serviceName"
-            name="serviceName"
-            value={clientServiceDetail.serviceName}
-            onChange={handleChange}
-            placeholder="e.g. Deep Cleaning, Electrical Repair"
-            required
-          />
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="repeatFrequency">Repeat Frequency</label>
-            <select
-              id="repeatFrequency"
-              name="repeatFrequency"
-              value={clientServiceDetail.repeatFrequency}
-              onChange={handleChange}
-            >
-              <option value="">Select frequency</option>
-              <option value="Once">One-time</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Fortnightly">Fortnightly</option>
-              <option value="Monthly">Monthly</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="priority">Priority</label>
-            <select
-              id="priority"
-              name="priority"
-              value={clientServiceDetail.priority}
-              onChange={handleChange}
-            >
-              <option value="">Select priority</option>
-              <option value="low">Low</option>
-              <option value="normal">Normal</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            value={clientServiceDetail.description}
-            onChange={handleChange}
-            rows="4"
-            placeholder="Please describe the service you need in detail..."
-            required
-          />
-        </div>
-
-        <button onClick={handleServiceRequestSubmit} className="submit-btn">
-          Submit Request
-        </button>
-      </form>
-
-      <div className="service-request-container">
+      <div className="service-request-container" id="services">
         <h2 className="service-title">Categories</h2>
         <div className="categories-grid">
           {serviceCategories.map((item, index) => (
@@ -462,55 +474,7 @@ export default function Client() {
         </div>
       </div>
 
-      <footer className="footer">
-        <div className="footer-container">
-          <div className="footer-section">
-            <h4>About Us</h4>
-            <p>
-              We’re a service delivery platform dedicated to helping people get
-              trusted local services easily and reliably.
-            </p>
-          </div>
-
-          <div className="footer-section">
-            <h4>Quick Links</h4>
-            <ul>
-              <li>
-                <a href="/services">Services</a>
-              </li>
-              <li>
-                <a href="/pricing">Pricing</a>
-              </li>
-              <li>
-                <a href="/about">About</a>
-              </li>
-              <li>
-                <a href="/contact">Contact</a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h4>Contact</h4>
-            <p>📍 Perth, Australia</p>
-            <p>📞 +61 123 456 789</p>
-            <p>📧 support@sdp.com</p>
-          </div>
-
-          <div className="footer-section">
-            <h4>Subscribe</h4>
-            <p>Stay updated with our latest services and offers.</p>
-            <form className="newsletter-form">
-              <input type="email" placeholder="Your email" required />
-              <button type="submit">Subscribe</button>
-            </form>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} SDP | All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

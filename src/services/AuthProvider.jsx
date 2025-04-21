@@ -26,7 +26,9 @@ export const AuthProvider = ({ children }) => {
   const login = (token, email, userid) => {
     if (!token) return;
     localStorage.setItem("token", token);
+    console.log("Setting user Id ....... ");
     localStorage.setItem("userId", userid);
+    console.log("User id set @@@- " + localStorage.getItem("userId"));
     localStorage.setItem("email", email);
     setLoggedIn(true);
     setEmail(email);

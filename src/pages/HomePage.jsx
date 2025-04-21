@@ -1,19 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../assets/css/Custom.css";
 import { useAuth } from "../services/AuthProvider";
-import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
+import { Alert } from "@mui/material";
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const { loggedIn, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [close, setClose] = useState(false);
   const [email, setEmail] = useState("");
   const [logoutDialog, setLogoutDialog] = useState(false);
+  const footerRef = useRef(null);
+  const dialogRef = useRef();
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   });
+
+  useEffect(() => {
+    setShowAlert(loggedIn);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 6000);
+  }, []);
+
+  const handleClickOutside = (e) => {
+    // Check if the clicked element is inside the logout dialog
+    const isInsideDialog = e.target.closest(".logout_dialog");
+
+    // Check if the click was on the profile button (to prevent immediate closing)
+    const isProfileButton = e.target.closest(".logout_icon");
+
+    // Close the dialog if clicking outside (and not on the profile button)
+    if (!isInsideDialog && !isProfileButton) {
+      setLogoutDialog(false);
+    }
+
+    if (dialogRef.current && !dialogRef.current.contains(e.target)) {
+      setLogoutDialog(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const scrollToFooter = () => {
+    footerRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -42,6 +83,11 @@ export default function HomePage() {
 
   return (
     <div>
+      {showAlert && (
+        <Alert variant="filled" severity="success">
+          Here is a gentle confirmation that your action was successful.
+        </Alert>
+      )}
       <header className="container_info">
         <div className="header_logo d-flex flex-row align-items-center">
           <img
@@ -69,7 +115,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="header_info d-flex flex-row align-items-center">
+          <div
+            className="header_info d-flex flex-row align-items-center"
+            onClick={scrollToFooter}
+            style={{ cursor: "pointer" }}
+          >
             <h5 className="fw-light info_call" style={{ color: "#4d4d4d" }}>
               📞 0411 598 851
             </h5>
@@ -94,9 +144,9 @@ export default function HomePage() {
         </div> */}
         <nav className={`nav-links ${isMenuOpen ? "show" : ""}`} id="navLinks">
           <a href="#">Home</a>
-          <a href="#">Services</a>
-          <a href="#">About</a>
-          <div
+          <a href="/client#services">Services</a>
+          <a href="/about">About</a>
+          {/* <div
             className="cus-nav-item"
             onClick={toggleDropdown}
             onMouseEnter={() => setIsDropdownOpen(true)} // Show dropdown on hover
@@ -116,8 +166,10 @@ export default function HomePage() {
                 </li>
               </ul>
             )}
-          </div>
-          <a href="#">Contact</a>
+          </div> */}
+          <a href="#" onClick={scrollToFooter}>
+            Contact
+          </a>
         </nav>
         <div>
           {!loggedIn && (
@@ -147,13 +199,11 @@ export default function HomePage() {
               ></span>
             </button>
           )}
-          <div className={`logout_dialog ${logoutDialog ? "show" : ""}`}>
-            <div
-              style={{
-                padding: "10px 20px",
-                borderBottom: "1px solid #e6e6e6",
-              }}
-            >
+          <div
+            className={`logout_dialog ${logoutDialog ? "show" : ""}`}
+            ref={dialogRef}
+          >
+            <div>
               <span
                 className="fa fa-envelope"
                 style={{
@@ -162,11 +212,16 @@ export default function HomePage() {
               ></span>
               <span style={{ marginLeft: "12px" }}>{email}</span>
             </div>
-            <div
-              style={{
-                padding: "10px 20px",
-              }}
-            >
+            <div>
+              <span
+                className="fa fa-chart-line"
+                style={{
+                  color: "#66b3ff",
+                }}
+              ></span>
+              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+            </div>
+            <div>
               <span
                 className="fa fa-sign-out"
                 style={{
@@ -175,7 +230,6 @@ export default function HomePage() {
               ></span>
               <button onClick={handleLogout}>Logout</button>
             </div>
-            <div></div>
           </div>
         </div>
       </header>
@@ -189,8 +243,8 @@ export default function HomePage() {
             Post your service request and we’ll take care of the rest.
           </p>
           <a
-            // href={loggedIn ? "/client" : "/login"}
-            href="/client"
+            href={loggedIn ? "/client" : "/login"}
+            // href="/client"
             className="cta-btn fw-bold mt-5 d-inline-block"
           >
             Schedule a Service
@@ -350,7 +404,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section py-5">
+      <section className="section py-5" ref={footerRef}>
         <div className="container">
           <h2 className="text-center fw-bold mb-4">
             Frequently Asked Questions
@@ -396,15 +450,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="bg-dark text-white text-center py-4">
-        <div className="container">
-          <p>&copy; 2025 Your Company Name. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer ref={footerRef} />
 
-      <style jsx>{`
+      <style>{`
         .hero {
-          height: 60vh;
+          height: 70vh;
           background-image: url("https://res.akamaized.net/domain/image/upload/t_web/v1722308766/HighRes_Image_13_-_1V59FL1JZ59_Red_Hill_House_Studio_by_zuzananicholas_-_Photography_by_Clinton_Weaver_rrhvyq.jpg");
           background-size: cover; /* This makes the image cover the entire container */
           background-position: center; /* This centers the image */

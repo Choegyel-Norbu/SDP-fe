@@ -1,0 +1,173 @@
+/* Base Styles */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #ff8000;
+  --accent-color: #00b8e6;
+  --text-color: #333;
+  --text-light: #777;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.dashboard h2 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+/* Client Card */
+.client-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.client-basic-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.client-name h2 {
+  font-size: 1.8rem;
+  color: var(--dark-color);
+  margin-bottom: 0.5rem;
+}
+
+.client-id {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Info Items */
+.info-item {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--primary-color);
+  min-width: 120px;
+}
+
+.info-value {
+  color: var(--dark-color);
+}
+
+/* Sections */
+.address-section,
+.map-coordinates {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.address-section h3,
+.map-coordinates h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+/* Grid Layouts */
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.coordinates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Map Placeholder */
+.map-placeholder {
+  height: 200px;
+  background-color: #e9ecef;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.table-container {
+  /* width: 90%; */
+  margin: auto auto;
+  overflow-x: auto;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .client-basic-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .avatar-placeholder {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .coordinates-grid {
+    grid-template-columns: 1fr;
+  }
+}

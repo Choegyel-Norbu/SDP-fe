@@ -1,0 +1,221 @@
+/* Base Styles */
+.transactions-container {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #333;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-section h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.search-bar input {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 250px;
+  font-size: 14px;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #eee;
+  margin: 15px 0;
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.transactions-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-btn,
+.add-patient-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.add-patient-btn {
+  background-color: #4361ee;
+  border: 1px solid #4361ee;
+  color: white;
+}
+
+.add-patient-btn:hover {
+  background-color: #3a56d4;
+}
+
+/* Table Styles */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.patients-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.patients-table th {
+  background-color: #f8f9fa;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.patients-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.patients-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.completed {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.status-badge.pending {
+  color: #ffc107;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.action-container {
+  position: relative;
+  display: inline-block;
+}
+
+.action-icons {
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+}
+
+.action_modal {
+  position: absolute; /* or relative depending on layout */
+  top: 1.5rem;
+  right: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 160px;
+  padding: 8px 0;
+  z-index: 10;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.action_modal ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.action_modal li {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* For the last row only */
+tr:last-child .action_modal {
+  bottom: 100%;
+  top: auto;
+  /* margin-bottom: 5px; */
+}
+
+/* Remove the default positioning for last item */
+tr:last-child .action_modal {
+  top: auto;
+}
+
+.action_modal li:hover {
+  background-color: #f0f4f8;
+  color: #1976d2;
+}
+
+/* Table Footer */
+.table-footer {
+  font-size: 14px;
+  color: #6c757d;
+  text-align: right;
+  margin-top: 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .filter-btn,
+  .add-patient-btn {
+    width: 48%;
+  }
+}

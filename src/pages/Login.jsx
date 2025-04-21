@@ -7,12 +7,15 @@ import API_BASE_URL from "../config";
 import "../assets/css/Custom.css";
 import { toast } from "react-toastify";
 import { useAuth } from "../services/AuthProvider";
+import Footer from "./Footer";
+import { Alert } from "@mui/material";
 
 export default function AuthForm() {
   const { login } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -107,27 +110,17 @@ export default function AuthForm() {
       const res = await axios.post(`${API_BASE_URL}/${endpoint}`, payload);
 
       if (isRegister && res.status === 201) {
-        toast.success("Registration successful!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 6000);
       }
 
       if (res.status === 200) {
-        toast.success("Login successful!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 6000);
         login(res.data.token, res.data.userDTO.email, res.data.userDTO.id);
       }
 
@@ -170,159 +163,169 @@ export default function AuthForm() {
   };
 
   return (
-    <div className="container-fluid login-container">
-      <div className="row g-0">
-        {/* Right Side - Hero Image */}
-        <div className="col-lg-6 image-section">
-          <div className="image-overlay">
-            <div className="overlay-text">
-              <h3 className="display-5 fw-bold mb-3">
-                Simplify Household Services
-              </h3>
-              <p className="lead">
-                Connect with trusted professionals for all your home needs
-              </p>
+    <>
+      {showAlert && (
+        <Alert variant="filled" severity="success">
+          Here is a gentle confirmation that your action was successful.
+        </Alert>
+      )}
+      <div className="container-fluid login-container">
+        <div className="row g-0">
+          {/* Right Side - Hero Image */}
+          <div className="col-lg-6 image-section">
+            <div className="image-overlay">
+              <div className="overlay-text">
+                <h3 className="display-5 fw-bold mb-3">
+                  Simplify Household Services
+                </h3>
+                <p className="lead">
+                  Connect with trusted professionals for all your home needs
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="col-lg-6 form-section">
-          <div className="login-form">
-            <h2 className="text-center mb-4">
-              {isRegister ? "Create Account" : "Login"}
-            </h2>
+          <div className="col-lg-6 form-section">
+            <div className="login-form">
+              <h2 className="text-center mb-4">
+                {isRegister ? "Create Account" : "Login"}
+              </h2>
 
-            {apiError && <div className="alert alert-danger">{apiError}</div>}
+              {apiError && <div className="alert alert-danger">{apiError}</div>}
 
-            <form onSubmit={handleSubmit}>
-              {/* Email Field */}
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                />
-                {errors.email && (
-                  <div className="invalid-feedback">{errors.email}</div>
-                )}
-              </div>
-
-              {/* Password Field with Toggle */}
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  Password
-                </label>
-                <div className="input-group">
+              <form onSubmit={handleSubmit}>
+                {/* Email Field */}
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email address
+                  </label>
                   <input
-                    type={showPassword ? "text" : "password"}
+                    type="email"
                     className={`form-control ${
-                      errors.password ? "is-invalid" : ""
+                      errors.email ? "is-invalid" : ""
                     }`}
-                    id="password"
-                    name="password"
-                    value={formData.password}
+                    id="email"
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
-                    placeholder={
-                      isRegister ? "Create a password" : "Enter your password"
-                    }
+                    placeholder="Enter your email"
                   />
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary eye-btn"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {/* {showPassword ? <FaEyeSlash /> : <FaEye />} */}
-                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-                  </button>
+                  {errors.email && (
+                    <div className="invalid-feedback">{errors.email}</div>
+                  )}
                 </div>
-                {errors.password && (
-                  <div className="invalid-feedback">{errors.password}</div>
-                )}
-                {isRegister && (
-                  <small className="text-muted">
-                    Must be at least 8 characters
-                  </small>
-                )}
-              </div>
 
-              {/* Confirm Password Field with Toggle (only for register) */}
-              {isRegister && (
-                <div className="mb-4">
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Confirm Password
+                {/* Password Field with Toggle */}
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
                   </label>
                   <div className="input-group">
                     <input
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showPassword ? "text" : "password"}
                       className={`form-control ${
-                        errors.confirmPassword ? "is-invalid" : ""
+                        errors.password ? "is-invalid" : ""
                       }`}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
+                      id="password"
+                      name="password"
+                      value={formData.password}
                       onChange={handleChange}
-                      placeholder="Re-enter your password"
+                      placeholder={
+                        isRegister ? "Create a password" : "Enter your password"
+                      }
                     />
                     <button
                       type="button"
-                      className="btn btn-outline-secondary"
-                      onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
-                      }
+                      className="btn btn-outline-secondary eye-btn"
+                      onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      {/* {showPassword ? <FaEyeSlash /> : <FaEye />} */}
+                      {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                     </button>
                   </div>
-                  {errors.confirmPassword && (
-                    <div className="invalid-feedback">
-                      {errors.confirmPassword}
-                    </div>
+                  {errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
+                  )}
+                  {isRegister && (
+                    <small className="text-muted">
+                      Must be at least 8 characters
+                    </small>
                   )}
                 </div>
-              )}
 
-              {/* Submit Button */}
-              <div className="d-grid mb-3">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting
-                    ? isRegister
-                      ? "Registering..."
-                      : "Logging in..."
-                    : isRegister
-                    ? "Register"
-                    : "Login"}
-                </button>
-              </div>
+                {/* Confirm Password Field with Toggle (only for register) */}
+                {isRegister && (
+                  <div className="mb-4">
+                    <label htmlFor="confirmPassword" className="form-label">
+                      Confirm Password
+                    </label>
+                    <div className="input-group">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        className={`form-control ${
+                          errors.confirmPassword ? "is-invalid" : ""
+                        }`}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Re-enter your password"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                    {errors.confirmPassword && (
+                      <div className="invalid-feedback">
+                        {errors.confirmPassword}
+                      </div>
+                    )}
+                  </div>
+                )}
 
-              <div className="text-center">
-                <p className="mb-0">
-                  {isRegister
-                    ? "Already have an account? "
-                    : "Don't have an account? "}
+                {/* Submit Button */}
+                <div className="d-grid mb-3">
                   <button
-                    type="button"
-                    className="btn btn-link p-0"
-                    onClick={() => toggleRegister()}
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={isSubmitting}
                   >
-                    {isRegister ? "Sign in" : "Register now"}
+                    {isSubmitting
+                      ? isRegister
+                        ? "Registering..."
+                        : "Logging in..."
+                      : isRegister
+                      ? "Register"
+                      : "Login"}
                   </button>
-                </p>
-              </div>
-            </form>
+                </div>
+
+                <div className="text-center">
+                  <p className="mb-0">
+                    {isRegister
+                      ? "Already have an account? "
+                      : "Don't have an account? "}
+                    <button
+                      type="button"
+                      className="btn btn-link p-0"
+                      onClick={() => toggleRegister()}
+                    >
+                      {isRegister ? "Sign in" : "Register now"}
+                    </button>
+                  </p>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

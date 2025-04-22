@@ -11,12 +11,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useLocation } from "react-router-dom";
 
 export default function Client() {
-  const { userId } = useAuth();
+  const { userId, loggedIn } = useAuth();
+
   const [serviceForm, setServiceForm] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [clientDetailSet, setClientDetailSet] = useState(false);
 
   const location = useLocation();
 
@@ -31,6 +33,13 @@ export default function Client() {
   }, [location]);
 
   useEffect(() => {
+    const clientSetCall = async () => {
+      const res = await api.get(`/clientSet/${userId}`);
+      if (res.data) setClientDetailSet(true);
+    };
+
+    clientSetCall();
+
     setServiceCategories(categoriesData.serviceCategories);
   }, []);
 
@@ -176,7 +185,11 @@ export default function Client() {
   return (
     <div>
       {showAlert && (
-        <Alert variant="filled" severity="success">
+        <Alert
+          variant="filled"
+          severity="success"
+          style={{ position: "fixed" }}
+        >
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
@@ -207,7 +220,7 @@ export default function Client() {
         
       )} */}
 
-      {serviceForm ? (
+      {clientDetailSet ? (
         <form className="service-form">
           <div className="form-group">
             <label htmlFor="serviceType">Service Type</label>

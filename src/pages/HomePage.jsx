@@ -16,17 +16,26 @@ export default function HomePage() {
   const footerRef = useRef(null);
   const dialogRef = useRef();
   const [showAlert, setShowAlert] = useState(false);
+  const [loginState, setLoginState] = useState(false);
+  const hasShownAlert = useRef(false); // Track if alert was shown
 
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   });
 
   useEffect(() => {
-    setShowAlert(loggedIn);
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 6000);
-  }, []);
+    console.log("Triggered effect --------------");
+    if (loggedIn && !hasShownAlert.current) {
+      setShowAlert(true);
+      hasShownAlert.current = true; // Mark as shown
+
+      const timer = setTimeout(() => {
+        setShowAlert(false);
+      }, 6000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loggedIn]); // Only depend on `loggedIn`
 
   const handleClickOutside = (e) => {
     // Check if the clicked element is inside the logout dialog
@@ -84,7 +93,10 @@ export default function HomePage() {
   return (
     <div>
       {showAlert && (
-        <Alert variant="filled" severity="success">
+        // <Alert variant="filled" severity="success">
+        //   Here is a gentle confirmation that your action was successful.
+        // </Alert>
+        <Alert severity="success">
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}

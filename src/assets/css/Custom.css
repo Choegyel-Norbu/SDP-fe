@@ -230,9 +230,9 @@
   height: fit-content;
 }
 /* Main container */
-.login-container {
+/* .login-container {
   height: 100vh;
-}
+} */
 
 /* Form section */
 .form-section {
@@ -250,7 +250,7 @@
 
 /* Image section */
 .image-section {
-  background-image: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+  background-image: url("https://archipro.com.au/images/cdn-images/width%3D3840%2Cquality%3D80/images/s1/article/misc/Gentlemans-Bungalow-Glenelg-East-Yvonne-Svensson-Architect.jpeg/eyJlZGl0cyI6W3sidHlwZSI6InpwY2YiLCJvcHRpb25zIjp7ImJveFdpZHRoIjoyODgwLCJib3hIZWlnaHQiOjE4NTYsIndhdGVybWFyayI6eyJ0ZXh0IjoiWXZvbm5lIFN2ZW5zc29uIEFyY2hpdGVjdCIsImZvbnRTaXplIjoyNH0sImNvdmVyIjp0cnVlLCJ6b29tV2lkdGgiOjI4ODAsInNjcm9sbFBvc1giOjUwLCJzY3JvbGxQb3NZIjo1MCwiYmFja2dyb3VuZCI6InJnYig3NCwxNDAsMjI3KSIsImZpbHRlciI6MH19LHsidHlwZSI6ImZsYXR0ZW4iLCJvcHRpb25zIjp7ImJhY2tncm91bmQiOiIjZmZmZmZmIn19XSwicXVhbGl0eSI6ODcsInRvRm9ybWF0IjoianBnIn0=");
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -263,7 +263,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 82, 154, 0.6);
+  background-color: rgba(0, 82, 154, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,9 +289,10 @@
 }
 
 .btn-primary {
-  background-color: #0077b6;
+  background-color: #ff8000 !important;
   border: none;
   border-radius: 8px;
+  color: #fff;
   padding: 12px;
   font-weight: 500;
 }

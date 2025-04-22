@@ -293,7 +293,7 @@ export default function AuthForm() {
                 <div className="d-grid mb-3">
                   <button
                     type="submit"
-                    className="btn btn-primary"
+                    className=" btn-primary"
                     disabled={isSubmitting}
                   >
                     {isSubmitting

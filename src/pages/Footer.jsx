@@ -14,7 +14,7 @@ const Footer = forwardRef((props, ref) => {
             </p>
           </div>
 
-          <div className="footer-section">
+          {/* <div className="footer-section">
             <h3>Quick Links</h3>
             <ul>
               <li>
@@ -30,9 +30,9 @@ const Footer = forwardRef((props, ref) => {
                 <a href="#">Contact</a>
               </li>
             </ul>
-          </div>
+          </div> */}
 
-          <div className="footer-section">
+          {/* <div className="footer-section">
             <h3>Legal</h3>
             <ul>
               <li>
@@ -45,13 +45,13 @@ const Footer = forwardRef((props, ref) => {
                 <a href="#">Cookie Policy</a>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="footer-section">
             <h3>Contact Us</h3>
             <ul>
               <li>📍 Perth, Australia</li>
-              <li>📞 +61 123 456 789</li>
+              <li>📞 0411 598 851</li>
               <li>✉️ support@sdp.com</li>
             </ul>
           </div>

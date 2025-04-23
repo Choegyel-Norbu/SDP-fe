@@ -121,7 +121,12 @@ export default function AuthForm() {
         setTimeout(() => {
           setShowAlert(false);
         }, 6000);
-        login(res.data.token, res.data.userDTO.email, res.data.userDTO.id);
+        login(
+          res.data.token,
+          res.data.userDTO.email,
+          res.data.userDTO.id,
+          res.data.userDTO.role
+        );
       }
 
       // Reset form after successful registration

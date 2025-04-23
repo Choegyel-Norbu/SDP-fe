@@ -231,10 +231,21 @@ export default function Client() {
               onChange={handleChange}
             >
               <option value="">Select a service type</option>
-              <option value="cleaning">Cleaning</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="repair">Repair</option>
-              <option value="consultation">Consultation</option>
+              <option value="cleaning">General Cleaning</option>
+              <option value="maintenance">Kitchen Services</option>
+              <option value="maintenance">Bathroom Services</option>
+              <option value="maintenance">Window & Glasses</option>
+              <option value="maintenance">Bedroom & Living Area</option>
+              <option value="maintenance">Floor & Carpet</option>
+              <option value="maintenance">Laundry Services</option>
+              <option value="maintenance">Organization Help</option>
+              <option value="maintenance">Garden & Outdoor</option>
+              <option value="maintenance">Wall & Fixture</option>
+              <option value="maintenance">Pet Related</option>
+              <option value="maintenance">
+                Elderly or Disability Support Service
+              </option>
+              <option value="maintenance">Miscellaneous</option>
             </select>
           </div>
 

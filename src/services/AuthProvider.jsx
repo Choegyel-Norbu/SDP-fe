@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
   });
 
   const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
+  const [role, setRole] = useState(() => localStorage.getItem("role") || "");
+
   const [userId, setUserId] = useState(
     () => localStorage.getItem("userId") || ""
   );
@@ -23,16 +25,18 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = (token, email, userid) => {
+  const login = (token, email, userid, role) => {
     if (!token) return;
     localStorage.setItem("token", token);
     console.log("Setting user Id ....... ");
     localStorage.setItem("userId", userid);
     console.log("User id set @@@- " + localStorage.getItem("userId"));
     localStorage.setItem("email", email);
+    localStorage.setItem("role", role);
     setLoggedIn(true);
     setEmail(email);
     setUserId(userid);
+    setRole(role);
     navigate("/");
   };
 
@@ -47,7 +51,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, login, logout, email, userId }}>
+    <AuthContext.Provider
+      value={{ loggedIn, login, logout, email, userId, role }}
+    >
       {children}
     </AuthContext.Provider>
   );

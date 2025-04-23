@@ -25,17 +25,7 @@ export default function HomePage() {
 
   useEffect(() => {
     console.log("Triggered effect --------------");
-    if (loggedIn && !hasShownAlert.current) {
-      setShowAlert(true);
-      hasShownAlert.current = true; // Mark as shown
-
-      const timer = setTimeout(() => {
-        setShowAlert(false);
-      }, 6000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [loggedIn]); // Only depend on `loggedIn`
+  }, [loggedIn]);
 
   const handleClickOutside = (e) => {
     // Check if the clicked element is inside the logout dialog

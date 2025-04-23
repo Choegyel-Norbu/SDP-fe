@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import "../assets/css/Dashboard.css";
 import AdminDashboard from "./AdminDashboard";
 import ClientDashboard from "./ClientDashboard";
+import { useAuth } from "../services/AuthProvider";
 
 export default function Dashboard() {
-  const [role, setRole] = useState("Admi");
+  const { role } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
 
@@ -20,6 +21,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    console.log("User role " + role);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -55,7 +57,7 @@ export default function Dashboard() {
         </div>
       </nav>
       <div onClick={() => setShowMobileNav(false)}>
-        {role === "Admin" ? <AdminDashboard /> : <ClientDashboard />}
+        {role === "ADMIN" ? <AdminDashboard /> : <ClientDashboard />}
       </div>
     </div>
   );

@@ -4,10 +4,11 @@ import { useAuth } from "../services/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { Alert } from "@mui/material";
+import api from "../services/Api";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { loggedIn, logout } = useAuth();
+  const { loggedIn, logout, userId } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [close, setClose] = useState(false);
@@ -18,14 +19,24 @@ export default function HomePage() {
   const [showAlert, setShowAlert] = useState(false);
   const [loginState, setLoginState] = useState(false);
   const hasShownAlert = useRef(false); // Track if alert was shown
+  const [clientDetailSet, setClientDetailSet] = useState(false);
 
   useEffect(() => {
     setEmail(localStorage.getItem("email"));
   });
 
   useEffect(() => {
-    console.log("Triggered effect --------------");
-  }, [loggedIn]);
+    console.log("Triggered effect HOMEPAGE --------------");
+    const clientSetCall = async () => {
+      console.log("Inside client set -------");
+      const res = await api.get(`/clientSet/${userId}`);
+      if (res.data) setClientDetailSet(true);
+
+      console.log("Client set status - " + res.data);
+    };
+
+    clientSetCall();
+  }, []);
 
   const handleClickOutside = (e) => {
     // Check if the clicked element is inside the logout dialog
@@ -221,7 +232,13 @@ export default function HomePage() {
                   color: "#66b3ff",
                 }}
               ></span>
-              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
+              <button
+                onClick={() =>
+                  navigate(clientDetailSet ? "/dashboard" : "/client")
+                }
+              >
+                Dashboard
+              </button>
             </div>
             <div>
               <span

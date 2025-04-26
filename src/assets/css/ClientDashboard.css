@@ -19,7 +19,7 @@
 
 body {
   background-color: #f5f7fa;
-  color: var(--dark-color);
+  color: var(--text-color);
   line-height: 1.6;
 }
 
@@ -29,28 +29,23 @@ body {
   margin: 2rem auto;
   padding: 0 1rem;
 }
+
 .dashboard h2 {
   font-size: 1rem;
   margin-bottom: 1rem;
   font-weight: 600;
 }
 
-.dashboard-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.dashboard-header h1 {
-  color: var(--primary-color);
-  font-size: 2.5rem;
-  font-weight: 600;
+.table-title {
+  font-size: 1.5rem !important;
+  margin: 1.5rem 0;
 }
 
 /* Client Card */
 .client-card {
   background: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
   padding: 2rem;
   margin-bottom: 2rem;
 }
@@ -78,77 +73,268 @@ body {
 }
 
 .client-name h2 {
-  font-size: 1.8rem;
-  color: var(--dark-color);
+  font-size: 1.5rem;
+  color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 
-.client-id {
-  color: #6c757d;
-  font-size: 0.9rem;
+/* Info Items */
+.contact-info {
+  margin-bottom: 1rem;
 }
 
-/* Info Items */
 .info-item {
   display: flex;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .info-label {
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--secondary-color);
   min-width: 120px;
 }
 
 .info-value {
-  color: var(--dark-color);
+  color: var(--text-color);
 }
 
-/* Sections */
-.address-section,
-.map-coordinates {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #eee;
+/* Table Styles - Fixed for action modal */
+.table-container {
+  margin: auto auto;
+  overflow-x: auto;
+  position: relative; /* Added for proper positioning context */
 }
 
-.address-section h3,
-.map-coordinates h3 {
-  color: var(--secondary-color);
-  margin-bottom: 1.5rem;
-  font-size: 1.3rem;
+.patients-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  /* Removed overflow: hidden */
 }
 
-/* Grid Layouts */
-.address-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+.patients-table th,
+.patients-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  position: relative; /* Added for action modal positioning */
 }
 
-.coordinates-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+.patients-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: var(--text-color);
 }
 
-/* Map Placeholder */
-.map-placeholder {
-  height: 200px;
-  background-color: #e9ecef;
-  border-radius: var(--border-radius);
+.patients-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.assigned {
+  color: #ff9800;
+  background-color: #fff3e0;
+}
+
+.status-badge.completed {
+  color: #4caf50;
+  background-color: #e8f5e9;
+}
+
+.status-badge.pending {
+  color: #f44336;
+  background-color: #ffebee;
+}
+
+/* Action Menu - Fixed */
+.action-container {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+
+.action-icons {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6c757d;
-  font-style: italic;
 }
 
-.table-container {
-  /* width: 90%; */
-  margin: auto auto;
-  overflow-x: auto;
+.action_modal {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: #fff;
+  box-shadow: var(--shadow);
+  border-radius: 4px;
+  z-index: 1001; /* Higher than table z-index */
+  min-width: 160px;
+  margin-top: 5px;
+}
+
+.action_modal ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.action_modal li {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.action_modal li:hover {
+  background-color: #f0f4f8;
+  color: #1976d2;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Form Styles */
+form {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Button Styles */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background-color: #f5f5f5;
 }
 
 /* Responsive Adjustments */
@@ -163,11 +349,19 @@ body {
     margin-bottom: 1rem;
   }
 
-  .address-grid {
-    grid-template-columns: 1fr;
+  .info-item {
+    flex-direction: column;
   }
 
-  .coordinates-grid {
-    grid-template-columns: 1fr;
+  .info-label {
+    min-width: auto;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Ensure action modal stays visible on mobile */
+  .action_modal {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

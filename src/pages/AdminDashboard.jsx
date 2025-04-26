@@ -62,6 +62,24 @@ export default function AdminDashboard() {
     setShowActionModal(showActionModal === index ? null : index);
   };
 
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+
+    const datePart = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    const timePart = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return { date: datePart, time: timePart };
+  };
+
   return (
     <div className="transactions-container">
       <div className="header-section">
@@ -98,7 +116,10 @@ export default function AdminDashboard() {
               <tr key={index}>
                 <td>{service.serviceType}</td>
                 <td>{service.serviceName}</td>
-                <td>{service.requestedDate}</td>
+                <td>
+                  {formatDateTime(service.requestedDate).date} <br />
+                  <small>{formatDateTime(service.requestedDate).time}</small>
+                </td>
                 <td>{service.repeatFrequency}</td>
                 <td>{service.priority}</td>
                 <td>

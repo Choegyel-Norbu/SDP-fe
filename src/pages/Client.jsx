@@ -8,11 +8,13 @@ import { Alert } from "@mui/material";
 import { useAuth } from "../services/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { DateTime } from "luxon";
 
 export default function Client() {
-  const { userId, loggedIn } = useAuth();
+  const navigate = useNavigate();
 
+  const { userId, loggedIn } = useAuth();
   const [serviceForm, setServiceForm] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -57,7 +59,6 @@ export default function Client() {
   });
 
   const [clientServiceDetail, setClientServiceDetail] = useState({
-    userId: "",
     serviceType: "",
     description: "",
     serviceName: "",
@@ -114,6 +115,7 @@ export default function Client() {
           setShowAlert(false);
         }, 6000);
         setServiceForm(true);
+        setClientDetailSet(true);
       } else {
         toast.error("Failed to recorded your information", {
           position: "top-center",
@@ -147,6 +149,18 @@ export default function Client() {
     }));
   };
 
+  const fieldReset = () => {
+    setClientServiceDetail({
+      userId: "",
+      serviceType: "",
+      description: "",
+      serviceName: "",
+      repeatFrequency: "",
+      priority: "",
+      requestedDate: "",
+    });
+  };
+
   const handleServiceRequestSubmit = async () => {
     console.log("UserId from client page@@@- " + userId);
 
@@ -154,7 +168,7 @@ export default function Client() {
       const payload = {
         ...clientServiceDetail,
         userId: userId,
-        requestedDate: clientServiceDetail.requestedDate.toISOString(), // Convert to ISO format
+        // requestedDate: utcDate.toISOString(), // Convert to ISO format
       };
       const res = await api.post("/serviceRequest", JSON.stringify(payload));
       if (res.status === 200) {
@@ -162,7 +176,7 @@ export default function Client() {
         setTimeout(() => {
           setShowAlert(false);
         }, 6000);
-        console.log("Successfully submitted");
+        fieldReset();
       } else {
         toast.error(
           "Oops! We couldn’t submit your request. Please try again or contact support if the issue persists.",
@@ -188,12 +202,11 @@ export default function Client() {
         <Alert
           variant="filled"
           severity="success"
-          style={{ position: "fixed" }}
+          style={{ position: "fixed", width: "100%" }}
         >
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
-
       <header className="header-container">
         <div>
           <h1 className="title">Service Request Form</h1>
@@ -231,21 +244,23 @@ export default function Client() {
               onChange={handleChange}
             >
               <option value="">Select a service type</option>
-              <option value="cleaning">General Cleaning</option>
-              <option value="maintenance">Kitchen Services</option>
-              <option value="maintenance">Bathroom Services</option>
-              <option value="maintenance">Window & Glasses</option>
-              <option value="maintenance">Bedroom & Living Area</option>
-              <option value="maintenance">Floor & Carpet</option>
-              <option value="maintenance">Laundry Services</option>
-              <option value="maintenance">Organization Help</option>
-              <option value="maintenance">Garden & Outdoor</option>
-              <option value="maintenance">Wall & Fixture</option>
-              <option value="maintenance">Pet Related</option>
-              <option value="maintenance">
+              <option value="General Cleaning">General Cleaning</option>
+              <option value="Kitchen Services">Kitchen Services</option>
+              <option value="Bathroom Services">Bathroom Services</option>
+              <option value="Window & Glasses">Window & Glasses</option>
+              <option value="Bedroom & Living Area">
+                Bedroom & Living Area
+              </option>
+              <option value="Floor & Carpet">Floor & Carpet</option>
+              <option value="Laundry Services">Laundry Services</option>
+              <option value="Organization Help">Organization Help</option>
+              <option value="Garden & Outdoor">Garden & Outdoor</option>
+              <option value="Wall & Fixture">Wall & Fixture</option>
+              <option value="Pet Related">Pet Related</option>
+              <option value="Elderly or Disability Support Service">
                 Elderly or Disability Support Service
               </option>
-              <option value="maintenance">Miscellaneous</option>
+              <option value="Miscellaneous">Miscellaneous</option>
             </select>
           </div>
 
@@ -271,10 +286,9 @@ export default function Client() {
                 onChange={handleChange}
               >
                 <option value="">Select frequency</option>
-                <option value="Once">One-time</option>
+                <option value="Daily">One-time</option>
                 <option value="Weekly">Weekly</option>
                 <option value="Fortnightly">Fortnightly</option>
-                <option value="Monthly">Monthly</option>
               </select>
             </div>
 
@@ -310,18 +324,33 @@ export default function Client() {
             <label htmlFor="description">Select date and time</label>
             <DatePicker
               id="serviceDateTime"
-              selected={clientServiceDetail.requestedDate}
-              onChange={(date) =>
+              selected={
+                clientServiceDetail.requestedDate
+                  ? new Date(clientServiceDetail.requestedDate)
+                  : null
+              }
+              onChange={(date) => {
+                if (!date) return;
+
+                // Convert selected date (JS Date) from local timezone to UTC ISO string
+                const localDate = DateTime.fromJSDate(date, {
+                  zone: "Asia/Thimphu",
+                });
+                console.log("Date time picked from picker - " + date);
+
+                console.log("Date time to local time - " + localDate);
+                const utcDateISO = localDate.toUTC().toISO();
+
                 setClientServiceDetail((prev) => ({
                   ...prev,
-                  requestedDate: date,
-                }))
-              }
+                  requestedDate: utcDateISO, // Save as ISO UTC string
+                }));
+              }}
               showTimeSelect
               timeFormat="HH:mm"
-              timeIntervals={15} // 15-minute intervals
+              timeIntervals={15}
               dateFormat="MMMM d, yyyy h:mm aa"
-              minDate={new Date()} // Prevent past dates
+              minDate={new Date()}
               placeholderText="Select date and time"
               className="date-picker-input"
               required
@@ -337,6 +366,16 @@ export default function Client() {
           >
             Submit Request
           </button>
+          {clientDetailSet && (
+            <button
+              type="button"
+              className="next-btn"
+              style={{ marginInline: "1rem" }}
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </button>
+          )}
         </form>
       ) : (
         <div className="service-request-container">

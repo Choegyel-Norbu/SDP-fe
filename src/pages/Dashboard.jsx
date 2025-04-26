@@ -3,11 +3,13 @@ import "../assets/css/Dashboard.css";
 import AdminDashboard from "./AdminDashboard";
 import ClientDashboard from "./ClientDashboard";
 import { useAuth } from "../services/AuthProvider";
+import { Alert } from "@mui/material";
 
 export default function Dashboard() {
   const { role } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   const toggleMobileNav = (e) => {
     e.stopPropagation();
@@ -20,6 +22,13 @@ export default function Dashboard() {
     }
   };
 
+  const handleAlert = (message) => {
+    setShowAlert(message);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  };
+
   useEffect(() => {
     console.log("User role " + role);
     document.addEventListener("mousedown", handleClickOutside);
@@ -30,6 +39,15 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
+      {showAlert && (
+        <Alert
+          variant="filled"
+          severity="success"
+          style={{ position: "fixed", zIndex: "1", width: "100%" }}
+        >
+          Here is a gentle confirmation that your action was successful.
+        </Alert>
+      )}
       <nav className="navbar" ref={navRef}>
         {/* Left Side */}
         <div className="nav-left">
@@ -52,12 +70,15 @@ export default function Dashboard() {
 
         {/* Right Side */}
         <div className="nav-right">
-          <span className="nav-item">Chogyal</span>
           <div className="profile-avatar"></div>
         </div>
       </nav>
       <div onClick={() => setShowMobileNav(false)}>
-        {role === "ADMIN" ? <AdminDashboard /> : <ClientDashboard />}
+        {role === "ADMIN" ? (
+          <AdminDashboard />
+        ) : (
+          <ClientDashboard onAlert={handleAlert} />
+        )}
       </div>
     </div>
   );

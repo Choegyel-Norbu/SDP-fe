@@ -3,13 +3,17 @@ import "../assets/css/ClientDashboard.css";
 import api from "../services/Api";
 import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
+import ServiceEditModal from "../components/ServiceEditModal";
+import { Alert } from "@mui/material";
 
-export default function ClientDashboard() {
+export default function ClientDashboard({ onAlert }) {
   const { userId, email } = useAuth();
   const [client, setClient] = useState(null);
   const [services, setServices] = useState([]);
   const [showActionModal, setShowActionModal] = useState(null);
   const modalRef = useRef(null);
+  const [editingService, setEditingService] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     console.log("Triggered useEffect @@@ ---------------");
@@ -18,15 +22,6 @@ export default function ClientDashboard() {
       try {
         const res = await api.get(`/getClientWithId/${userId}`);
         if (res.status === 200) setClient(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const fetchClientServices = async () => {
-      try {
-        const res = await api.get(`/getServicesForClient/${userId}`);
-        if (res.status === 200) setServices(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -42,6 +37,15 @@ export default function ClientDashboard() {
     };
   }, []);
 
+  const fetchClientServices = async () => {
+    try {
+      const res = await api.get(`/getServicesForClient/${userId}`);
+      if (res.status === 200) setServices(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
       setShowActionModal(null);
@@ -52,14 +56,60 @@ export default function ClientDashboard() {
     setShowActionModal(showActionModal === index ? null : index);
   };
 
-  const handleEdit = () => {
-    console.log("Edit ");
+  const handleRemove = async (serviceId) => {
+    try {
+      console.log("Service id " + serviceId);
+      const res = await api.delete(`/deleteServiceRequest/${serviceId}`);
+
+      if (res.status === 200) {
+        await fetchClientServices(); // refresh list after deletion
+        console.log("Service deleted and list updated.");
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    } finally {
+      setShowActionModal(null); // close the modal regardless
+    }
+  };
+
+  const formatDateTime = (isoString) => {
+    if (isoString === null) return;
+    const date = new Date(isoString);
+
+    const datePart = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    const timePart = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return { date: datePart, time: timePart };
+  };
+
+  // Update your edit handler
+  const handleEdit = (service) => {
+    console.log("Services @@@- " + service);
+    setEditingService(service);
     setShowActionModal(null);
   };
 
   return (
     <div>
       <div class="dashboard">
+        {showAlert && (
+          <Alert
+            variant="filled"
+            severity="success"
+            style={{ position: "fixed" }}
+          >
+            Here is a gentle confirmation that your action was successful.
+          </Alert>
+        )}
         {client ? (
           <div class="dashboard-content">
             <div class="client-card">
@@ -69,7 +119,7 @@ export default function ClientDashboard() {
                   <h2 id="client-name">
                     {client.firstName} {client.lastName}
                   </h2>
-                  <p>Email: {email}</p>
+                  <p style={{ fontSize: "14px" }}>Email: {email}</p>
                 </div>
               </div>
 
@@ -82,45 +132,13 @@ export default function ClientDashboard() {
                 </div>
               </div>
 
-              <div class="address-section">
-                <h3>Address Details</h3>
-                <div class="address-grid">
-                  <div class="info-item">
-                    <span class="info-label">Street:</span>
-                    <span class="info-value" id="street-address">
-                      {client.streetAddress}
-                    </span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Unit:</span>
-                    <span class="info-value" id="unit">
-                      {client.unit}
-                    </span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Suburb:</span>
-                    <span class="info-value" id="suburb">
-                      {client.subarb}
-                    </span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">State:</span>
-                    <span class="info-value" id="state">
-                      {client.state}
-                    </span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Post Code:</span>
-                    <span class="info-value" id="post-code">
-                      {client.unit}
-                    </span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Street Type:</span>
-                    <span class="info-value" id="street-type">
-                      {client.streetType}
-                    </span>
-                  </div>
+              <div class="contact-info">
+                <div class="info-item">
+                  <span class="info-label">Address:</span>
+                  <span class="info-value" id="phone-number">
+                    {client.unit} {client.streetAddress}, {client.subarb},{" "}
+                    {client.state}
+                  </span>
                 </div>
               </div>
             </div>
@@ -147,7 +165,10 @@ export default function ClientDashboard() {
                 <tr key={index}>
                   <td>{service.serviceType}</td>
                   <td>{service.serviceName}</td>
-                  <td>{service.requestedDate}</td>
+                  <td>
+                    {formatDateTime(service.requestedDate)?.date} <br />
+                    <small>{formatDateTime(service.requestedDate)?.time}</small>
+                  </td>
                   <td>{service.repeatFrequency}</td>
                   <td>{service.priority}</td>
                   <td>
@@ -168,7 +189,12 @@ export default function ClientDashboard() {
                       {showActionModal === index && (
                         <div className="action_modal" ref={modalRef}>
                           <ul>
-                            <li onClick={handleEdit}>Edit</li>
+                            <li onClick={() => handleEdit(service)}>Edit</li>
+                          </ul>
+                          <ul>
+                            <li onClick={() => handleRemove(service.id)}>
+                              Remove
+                            </li>
                           </ul>
                         </div>
                       )}
@@ -180,6 +206,32 @@ export default function ClientDashboard() {
           </table>
         </div>
       </div>
+
+      {editingService && (
+        <ServiceEditModal
+          service={editingService}
+          onClose={() => setEditingService(null)}
+          onSave={async (updatedService) => {
+            Object.entries(updatedService).forEach(([key, value]) => {
+              console.log(`${key}: ${value}`);
+            });
+            try {
+              const res = await api.put("/updateService", updatedService);
+              if (res.status === 200) {
+                console.log("Updating services.............");
+                onAlert(true);
+                await fetchClientServices();
+              }
+            } catch (error) {
+              console.error(
+                "Update error:",
+                error.response?.data || error.message
+              );
+            }
+            setEditingService(null);
+          }}
+        />
+      )}
       <Footer />
     </div>
   );

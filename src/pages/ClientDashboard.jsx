@@ -1,32 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
+import "../assets/css/Modal.css";
 import "../assets/css/ClientDashboard.css";
 import api from "../services/Api";
 import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
 import ServiceEditModal from "../components/ServiceEditModal";
-import { Alert } from "@mui/material";
+import { Alert, AlertTitle, Tooltip } from "@mui/material";
+import { FaEdit } from "react-icons/fa";
 
 export default function ClientDashboard({ onAlert }) {
   const { userId, email } = useAuth();
   const [client, setClient] = useState(null);
   const [services, setServices] = useState([]);
   const [showActionModal, setShowActionModal] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   const modalRef = useRef(null);
   const [editingService, setEditingService] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [clientRefresh, setClientRefresh] = useState(false);
 
   useEffect(() => {
-    console.log("Triggered useEffect @@@ ---------------");
-
-    const fetchClient = async () => {
-      try {
-        const res = await api.get(`/getClientWithId/${userId}`);
-        if (res.status === 200) setClient(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchClient();
     fetchClientServices();
 
@@ -36,6 +30,44 @@ export default function ClientDashboard({ onAlert }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const fetchClient = async () => {
+    try {
+      const res = await api.get(`/getClientWithId/${userId}`);
+      if (res.status === 200) setClient(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [updateClientDetail, setUpdateClientDetail] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    addressDTO: {
+      streetAddress: "",
+      state: "",
+      unit: "",
+      subarb: "",
+    },
+  });
+
+  // Watch for 'client' changes
+  useEffect(() => {
+    if (client) {
+      setUpdateClientDetail({
+        firstName: client.firstName || "",
+        lastName: client.lastName || "",
+        phoneNumber: client.phoneNumber || "",
+        addressDTO: {
+          streetAddress: client.streetAddress || "",
+          state: client.state || "",
+          unit: client.unit || "",
+          subarb: client.subarb || "",
+        },
+      });
+    }
+  }, [client, clientRefresh]);
 
   const fetchClientServices = async () => {
     try {
@@ -62,13 +94,13 @@ export default function ClientDashboard({ onAlert }) {
       const res = await api.delete(`/deleteServiceRequest/${serviceId}`);
 
       if (res.status === 200) {
-        await fetchClientServices(); // refresh list after deletion
+        await fetchClientServices();
         console.log("Service deleted and list updated.");
       }
     } catch (error) {
       console.error("Error deleting service:", error);
     } finally {
-      setShowActionModal(null); // close the modal regardless
+      setShowActionModal(null);
     }
   };
 
@@ -98,16 +130,75 @@ export default function ClientDashboard({ onAlert }) {
     setShowActionModal(null);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name.startsWith("addressDTO.")) {
+      const field = name.split(".")[1]; // Get the nested field, e.g., "state"
+      setUpdateClientDetail((prev) => ({
+        ...prev,
+        addressDTO: {
+          ...prev.addressDTO,
+          [field]: value,
+        },
+      }));
+    } else {
+      setUpdateClientDetail((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const onClose = () => {
+    setShowEditModal(false);
+    setClientRefresh(!clientRefresh);
+  };
+
+  const [isUpdating, setIsUpdating] = useState(false); // Add loading state
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      ...updateClientDetail,
+      userId: userId,
+    };
+
+    setIsUpdating(true);
+    setShowError(false);
+    try {
+      const res = await api.put("/updateClient", payload);
+
+      if (res.status === 200) {
+        await fetchClient(); // Refresh client data
+        setShowEditModal(false);
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000);
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+
+      setTimeout(() => setShowError(false), 6000);
+    } finally {
+      setIsUpdating(false); // Hide loading state
+    }
+  };
+
   return (
     <div>
       <div class="dashboard">
         {showAlert && (
-          <Alert
-            variant="filled"
-            severity="success"
-            style={{ position: "fixed" }}
-          >
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
             Here is a gentle confirmation that your action was successful.
+          </Alert>
+        )}
+
+        {showError && (
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            Oops, something went wrong. Please try again.
           </Alert>
         )}
         {client ? (
@@ -139,9 +230,23 @@ export default function ClientDashboard({ onAlert }) {
                     {client.unit} {client.streetAddress}, {client.subarb},{" "}
                     {client.state}
                   </span>
+                  <Tooltip
+                    title="Edit"
+                    arrow
+                    style={{ marginLeft: "1rem" }}
+                    onClick={() => setShowEditModal(true)}
+                  >
+                    <FaEdit
+                      className="text-xl text-blue-500"
+                      size={20}
+                      color="#00b8e6"
+                    />
+                  </Tooltip>
                 </div>
               </div>
             </div>
+
+            {/* client Edit modal */}
           </div>
         ) : (
           <h1>Undefined client</h1>
@@ -207,28 +312,132 @@ export default function ClientDashboard({ onAlert }) {
         </div>
       </div>
 
+      {showEditModal && (
+        <div className="edit-modal-overlay">
+          <div className="edit-modal">
+            <div className="edit-modal-header">
+              <h3>Edit Detail</h3>
+              <button onClick={onClose} className="edit-close-btn">
+                &times;
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={updateClientDetail.firstName}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={updateClientDetail.lastName}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Contact Number</label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={updateClientDetail.phoneNumber}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>State</label>
+                <input
+                  type="text"
+                  name="addressDTO.state"
+                  value={updateClientDetail.addressDTO.state}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Subarb</label>
+                <input
+                  type="text"
+                  name="addressDTO.subarb"
+                  value={updateClientDetail.addressDTO.subarb}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Unit</label>
+                <input
+                  type="text"
+                  name="addressDTO.unit"
+                  value={updateClientDetail.addressDTO.unit}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label>Street Address</label>
+                <input
+                  type="text"
+                  name="addressDTO.streetAddress"
+                  value={updateClientDetail.addressDTO.streetAddress}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="btn btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button type="submit" disabled={isUpdating}>
+                  {isUpdating ? "Updating..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {editingService && (
         <ServiceEditModal
           service={editingService}
           onClose={() => setEditingService(null)}
           onSave={async (updatedService) => {
-            Object.entries(updatedService).forEach(([key, value]) => {
-              console.log(`${key}: ${value}`);
-            });
+            console.log("Retrived date format " + updatedService.requestedDate);
             try {
               const res = await api.put("/updateService", updatedService);
+
               if (res.status === 200) {
-                console.log("Updating services.............");
-                onAlert(true);
                 await fetchClientServices();
+                onAlert(true);
+                setEditingService(null);
               }
             } catch (error) {
-              console.error(
-                "Update error:",
-                error.response?.data || error.message
-              );
+              console.error("Full update error:", {
+                request: error.config,
+                response: error.response,
+              });
+              setShowError({
+                severity: "error",
+                message:
+                  error.response?.data?.message || "Failed to update service",
+              });
             }
-            setEditingService(null);
           }}
         />
       )}

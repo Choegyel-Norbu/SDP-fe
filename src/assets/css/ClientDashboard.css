@@ -202,31 +202,6 @@ body {
   color: #1976d2;
 }
 
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.edit-modal {
-  background: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  animation: modalFadeIn 0.3s ease;
-}
-
 @keyframes modalFadeIn {
   from {
     opacity: 0;
@@ -266,7 +241,7 @@ form {
 }
 
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .form-row {
@@ -335,6 +310,9 @@ form {
 
 .btn-secondary:hover {
   background-color: #f5f5f5;
+}
+
+.edit-modal-container {
 }
 
 /* Responsive Adjustments */

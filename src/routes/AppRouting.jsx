@@ -9,6 +9,7 @@ import { AuthProvider } from "../services/AuthProvider";
 import Dashboard from "../pages/Dashboard";
 import AdminDashboard from "../pages/AdminDashboard";
 import About from "../pages/About";
+import OTPVerification from "../pages/OTPVerification";
 
 export default function () {
   return (
@@ -21,6 +22,7 @@ export default function () {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/about" element={<About />} />
+        <Route path="/otp" element={<OTPVerification />} />
       </Routes>
     </AuthProvider>
   );

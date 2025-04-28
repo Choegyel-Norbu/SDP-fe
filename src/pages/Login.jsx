@@ -1,14 +1,14 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import API_BASE_URL from "../config";
 
 import "../assets/css/Custom.css";
-import { toast } from "react-toastify";
 import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
 import { Alert } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function AuthForm() {
   const { login } = useAuth();
@@ -16,6 +16,10 @@ export default function AuthForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const registerFlag = location.flag;
+  const [registerEmailStatus, setRegisterEmailStatus] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -29,6 +33,10 @@ export default function AuthForm() {
     email: "",
     password: "",
     confirmPassword: "",
+  });
+
+  useEffect(() => {
+    setRegisterEmailStatus(registerFlag);
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,21 +110,27 @@ export default function AuthForm() {
     setIsSubmitting(true);
 
     try {
-      const endpoint = isRegister ? "api/registration" : "auth/login";
-      const payload = isRegister
-        ? formData
-        : { email: formData.email, password: formData.password };
+      const endpoint = isRegister ? "auth/sendOtp" : "auth/login";
+      const payload = { email: formData.email, password: formData.password };
 
-      const res = await axios.post(`${API_BASE_URL}/${endpoint}`, payload);
+      let res;
 
-      if (isRegister && res.status === 201) {
-        setShowAlert(true);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 6000);
+      if (isRegister) {
+        res = await axios.post(
+          `${API_BASE_URL}/${endpoint}?email=${formData.email}`
+        );
+      } else {
+        res = await axios.post(`${API_BASE_URL}/${endpoint}`, payload);
+      }
+      console.log("Status - " + res.status);
+
+      if (res.status === 201) {
+        console.log("OTP Succcess");
+        navigate("/otp", { state: formData });
       }
 
       if (res.status === 200) {
+        console.log("Success");
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
@@ -174,6 +188,7 @@ export default function AuthForm() {
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
+
       <div className="container-fluid login-container">
         <div className="row g-0">
           {/* Right Side - Hero Image */}
@@ -197,6 +212,23 @@ export default function AuthForm() {
               </h2>
 
               {apiError && <div className="alert alert-danger">{apiError}</div>}
+              {isSubmitting && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    marginTop: "1rem",
+                  }}
+                >
+                  <div className="custom-spinner" />
+                  <Alert severity="info">Registering please wait.......</Alert>
+                </div>
+              )}
+
+              {registerEmailStatus && (
+                <Alert severity="error">This is an error Alert.</Alert>
+              )}
 
               <form onSubmit={handleSubmit}>
                 {/* Email Field */}
@@ -244,7 +276,6 @@ export default function AuthForm() {
                       className="btn btn-outline-secondary eye-btn"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {/* {showPassword ? <FaEyeSlash /> : <FaEye />} */}
                       {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
                     </button>
                   </div>
@@ -316,13 +347,13 @@ export default function AuthForm() {
                     {isRegister
                       ? "Already have an account? "
                       : "Don't have an account? "}
-                    <button
-                      type="button"
-                      className="btn btn-link p-0"
+                    <span
+                      style={{ color: "#0066ff", cursor: "pointer" }}
+                      // className="btn btn-link p-0"
                       onClick={() => toggleRegister()}
                     >
                       {isRegister ? "Sign in" : "Register now"}
-                    </button>
+                    </span>
                   </p>
                 </div>
               </form>

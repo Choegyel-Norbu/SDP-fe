@@ -8,11 +8,23 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
     serviceRequestId: service.id,
     serviceType: service.serviceType || "",
     serviceName: service.serviceName || "",
-    requestedDate: service.requestedDate || new Date().toISOString(),
+    requestedDate: service.requestedDate,
     repeatFrequency: service.repeatFrequency || "",
     priority: service.priority || "",
     description: service.description || "",
   });
+
+  useEffect(() => {
+    if (service.requestedDate) {
+      // Convert existing date to proper ISO format with timezone
+      const dateObj = new Date(service.requestedDate);
+      const isoString = dateObj.toISOString();
+      setEditedService((prev) => ({
+        ...prev,
+        requestedDate: isoString,
+      }));
+    }
+  }, [service.requestedDate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,12 +33,16 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (service.requestedDate !== null) {
+      const existDate = DateTime.fromJSDate(service.requestedDate);
+      const utcDateISO = existDate.toUTC().toISO();
+      setEditedService((prev) => ({
+        ...prev,
+        requestedDate: utcDateISO,
+      }));
+    }
     onSave(editedService);
   };
-
-  useEffect(() => {
-    console.log("Update modal service id - " + service.id);
-  });
 
   return (
     <div className="edit-modal-overlay">
@@ -87,23 +103,30 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
                 selected={
                   editedService.requestedDate
                     ? new Date(editedService.requestedDate)
-                    : null
+                    : new Date()
                 }
                 onChange={(date) => {
-                  if (!date) return;
+                  // if (!date) {
+                  //   // When no date selected, use current date with proper format
+                  //   const now = new Date();
+                  //   const offset = now.getTimezoneOffset();
+                  //   const offsetDate = new Date(
+                  //     now.getTime() - offset * 60 * 1000
+                  //   );
+                  //   const isoString =
+                  //     offsetDate.toISOString().split(".")[0] + "Z";
 
-                  // Convert selected date (JS Date) from local timezone to UTC ISO string
-                  const localDate = DateTime.fromJSDate(date, {
-                    zone: "Asia/Thimphu",
-                  });
-                  console.log("Date time picked from picker - " + date);
-
-                  console.log("Date time to local time - " + localDate);
+                  //   setEditedService((prev) => ({
+                  //     ...prev,
+                  //     requestedDate: isoString,
+                  //   }));
+                  //   return;
+                  // }
+                  const localDate = DateTime.fromJSDate(date);
                   const utcDateISO = localDate.toUTC().toISO();
-
                   setEditedService((prev) => ({
                     ...prev,
-                    requestedDate: utcDateISO, // Save as ISO UTC string
+                    requestedDate: utcDateISO,
                   }));
                 }}
                 showTimeSelect
@@ -125,7 +148,7 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
                 className="form-control"
               >
                 <option value="">Select frequency</option>
-                <option value="Daily">One-time</option>
+                <option value="Daily">Daily</option>
                 <option value="Fortnightly">Fortnightly</option>
                 <option value="Weekly">Weekly</option>
               </select>
@@ -169,7 +192,7 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary">
-              Save Changes
+              Update
             </button>
           </div>
         </form>

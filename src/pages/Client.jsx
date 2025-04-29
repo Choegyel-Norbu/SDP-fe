@@ -286,7 +286,7 @@ export default function Client() {
                 onChange={handleChange}
               >
                 <option value="">Select frequency</option>
-                <option value="Daily">One-time</option>
+                <option value="Daily">Daily</option>
                 <option value="Weekly">Weekly</option>
                 <option value="Fortnightly">Fortnightly</option>
               </select>
@@ -364,7 +364,7 @@ export default function Client() {
             }}
             className="submit-btn"
           >
-            Submit Request
+            Submit
           </button>
           {clientDetailSet && (
             <button

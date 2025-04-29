@@ -312,7 +312,24 @@ form {
   background-color: #f5f5f5;
 }
 
-.edit-modal-container {
+.remove-dialog {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+}
+
+.remove-dialog-action {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 1rem;
+}
+
+.remove-btn {
+  background-color: #cc0000;
+  color: #fff;
 }
 
 /* Responsive Adjustments */

@@ -19,6 +19,8 @@ export default function ClientDashboard({ onAlert }) {
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
   const [clientRefresh, setClientRefresh] = useState(false);
+  const [showDeleteService, setShowDeleteService] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState(null);
 
   useEffect(() => {
     fetchClient();
@@ -89,19 +91,9 @@ export default function ClientDashboard({ onAlert }) {
   };
 
   const handleRemove = async (serviceId) => {
-    try {
-      console.log("Service id " + serviceId);
-      const res = await api.delete(`/deleteServiceRequest/${serviceId}`);
-
-      if (res.status === 200) {
-        await fetchClientServices();
-        console.log("Service deleted and list updated.");
-      }
-    } catch (error) {
-      console.error("Error deleting service:", error);
-    } finally {
-      setShowActionModal(null);
-    }
+    setServiceToDelete(serviceId);
+    setShowActionModal(false);
+    setShowDeleteService(true);
   };
 
   const formatDateTime = (isoString) => {
@@ -126,6 +118,7 @@ export default function ClientDashboard({ onAlert }) {
   // Update your edit handler
   const handleEdit = (service) => {
     console.log("Services @@@- " + service);
+    setShowActionModal(false);
     setEditingService(service);
     setShowActionModal(null);
   };
@@ -182,6 +175,26 @@ export default function ClientDashboard({ onAlert }) {
       setTimeout(() => setShowError(false), 6000);
     } finally {
       setIsUpdating(false); // Hide loading state
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteService(false);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      console.log("Service id " + serviceToDelete);
+      const res = await api.delete(`/deleteServiceRequest/${serviceToDelete}`);
+
+      if (res.status === 200) {
+        await fetchClientServices();
+        setShowDeleteService(false);
+      }
+    } catch (error) {
+      console.error("Error deleting service:", error);
+    } finally {
+      setShowActionModal(null);
     }
   };
 
@@ -404,11 +417,36 @@ export default function ClientDashboard({ onAlert }) {
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={isUpdating}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isUpdating}
+                >
                   {isUpdating ? "Updating..." : "Save Changes"}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showDeleteService && (
+        <div className="edit-modal-overlay">
+          <div className="edit-modal">
+            <div className="remove-dialog">
+              <h4 className="">Confirm Deletion</h4>
+              <p className="mb-6">
+                Are you sure you want to delete <b></b>?
+              </p>
+              <div className="remove-dialog-action">
+                <button onClick={cancelDelete} className="">
+                  Cancel
+                </button>
+                <button onClick={confirmDelete} className="remove-btn">
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -441,6 +479,7 @@ export default function ClientDashboard({ onAlert }) {
           }}
         />
       )}
+
       <Footer />
     </div>
   );

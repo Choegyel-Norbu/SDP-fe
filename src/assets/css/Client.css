@@ -221,16 +221,19 @@ button {
   background-color: #e2e6ea;
 }
 
-.next-btn,
+.next-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
 .submit-btn {
   background-color: var(--secondary-color);
   color: white;
 }
 
-.next-btn:hover,
+/* .next-btn:hover,
 .submit-btn:hover {
   background-color: var(--primary-color);
-}
+} */
 .service-form {
   width: 80%;
   margin: auto auto;

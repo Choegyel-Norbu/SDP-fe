@@ -106,22 +106,6 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
                     : new Date()
                 }
                 onChange={(date) => {
-                  // if (!date) {
-                  //   // When no date selected, use current date with proper format
-                  //   const now = new Date();
-                  //   const offset = now.getTimezoneOffset();
-                  //   const offsetDate = new Date(
-                  //     now.getTime() - offset * 60 * 1000
-                  //   );
-                  //   const isoString =
-                  //     offsetDate.toISOString().split(".")[0] + "Z";
-
-                  //   setEditedService((prev) => ({
-                  //     ...prev,
-                  //     requestedDate: isoString,
-                  //   }));
-                  //   return;
-                  // }
                   const localDate = DateTime.fromJSDate(date);
                   const utcDateISO = localDate.toUTC().toISO();
                   setEditedService((prev) => ({

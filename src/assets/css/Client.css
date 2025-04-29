@@ -222,9 +222,14 @@ button {
 }
 
 .next-btn {
+  background-color: var(--secondary-color);
+  color: white;
+}
+.next-dashboard-btn {
   background-color: var(--primary-color);
   color: white;
 }
+
 .submit-btn {
   background-color: var(--secondary-color);
   color: white;

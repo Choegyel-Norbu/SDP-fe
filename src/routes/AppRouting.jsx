@@ -8,14 +8,17 @@ import Client from "../pages/Client";
 import { AuthProvider } from "../services/AuthProvider";
 import Dashboard from "../pages/Dashboard";
 import AdminDashboard from "../pages/AdminDashboard";
+
 import About from "../pages/About";
 import OTPVerification from "../pages/OTPVerification";
+import LandingPage from "../pages/LandingPage";
+import Service from "../pages/Service";
 
 export default function () {
   return (
     <AuthProvider>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/client" element={<Client />} />
@@ -23,6 +26,8 @@ export default function () {
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/otp" element={<OTPVerification />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/services" element={<Service />} />
       </Routes>
     </AuthProvider>
   );

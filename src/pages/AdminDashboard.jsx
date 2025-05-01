@@ -223,11 +223,11 @@ export default function AdminDashboard() {
                           <strong>Email:</strong> {service.clientEmail || "N/A"}
                         </p>
                         <p>
-                          <strong>Address:</strong> {client.unit || "N/A"}
+                          <strong>Address:</strong> {client?.unit || "N/A"}
                           {", "}
-                          {client.streetAddress || "N/A"}
+                          {client?.streetAddress || "N/A"}
                           {", "}
-                          {client.subarb || "N/A"}, {client.state || "N/A"}
+                          {client?.subarb || "N/A"}, {client?.state || "N/A"}
                         </p>
                       </div>
                     </div>

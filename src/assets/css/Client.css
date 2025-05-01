@@ -23,14 +23,15 @@ body {
 /* ==================== */
 
 /* Header Styles */
-.header-container {
+.client-header-container {
+  width: 80%;
   height: 7rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
   flex-wrap: wrap;
-  padding: 2rem 5rem 0;
+  margin: auto auto;
 }
 
 .title {
@@ -226,8 +227,9 @@ button {
   color: white;
 }
 .next-dashboard-btn {
-  background-color: var(--primary-color);
-  color: white;
+  display: inline;
+  color: #4d94ff;
+  cursor: pointer;
 }
 
 .submit-btn {
@@ -242,6 +244,7 @@ button {
 .service-form {
   width: 80%;
   margin: auto auto;
+  padding-inline: 0;
 }
 
 /* ==================== */
@@ -346,12 +349,6 @@ button {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #eee;
-}
-
-.service-icon {
-  margin-right: 10px;
-  width: 20px;
-  text-align: center;
 }
 
 .service-name {
@@ -481,10 +478,6 @@ button {
     gap: 0;
     background-color: #fff;
   }
-
-  .service-form {
-    padding: 1.5rem;
-  }
 }
 
 @media (max-width: 750px) {
@@ -528,10 +521,6 @@ button {
     grid-template-columns: 1fr;
     padding: 0;
     gap: 12px;
-  }
-
-  .header-container {
-    padding: 1rem 2.5rem 0;
   }
 }
 

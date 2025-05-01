@@ -157,29 +157,9 @@ export default function HomePage() {
         </div> */}
         <nav className={`nav-links ${isMenuOpen ? "show" : ""}`} id="navLinks">
           <a href="#">Home</a>
-          <a href="/client#services">Services</a>
+          <a href="/services">Services</a>
+          <a href="/">Landing</a>
           <a href="/about">About</a>
-          {/* <div
-            className="cus-nav-item"
-            onClick={toggleDropdown}
-            onMouseEnter={() => setIsDropdownOpen(true)} // Show dropdown on hover
-            onMouseLeave={() => setIsDropdownOpen(false)}
-          >
-            <a href="#">Oppertunities</a>
-            {isDropdownOpen && (
-              <ul className={`cus-dropdown ${isDropdownOpen ? "open" : ""}`}>
-                <li>
-                  <a href="#">Web Development</a>
-                </li>
-                <li>
-                  <a href="#">App Development</a>
-                </li>
-                <li>
-                  <a href="#">SEO Services</a>
-                </li>
-              </ul>
-            )}
-          </div> */}
           <a href="#" onClick={scrollToFooter}>
             Contact
           </a>
@@ -271,28 +251,90 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="section py-5">
+      <section className="service-categories py-5">
         <div className="container">
           <div className="text-center mb-5">
-            <h2 className="fw-bold">Popular Service Categories</h2>
-            <p className="text-muted">
-              Here are a few things you can request from us
+            <h2 className="fw-bold display-5 mb-3">
+              Popular Service Categories
+            </h2>
+            <p className="text-muted fs-5">
+              Premium services delivered right to your doorstep
             </p>
           </div>
+
           <div className="row g-4">
+            {/* Laundry Service */}
             <div className="col-md-4">
-              <div className="icon-box p-4 shadow-sm bg-white rounded text-center">
-                <h5>🧺 Laundry Pickup & Drop</h5>
+              <div className="service-card shadow-sm rounded overflow-hidden">
+                <div
+                  className="service-img"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1604176354204-9268737828e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')",
+                  }}
+                >
+                  <div className="service-overlay"></div>
+                </div>
+                <div className="service-content p-4 bg-white">
+                  <div className="service-icon mb-3">🧺</div>
+                  <h5 className="fw-bold mb-3">Laundry Pickup & Drop</h5>
+                  <p className="text-muted">
+                    Professional laundry service with free pickup and delivery
+                  </p>
+                  <a href="#" className="service-link">
+                    Learn more →
+                  </a>
+                </div>
               </div>
             </div>
+
+            {/* Car Wash */}
             <div className="col-md-4">
-              <div className="icon-box p-4 shadow-sm bg-white rounded text-center">
-                <h5>🧼 Car Wash at Home</h5>
+              <div className="service-card shadow-sm rounded overflow-hidden">
+                <div
+                  className="service-img"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')",
+                  }}
+                >
+                  <div className="service-overlay"></div>
+                </div>
+                <div className="service-content p-4 bg-white">
+                  <div className="service-icon mb-3">🚗</div>
+                  <h5 className="fw-bold mb-3">Car Wash at Home</h5>
+                  <p className="text-muted">
+                    Eco-friendly car wash without leaving your driveway
+                  </p>
+                  <a href="#" className="service-link">
+                    Learn more →
+                  </a>
+                </div>
               </div>
             </div>
+
+            {/* Deep Cleaning */}
             <div className="col-md-4">
-              <div className="icon-box p-4 shadow-sm bg-white rounded text-center">
-                <h5>🧹 Deep Cleaning</h5>
+              <div className="service-card shadow-sm rounded overflow-hidden">
+                <div
+                  className="service-img"
+                  style={{
+                    backgroundImage:
+                      "url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80')",
+                  }}
+                >
+                  <div className="service-overlay"></div>
+                </div>
+                <div className="service-content p-4 bg-white">
+                  <div className="service-icon mb-3">🧹</div>
+                  <h5 className="fw-bold mb-3">Deep Cleaning</h5>
+                  <p className="text-muted">
+                    Thorough cleaning service for your entire home
+                  </p>
+                  <a href="#" className="service-link">
+                    Learn more →
+                  </a>
+                </div>
               </div>
             </div>
           </div>

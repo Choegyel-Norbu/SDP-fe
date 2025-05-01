@@ -207,9 +207,9 @@ export default function Client() {
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
-      <header className="header-container">
+      <header className="client-header-container">
         <div>
-          <h1 className="title">Service Request Form</h1>
+          <h1 className="title">Share Your Service Offering</h1>
           {serviceForm ? (
             <p className="subtitle">
               Share the service details to help us deliver exactly what you're
@@ -236,14 +236,14 @@ export default function Client() {
       {clientDetailSet ? (
         <form className="service-form">
           <div className="form-group">
-            <label htmlFor="serviceType">Service Type</label>
+            <label htmlFor="serviceType">Service Category</label>
             <select
               id="serviceType"
               name="serviceType"
               value={clientServiceDetail.serviceType}
               onChange={handleChange}
             >
-              <option value="">Select a service type</option>
+              <option value="">Select a service category</option>
               <option value="General Cleaning">General Cleaning</option>
               <option value="Kitchen Services">Kitchen Services</option>
               <option value="Bathroom Services">Bathroom Services</option>
@@ -278,14 +278,14 @@ export default function Client() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="repeatFrequency">Repeat Frequency</label>
+              <label htmlFor="repeatFrequency">How often?</label>
               <select
                 id="repeatFrequency"
                 name="repeatFrequency"
                 value={clientServiceDetail.repeatFrequency}
                 onChange={handleChange}
               >
-                <option value="">Select frequency</option>
+                <option value="">Select</option>
                 <option value="Daily">Daily</option>
                 <option value="Weekly">Weekly</option>
                 <option value="Fortnightly">Fortnightly</option>
@@ -367,14 +367,13 @@ export default function Client() {
             Submit
           </button>
           {clientDetailSet && (
-            <button
-              type="button"
-              className="next-btn"
+            <div
+              className="next-dashboard-btn"
               style={{ marginInline: "1rem" }}
               onClick={() => navigate("/dashboard")}
             >
               Dashboard
-            </button>
+            </div>
           )}
         </form>
       ) : (
@@ -497,7 +496,7 @@ export default function Client() {
       )}
 
       <div className="service-request-container" id="services">
-        <h2 className="service-title">Categories</h2>
+        <h2 className="service-title">Service Categories</h2>
         <div className="categories-grid">
           {serviceCategories.map((item, index) => (
             <div

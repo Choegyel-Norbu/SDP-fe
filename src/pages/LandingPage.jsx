@@ -62,6 +62,27 @@ export default function LandingPage() {
     logout();
   };
 
+  const handleClickOutside = (e) => {
+    const isInsideDialog = e.target.closest(".logout_dialog");
+
+    const isProfileButton = e.target.closest(".logout_icon");
+
+    if (!isInsideDialog && !isProfileButton) {
+      setLogoutDialog(false);
+    }
+
+    if (dialogRef.current && !dialogRef.current.contains(e.target)) {
+      setLogoutDialog(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="hero">
       <header className="hero-header">

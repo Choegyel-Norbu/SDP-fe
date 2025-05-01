@@ -72,9 +72,8 @@ body {
 
 /* Form Container */
 .service-request-container {
-  max-width: 90%;
+  max-width: 80%;
   margin: 2rem auto;
-  padding: 2rem;
   background: #fff;
   border-radius: 8px;
   box-shadow: var(--shadow);
@@ -138,10 +137,6 @@ body {
 }
 
 /* Form Sections */
-.form-section {
-  display: flex;
-  flex-direction: column;
-}
 
 .form-section h2 {
   margin: 1.5rem 1rem;
@@ -354,6 +349,13 @@ button {
 .service-name {
   flex: 1;
 }
+/* validation error  */
+.validation-error-message {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 5px;
+}
 
 /* ==================== */
 /* FOOTER STYLES */
@@ -525,9 +527,6 @@ button {
 }
 
 @media (max-width: 580px) {
-  .service-request-container {
-    padding: 0.5rem;
-  }
   .category-card {
     width: 100%;
     /* padding-inline: 0; */

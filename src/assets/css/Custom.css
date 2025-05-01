@@ -326,9 +326,11 @@
 /* Form section */
 .form-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #f8f9fa;
+  padding-bottom: 1rem;
 }
 
 .login-form {

@@ -196,6 +196,81 @@ export default function Client() {
     }
   };
 
+  //  form validation
+
+  const [errors, setErrors] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    streetAddress: "",
+    subarb: "",
+    state: "",
+    unit: "",
+  });
+
+  const validateClientDetails = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    if (!clientDetail.firstName.trim()) {
+      newErrors.firstName = "First name is required";
+      isValid = false;
+    } else if (clientDetail.firstName.length < 2) {
+      newErrors.firstName = "First name must be at least 2 characters";
+      isValid = false;
+    }
+
+    if (!clientDetail.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
+      isValid = false;
+    } else if (clientDetail.lastName.length < 2) {
+      newErrors.lastName = "Last name must be at least 2 characters";
+      isValid = false;
+    }
+
+    if (!clientDetail.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+      isValid = false;
+    } else if (!/^[\d\s+()-]{8,15}$/.test(clientDetail.phoneNumber)) {
+      newErrors.phoneNumber = "Please enter a valid phone number";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    if (isValid) {
+      handleNext();
+    }
+  };
+
+  const validateAddressDetails = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    if (!clientDetail.addressDTO.streetAddress.trim()) {
+      newErrors.streetAddress = "Street address is required";
+      isValid = false;
+    }
+
+    if (!clientDetail.addressDTO.subarb.trim()) {
+      newErrors.subarb = "Suburb is required";
+      isValid = false;
+    }
+
+    if (!clientDetail.addressDTO.state) {
+      newErrors.state = "Please select a state";
+      isValid = false;
+    }
+    if (!clientDetail.addressDTO.unit.trim()) {
+      newErrors.unit = "Unit is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    if (isValid) {
+      submitClientDetailAddress();
+    }
+  };
+
   return (
     <div>
       {showAlert && (
@@ -221,11 +296,6 @@ export default function Client() {
               for you.
             </p>
           )}
-        </div>
-        <div className="contact-help">
-          <p>
-            Need help? <a href="/contact">Contact Support</a>
-          </p>
         </div>
       </header>
 
@@ -400,6 +470,11 @@ export default function Client() {
                       value={clientDetail.firstName}
                       onChange={handleChangeDetail}
                     />
+                    {errors.firstName && (
+                      <span className="validation-error-message">
+                        {errors.firstName}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Last Name:</label>
@@ -409,6 +484,11 @@ export default function Client() {
                       value={clientDetail.lastName}
                       onChange={handleChangeDetail}
                     />
+                    {errors.lastName && (
+                      <span className="validation-error-message">
+                        {errors.lastName}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Phone Number:</label>
@@ -418,13 +498,18 @@ export default function Client() {
                       value={clientDetail.phoneNumber}
                       onChange={handleChangeDetail}
                     />
+                    {errors.phoneNumber && (
+                      <span className="validation-error-message">
+                        {errors.phoneNumber}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="form-navigation">
                   <button
                     type="button"
                     className="next-btn"
-                    onClick={handleNext}
+                    onClick={validateClientDetails}
                   >
                     Next
                   </button>
@@ -444,6 +529,11 @@ export default function Client() {
                       value={clientDetail.addressDTO.streetAddress}
                       onChange={handleChangeAddress}
                     />
+                    {errors.streetAddress && (
+                      <span className="validation-error-message">
+                        {errors.streetAddress}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Subarb</label>
@@ -453,6 +543,11 @@ export default function Client() {
                       value={clientDetail.addressDTO.subarb}
                       onChange={handleChangeAddress}
                     />
+                    {errors.subarb && (
+                      <span className="validation-error-message">
+                        {errors.subarb}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <label>State</label>
@@ -462,6 +557,11 @@ export default function Client() {
                       value={clientDetail.addressDTO.state}
                       onChange={handleChangeAddress}
                     />
+                    {errors.state && (
+                      <span className="validation-error-message">
+                        {errors.state}
+                      </span>
+                    )}
                   </div>
                   <div className="form-group">
                     <label>Unit</label>
@@ -471,6 +571,11 @@ export default function Client() {
                       value={clientDetail.addressDTO.unit}
                       onChange={handleChangeAddress}
                     />
+                    {errors.unit && (
+                      <span className="validation-error-message">
+                        {errors.unit}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="form-navigation">
@@ -484,7 +589,7 @@ export default function Client() {
                   <button
                     type="button"
                     className="next-btn"
-                    onClick={submitClientDetailAddress}
+                    onClick={validateAddressDetails}
                   >
                     Submit
                   </button>
@@ -495,21 +600,23 @@ export default function Client() {
         </div>
       )}
 
-      <div className="service-request-container" id="services">
-        <h2 className="service-title">Service Categories</h2>
-        <div className="categories-grid">
-          {serviceCategories.map((item, index) => (
-            <div
-              key={index}
-              className="category-card"
-              onClick={() => handleCardClick(item)}
-              onMouseEnter={() => setSelectedCategory(item)}
-            >
-              <h4 className="category-title">{item.category}</h4>
-            </div>
-          ))}
+      {clientDetailSet && (
+        <div className="service-request-container" id="services">
+          <h2 className="service-title">Service Categories</h2>
+          <div className="categories-grid">
+            {serviceCategories.map((item, index) => (
+              <div
+                key={index}
+                className="category-card"
+                onClick={() => handleCardClick(item)}
+                onMouseEnter={() => setSelectedCategory(item)}
+              >
+                <h4 className="category-title">{item.category}</h4>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Dialog Box */}
       <div

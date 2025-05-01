@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../assets/css/landing.css";
+import "../assets/css/Landing.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
 import serviceCategories from "../data/ServiceCategories.json";

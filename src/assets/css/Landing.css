@@ -390,6 +390,9 @@
   .hero {
     padding: 1rem;
   }
+  .nav-links {
+    color: #000;
+  }
   .landing-nav-links {
     display: block;
   }

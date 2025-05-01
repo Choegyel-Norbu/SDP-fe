@@ -96,11 +96,12 @@ export default function LandingPage() {
           ref={menuRef}
         >
           <a href="/">Home</a>
-          <a href="#">About Us</a>
+
           <a href="/services">Services</a>
           <a href="#" onClick={scrollToFooter}>
             Contact
           </a>
+          <a href="#">About Us</a>
         </nav>
         <div className="nav-end">
           <div className="quote-button-num"> + 0411 598 851</div>

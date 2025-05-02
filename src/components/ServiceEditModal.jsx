@@ -54,7 +54,7 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="dashboard-form">
           <div className="form-group">
             <label>Service Category</label>
             <select

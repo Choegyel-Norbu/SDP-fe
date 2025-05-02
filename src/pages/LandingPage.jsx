@@ -2,6 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import "../assets/css/Landing.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
+import BiotechIcon from "@mui/icons-material/Science";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowsSpin,
+  faSliders,
+  faUser,
+  faUserShield,
+} from "@fortawesome/free-solid-svg-icons";
+
 import serviceCategories from "../data/ServiceCategories.json";
 import api from "../services/Api";
 
@@ -101,7 +110,7 @@ export default function LandingPage() {
           <a href="#" onClick={scrollToFooter}>
             Contact
           </a>
-          <a href="#">About Us</a>
+          <a href="/about">About Us</a>
         </nav>
         <div className="nav-end">
           <div className="quote-button-num"> + 0411 598 851</div>
@@ -190,7 +199,7 @@ export default function LandingPage() {
           </button>
         </div>
       </div>
-
+      {/* Service provided  */}
       <section className="landing-services-section">
         <div className="landing-services-container">
           <p className="section-label">Our Services</p>
@@ -222,18 +231,6 @@ export default function LandingPage() {
                   View more services ...
                 </a>
               </div>
-
-              {/* <div className="landing-services-card-1">
-                <h3 className="landing-services-title">Plumping Services</h3>
-                <p className="landing-services-desc">
-                  From fixing leaks and unclogging drains to installing new
-                  fixtures, our expert plumbers handle it all with precision and
-                  care.
-                </p>
-                <a href="/client#services" className="learn-more">
-                  View more services ...
-                </a>
-              </div> */}
             </div>
             <div className="landing-services-grid-2">
               <div className="landing-services-card">
@@ -274,7 +271,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
+      {/* Service experience */}
       <section className="provided-container">
         <p className="section-label">Our Services</p>
         <div className="provided-content">
@@ -317,6 +314,66 @@ export default function LandingPage() {
             </p>
             <p className="see-more">See more</p>
           </div>
+        </div>
+      </section>
+
+      {/* Why choose us */}
+      <section className="why-us-section">
+        <div className="why-us-container">
+          <div className="why-us-header">
+            <p className="section-label">Why us</p>
+            <h2 className="section-title">Why choose us?</h2>
+            <p className="section-description">
+              At our core, we are driven by a commitment to quality,
+              reliability, and customer-first solutions. Our team blends
+              innovation with deep industry knowledge to deliver services that
+              are not only efficient but also tailored to your unique needs.
+            </p>
+          </div>
+          <div className="why-us-content">
+            <div className="content content-1">
+              <div className="why-us-icon">
+                <FontAwesomeIcon
+                  icon={faArrowsSpin}
+                  style={{ fontSize: 20, color: "#33d6ff" }}
+                />
+              </div>
+              <h5>End-to-End Service Management</h5>
+              <p>
+                From scheduling to final delivery, we handle everything—no
+                third-party contractors. You deal with us directly, ensuring
+                full accountability and smoother communication.
+              </p>
+            </div>
+            <div className="content content-2">
+              <div className="why-us-icon">
+                <FontAwesomeIcon
+                  icon={faUserShield}
+                  style={{ fontSize: 20, color: "#33d6ff" }}
+                />
+              </div>
+              <h5>Trained & Insured Professionals</h5>
+              <p>
+                Our team members are background-checked, trained, and fully
+                insured—giving you peace of mind and consistent, professional
+                results every time.
+              </p>
+            </div>
+            <div className="content content-3">
+              <div className="why-us-icon">
+                <FontAwesomeIcon
+                  icon={faSliders}
+                  style={{ fontSize: 20, color: "#33d6ff" }}
+                />
+              </div>
+              <h5>Customizable Solutions for Every Need</h5>
+              <p>
+                Whether it’s a one-time job or ongoing support, we tailor
+                services to fit your exact requirements, timelines, and budget.
+              </p>
+            </div>
+          </div>
+          <div className="why-us-content"></div>
         </div>
       </section>
 

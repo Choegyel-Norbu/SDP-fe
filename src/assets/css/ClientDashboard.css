@@ -236,8 +236,8 @@ body {
 }
 
 /* Form Styles */
-form {
-  /* padding: 1.5rem; */
+.dashboard-form {
+  padding: 1.5rem;
 }
 
 .form-group {

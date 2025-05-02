@@ -7,11 +7,10 @@
   color: #333;
 }
 
-.services-header {
-  text-align: center;
+.service-header {
   margin-bottom: 40px;
   padding: 20px;
-  border-radius: 10px;
+  border-bottom: 1px solid #cccccc;
 }
 
 .services-header h1 {
@@ -48,7 +47,6 @@
 /* Category Header */
 .category-header {
   display: flex;
-  align-items: center;
   padding: 15px 20px;
   background: linear-gradient(to right, #e5731b, #e26c11);
   color: white;

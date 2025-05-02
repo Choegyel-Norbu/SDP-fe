@@ -6,7 +6,7 @@ export default function Service() {
   const [service, setService] = useState(serviceCategories.serviceCategories);
   return (
     <div className="services-page">
-      <header className="services-header">
+      <header className="service-header">
         <h1>Our Services</h1>
         <p>Comprehensive solutions for every corner of your home</p>
       </header>

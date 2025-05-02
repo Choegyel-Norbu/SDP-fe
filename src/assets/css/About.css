@@ -6,7 +6,8 @@
 }
 
 .about-header {
-  background: linear-gradient(135deg, #00b4e6 0%, #0082e6 100%);
+  background-color: #d8571c;
+  /* background: linear-gradient(135deg, #e77d4b 0%, #d8571c 100%); */
   color: white;
   padding: 4rem 2rem;
   margin-bottom: 3rem;
@@ -67,7 +68,7 @@
 }
 
 .section-body p {
-  font-size: 1.1rem;
+  font-size: 16px;
   color: #4a5568;
   margin-bottom: 1.5rem;
   line-height: 1.8;
@@ -106,7 +107,7 @@
 }
 
 .value-card p {
-  font-size: 1rem;
+  font-size: 16px;
   color: #4a5568;
 }
 

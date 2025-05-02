@@ -335,7 +335,7 @@ export default function ClientDashboard({ onAlert }) {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="dashboard-form">
               <div className="form-row">
                 <div className="form-group">
                   <label>First Name</label>

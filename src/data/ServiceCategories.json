@@ -1,124 +1,147 @@
 {
   "serviceCategories": [
     {
-      "category": "General Cleaning",
+      "category": "Residential Cleaning",
       "services": [
-        { "name": "Move In/Out Cleaning (Bond back guaranteed)", "icon": "✅" },
-        { "name": "Deep/Initial Cleaning", "icon": "✅" },
-        { "name": "Regular Home Cleaning", "icon": "✅" },
-        { "name": "Spring Cleaning", "icon": "✅" },
-        { "name": "After-party Cleanup", "icon": "✅" }
+        {
+          "id": 1,
+          "name": "General House Cleaning",
+          "icon": "✅",
+          "rate": 100,
+          "serviceIcon": "🧹"
+        },
+        {
+          "name": "Carpet and Upholstery Cleaning",
+          "icon": "✅",
+          "rate": 120,
+          "serviceIcon": "🛋️"
+        },
+        {
+          "name": "Window Cleaning",
+          "icon": "✅",
+          "rate": 60,
+          "serviceIcon": "🪟"
+        }
       ]
     },
     {
-      "category": "Kitchen Services",
+      "category": "Commercial Cleaning",
       "services": [
-        { "name": "Inside Oven Cleaning", "icon": "✅" },
-        { "name": "Inside Fridge Cleaning", "icon": "✅" },
-        { "name": "Kitchen Cabinet Cleaning", "icon": "✅" },
-        { "name": "Microwave Cleaning", "icon": "✅" },
-        { "name": "Dishwashing (Wash Dishes)", "icon": "✅" },
-        { "name": "Kitchen Surface Sanitizing", "icon": "✅" },
-        { "name": "Range Hood & Exhaust Fan Cleaning", "icon": "✅" }
+        {
+          "id": 2,
+          "name": "Office Cleaning",
+          "icon": "✅",
+          "rate": 130,
+          "serviceIcon": "🏢"
+        },
+        {
+          "name": "Retail Cleaning",
+          "icon": "✅",
+          "rate": 120,
+          "serviceIcon": "🏬"
+        },
+        {
+          "name": "Healthcare Facility Cleaning",
+          "icon": "✅",
+          "rate": 160,
+          "serviceIcon": "🏥"
+        },
+        {
+          "name": "Educational Institution Cleaning",
+          "icon": "✅",
+          "rate": 140,
+          "serviceIcon": "🏫"
+        },
+        {
+          "name": "Childcare Center Cleaning",
+          "icon": "✅",
+          "rate": 135,
+          "serviceIcon": "🧸"
+        }
       ]
     },
     {
-      "category": "Bathroom Services",
+      "category": "Industrial & Specialized Cleaning",
       "services": [
-        { "name": "Full Bathroom Deep Cleaning", "icon": "✅" },
-        { "name": "Shower & Tile Scrub", "icon": "✅" },
-        { "name": "Grout Cleaning", "icon": "✅" },
-        { "name": "Mirror and Glass Polishing", "icon": "✅" },
-        { "name": "Toilet & Sink Disinfection", "icon": "✅" }
+        {
+          "id": 3,
+          "name": "Warehouse Cleaning",
+          "icon": "✅",
+          "rate": 180,
+          "serviceIcon": "🏗️"
+        },
+        {
+          "name": "Factory and Manufacturing Plant Cleaning",
+          "icon": "✅",
+          "rate": 200,
+          "serviceIcon": "🏭"
+        },
+        {
+          "name": "High-Pressure Cleaning",
+          "icon": "✅",
+          "rate": 150,
+          "serviceIcon": "💦"
+        },
+        {
+          "name": "Chimney Sweeping",
+          "icon": "✅",
+          "rate": 85,
+          "serviceIcon": "🔥"
+        }
       ]
     },
     {
-      "category": "Window & Glass",
+      "category": "Event & Venue Cleaning",
       "services": [
-        { "name": "Inside Windows", "icon": "✅" },
-        { "name": "Sliding Door Glass Cleaning", "icon": "✅" },
-        { "name": "Outside Window Cleaning", "icon": "✅" },
-        { "name": "Mirror Cleaning", "icon": "✅" }
+        {
+          "id": 4,
+          "name": "Event Venue Cleaning",
+          "icon": "✅",
+          "rate": 170,
+          "serviceIcon": "🎪"
+        },
+        {
+          "name": "Post-Construction Cleaning",
+          "icon": "✅",
+          "rate": 200,
+          "serviceIcon": "🚧"
+        },
+        {
+          "name": "Resort and Hotel Cleaning",
+          "icon": "✅",
+          "rate": 160,
+          "serviceIcon": "🏨"
+        },
+        {
+          "name": "Airport Cleaning",
+          "icon": "✅",
+          "rate": 180,
+          "serviceIcon": "🛫"
+        }
       ]
     },
     {
-      "category": "Bedroom & Living Area",
+      "category": "Eco-Friendly & Sanitization",
       "services": [
-        { "name": "Change Linens", "icon": "✅" },
-        { "name": "Bed Making", "icon": "✅" },
-        { "name": "Curtain Dusting", "icon": "✅" },
-        { "name": "Ceiling Fan Cleaning", "icon": "✅" },
-        { "name": "Decluttering Service", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Floor & Carpet",
-      "services": [
-        { "name": "Carpet Vacuuming", "icon": "✅" },
-        { "name": "Carpet Shampooing", "icon": "✅" },
-        { "name": "Floor Sweeping & Mopping", "icon": "✅" },
-        { "name": "Floor Polishing", "icon": "✅" },
-        { "name": "Rug Cleaning", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Laundry Services",
-      "services": [
-        { "name": "Wash & Fold Laundry", "icon": "✅" },
-        { "name": "Ironing Clothes", "icon": "✅" },
-        { "name": "Pick-up & Drop Laundry", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Organization Help",
-      "services": [
-        { "name": "Closet Organization", "icon": "✅" },
-        { "name": "Pantry Organization", "icon": "✅" },
-        { "name": "Garage Cleanup", "icon": "✅" },
-        { "name": "Toy Room or Kids’ Area Organization", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Garden & Outdoor",
-      "services": [
-        { "name": "Balcony Cleaning", "icon": "✅" },
-        { "name": "Sweeping Outdoor Paths", "icon": "✅" },
-        { "name": "Window Sill Dusting", "icon": "✅" },
-        { "name": "Porch/Patio Sweeping", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Wall & Fixture",
-      "services": [
-        { "name": "Wall Scrub & Spot Cleaning", "icon": "✅" },
-        { "name": "Switchboard & Fixture Wiping", "icon": "✅" },
-        { "name": "Cobweb Removal", "icon": "✅" },
-        { "name": "Door & Handle Sanitizing", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Pet Related",
-      "services": [
-        { "name": "Pet Hair Removal from Furniture", "icon": "✅" },
-        { "name": "Pet Area Cleanup", "icon": "✅" },
-        { "name": "Litter Box Cleaning", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Elderly or Disability Support Services",
-      "services": [
-        { "name": "Light Cleaning Support", "icon": "✅" },
-        { "name": "Bedside Assistance", "icon": "✅" },
-        { "name": "Meal Heating & Serving", "icon": "✅" }
-      ]
-    },
-    {
-      "category": "Miscellaneous",
-      "services": [
-        { "name": "Trash Bin Cleaning", "icon": "✅" },
-        { "name": "Recycling Separation", "icon": "✅" },
-        { "name": "Grocery Unpacking", "icon": "✅" },
-        { "name": "Watering Indoor Plants", "icon": "✅" }
+        {
+          "id": 5,
+          "name": "Green Cleaning",
+          "icon": "✅",
+          "rate": 110,
+          "serviceIcon": "🌱"
+        },
+        {
+          "name": "Sanitization Services",
+          "icon": "✅",
+          "rate": 130,
+          "serviceIcon": "🧴"
+        },
+        {
+          "name": "Strata Cleaning",
+          "icon": "✅",
+          "rate": 140,
+          "serviceIcon": "🏢"
+        }
       ]
     }
   ]

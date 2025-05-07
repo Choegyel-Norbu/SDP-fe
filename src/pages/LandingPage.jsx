@@ -373,7 +373,47 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-          <div className="why-us-content"></div>
+        </div>
+      </section>
+      {/* Testimonial */}
+      <section className="review-section">
+        <div className="review-container">
+          <p className="section-label">Testimonial</p>
+          <h2 className="section-title">What Our Clients Say</h2>
+        </div>
+        <div className="review-content">
+          <div className="review-card">
+            <div className="review-card-comment">
+              <em>
+                From start to finish, the service was seamless and incredibly
+                professional. Every detail was handled with care, and the
+                communication was top-notch. It's rare to find someone who
+                genuinely cares about delivering quality—highly recommended!"
+              </em>
+              <div className="review-card-header"> - Tashi Wanmgo</div>
+            </div>
+            <div className="review-card-rating"></div>
+          </div>
+          <div className="review-card">
+            <div className="review-card-comment">
+              <em>
+                "I couldn’t believe how easy and stress-free everything was.
+              </em>
+              <div className="review-card-header"> - Tashi Wanmgo</div>
+            </div>
+            <div className="review-card-rating"></div>
+          </div>
+          <div className="review-card">
+            <div className="review-card-comment">
+              <em>
+                "After using your service, my productivity skyrocketed. What
+                used to take me days now takes hours. The value far exceeds the
+                cost. Truly game-changing!"
+              </em>
+              <div className="review-card-header"> - Tashi Wanmgo</div>
+            </div>
+            <div className="review-card-rating"></div>
+          </div>
         </div>
       </section>
 

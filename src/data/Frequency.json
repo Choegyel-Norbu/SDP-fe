@@ -1,0 +1,6 @@
+[
+  { "label": "One Time", "value": "daily" },
+  { "label": "Weekly", "value": "weekly", "discount": "15% off" },
+  { "label": "Fortnightly", "value": "fortnightly", "discount": "10% off" },
+  { "label": "Monthly", "value": "monthly", "discount": "5% off" }
+]

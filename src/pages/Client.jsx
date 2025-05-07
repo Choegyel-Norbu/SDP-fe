@@ -10,9 +10,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
+import AddOns from "../data/AddOns.json";
+import Frequency from "../data/Frequency.json";
+import dayjs from "dayjs";
+
+import TimePicker from "react-time-picker";
+
+// import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Client() {
   const navigate = useNavigate();
+
+  const [time, setTime] = useState("10:00");
 
   const { userId, loggedIn } = useAuth();
   const [serviceForm, setServiceForm] = useState(false);
@@ -21,6 +32,10 @@ export default function Client() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [clientDetailSet, setClientDetailSet] = useState(false);
+
+  const [selectedTime, setSelectedTime] = React.useState(null);
+
+  const [clientSelectedService, setClientSelectedService] = useState(null);
 
   const location = useLocation();
 
@@ -45,6 +60,23 @@ export default function Client() {
     setServiceCategories(categoriesData.serviceCategories);
   }, []);
 
+  const clientSelectServiceCategory = (selected) => {
+    console.log("Client selected service - " + selectedCategory.category);
+
+    console.log("Client selected service - " + selected.name);
+    setClientSelectedService(selected);
+    setBookingDetail((prev) => ({
+      ...prev,
+      serviceRequest: {
+        ...prev.serviceRequest,
+        serviceName: selected.name,
+        serviceType: selectedCategory.category,
+        itemPrice: selected.rate,
+      },
+    }));
+    setIsDialogOpen(false);
+  };
+
   const [clientDetail, setClientDetail] = useState({
     userId: "",
     firstName: "",
@@ -58,13 +90,20 @@ export default function Client() {
     },
   });
 
-  const [clientServiceDetail, setClientServiceDetail] = useState({
-    serviceType: "",
-    description: "",
-    serviceName: "",
-    repeatFrequency: "",
-    priority: "",
-    requestedDate: "",
+  const [bookingDetail, setBookingDetail] = useState({
+    serviceRequest: {
+      serviceType: "",
+      serviceName: "",
+      itemPrice: "",
+    },
+    frequency: "",
+    specialInstructions: "",
+    promoCode: "",
+    numberOfBedrooms: "",
+    numberOfBathrooms: "",
+    addOns: [],
+    timeStart: "",
+    timeEnd: "",
   });
 
   const [currentSection, setCurrentSection] = useState(1);
@@ -86,6 +125,31 @@ export default function Client() {
         [name]: value,
       },
     }));
+  };
+
+  const [selectedAddOnIds, setSelectedAddOnIds] = useState(new Set());
+
+  const handleToggleAddon = (addon) => {
+    setSelectedAddOnIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(addon.name)) {
+        newSet.delete(addon.name);
+      } else {
+        newSet.add(addon.name);
+      }
+      return newSet;
+    });
+
+    setBookingDetail((prev) => {
+      const exists = prev.addOns.some((a) => a.name === addon.name);
+      return {
+        ...prev,
+        addOns: exists
+          ? prev.addOns.filter((a) => a.name !== addon.name) // remove
+          : [...prev.addOns, addon], // add
+      };
+    });
+    console.log("Add on addons ");
   };
 
   const handleNext = () => {
@@ -143,40 +207,83 @@ export default function Client() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setClientServiceDetail((prev) => ({
+    setBookingDetail((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const fieldReset = () => {
-    setClientServiceDetail({
-      userId: "",
+  const initialBookingDetail = {
+    serviceRequest: {
       serviceType: "",
-      description: "",
       serviceName: "",
-      repeatFrequency: "",
-      priority: "",
-      requestedDate: "",
-    });
+      itemPrice: "",
+    },
+    frequency: "",
+    specialInstructions: "",
+    startTime: "",
+    endTime: "",
+    promoCode: "",
+    numberOfBedrooms: "",
+    numberOfBathrooms: "",
+    addOns: [],
+    timeStart: "",
+    timeEnd: "",
   };
 
-  const handleServiceRequestSubmit = async () => {
+  const [review, setReview] = useState(true);
+  const [reviewAmount, setReviewAmount] = useState({
+    totalAmount: "",
+    discountedAmount: "",
+    amountAfterDiscount: "",
+    discountDesc: "",
+  });
+
+  const handleBookingReview = async () => {
+    console.log("Review booking .......");
+
+    try {
+      const payload = {
+        ...bookingDetail,
+        userId: userId,
+        // requestedDate: utcDate.toISOString(), // Convert to ISO format
+      };
+      const res = await api.post("/reviewBooking", JSON.stringify(payload));
+      console.log("Response price - " + res.data.priceAfterDiscount);
+      console.log("Response description - " + res.data.description);
+      console.log("Response discountedPrice - " + res.data.discountedPrice);
+      setReviewAmount({
+        totalAmount: res.data.totalAmount,
+        discountedAmount: res.data.discountedPrice,
+        amountAfterDiscount: res.data.amountAfterDiscount,
+        discountDesc: res.data.description,
+      });
+      setReview(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBookingConfirm = async () => {
     console.log("UserId from client page@@@- " + userId);
 
     try {
       const payload = {
-        ...clientServiceDetail,
+        ...bookingDetail,
         userId: userId,
         // requestedDate: utcDate.toISOString(), // Convert to ISO format
       };
-      const res = await api.post("/serviceRequest", JSON.stringify(payload));
+      const res = await api.post("/booking", JSON.stringify(payload));
       if (res.status === 200) {
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
         }, 6000);
-        fieldReset();
+        setBookingDetail(initialBookingDetail);
+        setSelectedAddOnIds(() => new Set());
+
+        setReview(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         toast.error(
           "Oops! We couldn’t submit your request. Please try again or contact support if the issue persists.",
@@ -242,6 +349,15 @@ export default function Client() {
     }
   };
 
+  const handleFreqSelect = (freq) => {
+    setBookingDetail((prev) => ({
+      ...prev,
+      frequency: freq,
+    }));
+    console.log("Frequenty @@@- " + bookingDetail.frequency);
+    console.log("Frequenty @@@- " + freq);
+  };
+
   const validateAddressDetails = () => {
     const newErrors = {};
     let isValid = true;
@@ -302,150 +418,397 @@ export default function Client() {
       {/* {serviceForm && (
         
       )} */}
+      {clientDetailSet && (
+        <div className="service-request-container" id="services">
+          <h2 className="service-title">Service Categories</h2>
+          <p
+            style={{
+              fontSize: "14px",
+              color: "#555",
+              marginBottom: "2rem",
+              padding: "15px",
+            }}
+          >
+            Let’s start by selecting what type of cleaning you need today.
+            Whether it's a sparkling kitchen or a spotless bathroom, choose the
+            service that fits your needs best.
+          </p>
+          <div className="categories-grid">
+            {serviceCategories.map((item, index) => (
+              <div
+                key={index}
+                className="category-card"
+                onClick={() => handleCardClick(item)}
+                onMouseEnter={() => setSelectedCategory(item)}
+              >
+                <h4 className="category-title">{item.category}</h4>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {clientDetailSet ? (
-        <form className="service-form">
-          <div className="form-group">
-            <label htmlFor="serviceType">Service Category</label>
-            <select
-              id="serviceType"
-              name="serviceType"
-              value={clientServiceDetail.serviceType}
-              onChange={handleChange}
-            >
-              <option value="">Select a service category</option>
-              <option value="General Cleaning">General Cleaning</option>
-              <option value="Kitchen Services">Kitchen Services</option>
-              <option value="Bathroom Services">Bathroom Services</option>
-              <option value="Window & Glasses">Window & Glasses</option>
-              <option value="Bedroom & Living Area">
-                Bedroom & Living Area
-              </option>
-              <option value="Floor & Carpet">Floor & Carpet</option>
-              <option value="Laundry Services">Laundry Services</option>
-              <option value="Organization Help">Organization Help</option>
-              <option value="Garden & Outdoor">Garden & Outdoor</option>
-              <option value="Wall & Fixture">Wall & Fixture</option>
-              <option value="Pet Related">Pet Related</option>
-              <option value="Elderly or Disability Support Service">
-                Elderly or Disability Support Service
-              </option>
-              <option value="Miscellaneous">Miscellaneous</option>
-            </select>
-          </div>
+        <>
+          {clientSelectedService && (
+            <div className="service-request-container">
+              <div className="avail-section">
+                <div>
+                  <div className="avail-details">
+                    <span className="avail-icon">
+                      {clientSelectedService?.serviceIcon}
+                    </span>
+                    <p className="avail-service-name">
+                      {clientSelectedService?.name}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="avail-service-rate">
+                      rate: ${clientSelectedService?.rate}
+                    </p>
+                  </div>
+                </div>
 
-          <div className="form-group">
-            <label htmlFor="serviceName">Service Name</label>
-            <input
-              type="text"
-              id="serviceName"
-              name="serviceName"
-              value={clientServiceDetail.serviceName}
-              onChange={handleChange}
-              placeholder="e.g. Deep Cleaning, Electrical Repair"
-            />
-          </div>
+                <div>
+                  <div className="booking-container">
+                    <div className="booking-step">
+                      <>
+                        <h2>Select Date & Time</h2>
+                        <p>
+                          Choose a date and time that works best for you. Our
+                          professional cleaners will arrive promptly and handle
+                          the rest
+                        </p>
+                        {/* <p>
+                          Pick a convenient date and time for your cleaning.
+                        </p> */}
+                        <div className="form-row">
+                          <div className="form-group">
+                            <label htmlFor="description">
+                              Select start time{" "}
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="repeatFrequency">How often?</label>
-              <select
-                id="repeatFrequency"
-                name="repeatFrequency"
-                value={clientServiceDetail.repeatFrequency}
-                onChange={handleChange}
-              >
-                <option value="">Select</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Fortnightly">Fortnightly</option>
-              </select>
-            </div>
+                            <DatePicker
+                              selected={bookingDetail.timeStart}
+                              onChange={(date) =>
+                                setBookingDetail((prev) => ({
+                                  ...prev,
+                                  timeStart: date,
+                                }))
+                              }
+                              showTimeSelect
+                              showTimeSelectOnly
+                              timeIntervals={15}
+                              timeCaption="Time"
+                              dateFormat="h:mm aa"
+                              className="date-picker-input"
+                              placeholder="Select time"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="description">
+                              Select end date and time
+                              <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <DatePicker
+                              selected={bookingDetail.timeEnd}
+                              onChange={(date) =>
+                                setBookingDetail((prev) => ({
+                                  ...prev,
+                                  timeEnd: date,
+                                }))
+                              }
+                              showTimeSelect
+                              showTimeSelectOnly
+                              timeIntervals={15}
+                              timeCaption="Time"
+                              dateFormat="h:mm aa"
+                              className="date-picker-input"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    </div>
+                  </div>
 
-            <div className="form-group">
-              <label htmlFor="priority">Priority</label>
-              <select
-                id="priority"
-                name="priority"
-                value={clientServiceDetail.priority}
-                onChange={handleChange}
-              >
-                <option value="">Select priority</option>
-                <option value="low">Low</option>
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-          </div>
+                  {selectedCategory?.category === "Residential Cleaning" && (
+                    <div className="booking-container">
+                      <div className="booking-step">
+                        <h2>How many bedrooms and bathrooms?</h2>
+                        <p style={{ marginBottom: "2rem" }}>
+                          Let us know the size of your home so we can tailor the
+                          cleaning service. Select the number of bedrooms and
+                          bathrooms to get the most accurate estimate.{" "}
+                          <span style={{ color: "red" }}>*</span>
+                        </p>
+                        <select
+                          id="bedrooms"
+                          value={bookingDetail.numberOfBedrooms}
+                          onChange={(e) =>
+                            setBookingDetail((prev) => ({
+                              ...prev,
+                              numberOfBedrooms: e.target.value,
+                            }))
+                          }
+                          className="select-native"
+                        >
+                          <option value="">Select Bedrooms</option>
+                          <option value="1">1 Bedroom</option>
+                          <option value="2">2 Bedrooms</option>
+                          <option value="3">3 Bedrooms</option>
+                          <option value="4">4 Bedrooms</option>
+                          <option value="5">5+ Bedrooms</option>
+                        </select>
+                        <select
+                          id="bathrooms"
+                          value={bookingDetail.numberOfBathrooms}
+                          onChange={(e) =>
+                            setBookingDetail((prev) => ({
+                              ...prev,
+                              numberOfBathrooms: e.target.value,
+                            }))
+                          }
+                          className="select-native"
+                        >
+                          <option value="">Select Bathrooms</option>
+                          <option value="1">1 Bathroom</option>
+                          <option value="2">2 Bathrooms</option>
+                          <option value="3">3 Bathrooms</option>
+                          <option value="4">4 Bathrooms</option>
+                          <option value="5">5+ Bathrooms</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
 
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={clientServiceDetail.description}
-              onChange={handleChange}
-              rows="4"
-              placeholder="Please describe the service you need in detail..."
-            />
-          </div>
+                  <div className="booking-container">
+                    <div className="booking-step">
+                      <h2>How ofter?</h2>
 
-          <div className="form-group">
-            <label htmlFor="description">Select date and time</label>
-            <DatePicker
-              id="serviceDateTime"
-              selected={
-                clientServiceDetail.requestedDate
-                  ? new Date(clientServiceDetail.requestedDate)
-                  : null
-              }
-              onChange={(date) => {
-                if (!date) return;
+                      <p style={{ marginBottom: "2rem" }}>
+                        Looking for a one-time deep clean or a recurring
+                        service? Pick how often you'd like our team to visit.{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </p>
+                      <ul className="frequency-list">
+                        {Frequency.map((freq) => (
+                          <li
+                            key={freq.value}
+                            className={`frequency-option ${
+                              bookingDetail.frequency === freq.value
+                                ? "selected"
+                                : ""
+                            }`}
+                            onClick={() => handleFreqSelect(freq.value)}
+                          >
+                            {freq.label}
+                            {freq.discount && (
+                              <span className="percent-off">
+                                - {freq.discount}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
 
-                // Convert selected date (JS Date) from local timezone to UTC ISO string
-                const localDate = DateTime.fromJSDate(date, {
-                  zone: "Asia/Thimphu",
-                });
-                console.log("Date time picked from picker - " + date);
+                  <div className="booking-container">
+                    <div className="booking-step">
+                      <h2>Special Instructions</h2>
 
-                console.log("Date time to local time - " + localDate);
-                const utcDateISO = localDate.toUTC().toISO();
+                      <p style={{ marginBottom: "2rem" }}>
+                        Got any specific areas to focus on or special
+                        instructions for our cleaners? Leave us a note!{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </p>
+                      <textarea
+                        id="description"
+                        name="specialInstructions"
+                        value={bookingDetail.specialInstructions}
+                        onChange={handleChange}
+                        rows="4"
+                        className="special-instr"
+                        placeholder="Please describe the service you need in detail..."
+                      />
+                    </div>
+                  </div>
 
-                setClientServiceDetail((prev) => ({
-                  ...prev,
-                  requestedDate: utcDateISO, // Save as ISO UTC string
-                }));
-              }}
-              showTimeSelect
-              timeFormat="HH:mm"
-              timeIntervals={15}
-              dateFormat="MMMM d, yyyy h:mm aa"
-              minDate={new Date()}
-              placeholderText="Select date and time"
-              className="date-picker-input"
-              required
-            />
-          </div>
+                  <div className="booking-container">
+                    <div className="booking-step">
+                      <h2>Promo code?</h2>
 
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleServiceRequestSubmit();
-            }}
-            className="submit-btn"
-          >
-            Submit
-          </button>
-          {clientDetailSet && (
-            <div
-              className="next-dashboard-btn"
-              style={{ marginInline: "1rem" }}
-              onClick={() => navigate("/dashboard")}
-            >
-              Dashboard
+                      <p style={{ marginBottom: "2rem" }}>
+                        Have a discount code? Apply it here and enjoy some
+                        savings on your service.
+                      </p>
+                      <input
+                        type="text"
+                        id="serviceName"
+                        name="promoCode"
+                        value={bookingDetail.promoCode}
+                        onChange={handleChange}
+                        className="date-picker-input promo-code"
+                        placeholder="Enter promo code"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="booking-container">
+                    <div className="booking-step">
+                      <h2>AddOns?</h2>
+
+                      <p style={{ marginBottom: "2rem" }}>
+                        Want to go the extra mile? Select additional services
+                        like deep oven or fridge cleaning to give your space a
+                        full refresh.
+                      </p>
+                      <div className="addon-section">
+                        <h2 className="addon-title"> Enhance Your Cleaning</h2>
+                        <div className="addon-grid">
+                          {AddOns.map((addon) => {
+                            const isSelected = selectedAddOnIds.has(addon.name);
+                            return (
+                              <div
+                                key={addon.name}
+                                className={`addon-card ${
+                                  isSelected ? "addon-card-selected" : ""
+                                }`}
+                              >
+                                <div className="addon-name">{addon.name}</div>
+                                <div className="addon-description">
+                                  {addon.description}
+                                </div>
+                                <div className="addon-price">
+                                  ${addon.price}
+                                </div>
+                                <button
+                                  className={`addon-toggle ${
+                                    isSelected ? "addon-toggle-selected" : ""
+                                  }`}
+                                  onClick={() => handleToggleAddon(addon)}
+                                >
+                                  {isSelected ? "Added" : "Add"}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Review booking  */}
+
+                {!review && (
+                  <div className="booking-review">
+                    <h2>Review Your Booking</h2>
+
+                    <div className="review-row">
+                      <span className="label">Service:</span>
+                      <span>{bookingDetail.serviceRequest.serviceName}</span>
+                    </div>
+
+                    <div className="review-row">
+                      <span className="label">Start Time:</span>
+                      <span>
+                        {bookingDetail.timeStart
+                          ? bookingDetail.timeStart.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "Not selected"}
+                      </span>
+                    </div>
+
+                    <div className="review-row">
+                      <span className="label">End Time:</span>
+                      <span>
+                        {bookingDetail.timeEnd
+                          ? bookingDetail.timeEnd.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "Not selected"}
+                      </span>
+                    </div>
+
+                    <div className="review-row">
+                      <span className="label">Frequency:</span>
+                      <span>{bookingDetail.frequency}</span>
+                    </div>
+
+                    <div className="review-row">
+                      <span className="label">Special Instructions:</span>
+                      <span>{bookingDetail.specialInstructions || "None"}</span>
+                    </div>
+
+                    <div className="review-row review-addons">
+                      <span className="label">Add-ons:</span>
+                      <ul>
+                        {bookingDetail.addOns.length > 0 ? (
+                          bookingDetail.addOns.map((addon, idx) => (
+                            <li key={idx}>
+                              {addon.name} - ${addon.price}
+                            </li>
+                          ))
+                        ) : (
+                          <li>None</li>
+                        )}
+                      </ul>
+                    </div>
+
+                    <hr />
+
+                    <div className="review-row total">
+                      <span className="label">Total Amount:</span>
+                      <span>${reviewAmount.totalAmount}</span>
+                    </div>
+
+                    <div className="review-row discount">
+                      <span className="label">Discount:</span>
+                      <span>- ${reviewAmount.discountedAmount}</span>
+                    </div>
+
+                    <div className="review-row final-amount">
+                      <span className="label">Amount After Discount:</span>
+                      <span>${reviewAmount.amountAfterDiscount}</span>
+                    </div>
+
+                    <div className="review-row">
+                      <span className="label">Discount Description:</span>
+                      <span>{reviewAmount.discountDesc || "—"}</span>
+                    </div>
+                  </div>
+                )}
+
+                {review && (
+                  <p style={{ fontSize: "14px", color: "#555" }}>
+                    Almost done! Take a moment to review your details and
+                    confirm your booking. We’ll send you a confirmation once
+                    it’s locked in."
+                  </p>
+                )}
+                <div className="booking-action-btn">
+                  <div
+                    className="confirm-booking"
+                    onClick={handleBookingReview}
+                  >
+                    Review
+                  </div>
+                  <div
+                    className="confirm-booking"
+                    onClick={handleBookingConfirm}
+                  >
+                    Confirm Booking
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </form>
+        </>
       ) : (
         <div className="service-request-container">
           <div className="progress-indicator">
@@ -600,24 +963,6 @@ export default function Client() {
         </div>
       )}
 
-      {clientDetailSet && (
-        <div className="service-request-container" id="services">
-          <h2 className="service-title">Service Categories</h2>
-          <div className="categories-grid">
-            {serviceCategories.map((item, index) => (
-              <div
-                key={index}
-                className="category-card"
-                onClick={() => handleCardClick(item)}
-                onMouseEnter={() => setSelectedCategory(item)}
-              >
-                <h4 className="category-title">{item.category}</h4>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Dialog Box */}
       <div
         className={`dialog-backdrop ${isDialogOpen ? "open" : ""}`}
@@ -632,7 +977,11 @@ export default function Client() {
               <h3>{selectedCategory.category}</h3>
               <div className="services-list">
                 {selectedCategory.services.map((service, i) => (
-                  <div key={i} className="service-item">
+                  <div
+                    key={i}
+                    className="avail-service-item"
+                    onClick={() => clientSelectServiceCategory(service)}
+                  >
                     <span className="service-icon">{service.icon}</span>
                     <span className="service-name">{service.name}</span>
                   </div>

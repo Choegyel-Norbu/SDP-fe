@@ -259,6 +259,7 @@ export default function Client() {
         discountDesc: res.data.description,
       });
       setReview(false);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     } catch (error) {
       console.log(error);
     }
@@ -798,12 +799,14 @@ export default function Client() {
                   >
                     Review
                   </div>
-                  <div
-                    className="confirm-booking"
-                    onClick={handleBookingConfirm}
-                  >
-                    Confirm Booking
-                  </div>
+                  {!review && (
+                    <div
+                      className="confirm-booking"
+                      onClick={handleBookingConfirm}
+                    >
+                      Confirm Booking
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

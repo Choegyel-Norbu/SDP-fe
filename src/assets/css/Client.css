@@ -445,7 +445,6 @@ body {
   display: flex;
   flex-direction: row;
   margin-top: 1rem;
-  justify-content: center;
   align-items: flex-end;
 }
 

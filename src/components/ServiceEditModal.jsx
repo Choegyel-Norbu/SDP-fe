@@ -3,114 +3,71 @@ import "../assets/css/Modal.css";
 import DatePicker from "react-datepicker";
 import { DateTime } from "luxon";
 
-const ServiceEditModal = ({ service, onClose, onSave }) => {
-  const [editedService, setEditedService] = useState({
-    serviceRequestId: service.id,
-    serviceType: service.serviceType || "",
-    serviceName: service.serviceName || "",
-    requestedDate: service.requestedDate,
-    repeatFrequency: service.repeatFrequency || "",
-    priority: service.priority || "",
-    description: service.description || "",
+const ServiceEditModal = ({ booking, onClose, onSave }) => {
+  const [editedbooking, setEditedbooking] = useState({
+    id: booking.id,
+    startTime: booking.startTime,
+    frequency: booking.frequency || "",
+    specialInstructions: booking.specialInstructions || "",
   });
 
   useEffect(() => {
-    if (service.requestedDate) {
+    console.log("Inside ServiceEdit time @@@ " + booking);
+    if (booking.startTime) {
       // Convert existing date to proper ISO format with timezone
-      const dateObj = new Date(service.requestedDate);
+      const dateObj = new Date(booking.startTime);
       const isoString = dateObj.toISOString();
-      setEditedService((prev) => ({
+      setEditedbooking((prev) => ({
         ...prev,
-        requestedDate: isoString,
+        startTime: isoString,
       }));
     }
-  }, [service.requestedDate]);
+  }, [booking.startTime]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedService((prev) => ({ ...prev, [name]: value }));
+    setEditedbooking((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (service.requestedDate !== null) {
-      const existDate = DateTime.fromJSDate(service.requestedDate);
+    if (booking.startTime !== null) {
+      const existDate = DateTime.fromJSDate(booking.startTime);
       const utcDateISO = existDate.toUTC().toISO();
-      setEditedService((prev) => ({
+      setEditedbooking((prev) => ({
         ...prev,
-        requestedDate: utcDateISO,
+        startTime: utcDateISO,
       }));
     }
-    onSave(editedService);
+    onSave(editedbooking);
   };
 
   return (
     <div className="edit-modal-overlay">
       <div className="edit-modal">
         <div className="edit-modal-header">
-          <h3>Edit Service</h3>
+          <h3>Edit booking</h3>
           <button onClick={onClose} className="edit-close-btn">
             &times;
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="dashboard-form">
-          <div className="form-group">
-            <label>Service Category</label>
-            <select
-              name="serviceType"
-              value={editedService.serviceType}
-              onChange={handleChange}
-              className="form-control"
-            >
-              <option value="">Select a service type:</option>
-              <option value="General Cleaning">General Cleaning</option>
-              <option value="Kitchen Services">Kitchen Services</option>
-              <option value="Bathroom Services">Bathroom Services</option>
-              <option value="Window & Glasses">Window & Glasses</option>
-              <option value="Bedroom & Living Area">
-                Bedroom & Living Area
-              </option>
-              <option value="Floor & Carpet">Floor & Carpet</option>
-              <option value="Laundry Services">Laundry Services</option>
-              <option value="Organization Help">Organization Help</option>
-              <option value="Garden & Outdoor">Garden & Outdoor</option>
-              <option value="Wall & Fixture">Wall & Fixture</option>
-              <option value="Pet Related">Pet Related</option>
-              <option value="Elderly or Disability Support Service">
-                Elderly or Disability Support Service
-              </option>
-              <option value="Miscellaneous">Miscellaneous</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Service Name</label>
-            <input
-              type="text"
-              name="serviceName"
-              value={editedService.serviceName}
-              onChange={handleChange}
-              className="form-control"
-              required
-            />
-          </div>
-
           <div className="form-row">
             <div className="form-group">
               <label>Pick date and time</label>
               <DatePicker
                 selected={
-                  editedService.requestedDate
-                    ? new Date(editedService.requestedDate)
+                  editedbooking.startTime
+                    ? new Date(editedbooking.startTime)
                     : new Date()
                 }
                 onChange={(date) => {
                   const localDate = DateTime.fromJSDate(date);
                   const utcDateISO = localDate.toUTC().toISO();
-                  setEditedService((prev) => ({
+                  setEditedbooking((prev) => ({
                     ...prev,
-                    requestedDate: utcDateISO,
+                    startTime: utcDateISO,
                   }));
                 }}
                 showTimeSelect
@@ -124,34 +81,22 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Frequency</label>
+              <label>How often?</label>
               <select
-                name="repeatFrequency"
-                value={editedService.repeatFrequency}
+                name="frequency"
+                value={editedbooking.frequency}
                 onChange={handleChange}
                 className="form-control"
               >
-                <option value="">Select frequency</option>
+                <option value="" style={{ color: "#fff" }}>
+                  Select how often
+                </option>
                 <option value="Daily">Daily</option>
                 <option value="Fortnightly">Fortnightly</option>
                 <option value="Weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
               </select>
             </div>
-          </div>
-
-          <div className="form-group">
-            <label>Priority</label>
-            <select
-              name="priority"
-              value={editedService.priority}
-              onChange={handleChange}
-              className="form-control"
-            >
-              <option value="">Select priority</option>
-              <option value="low">Low</option>
-              <option value="normal">Normal</option>
-              <option value="high">High</option>
-            </select>
           </div>
 
           <div className="form-group">
@@ -159,11 +104,11 @@ const ServiceEditModal = ({ service, onClose, onSave }) => {
 
             <textarea
               id="description"
-              name="description"
-              value={editedService.description}
+              name="specialInstructions"
+              value={editedbooking.specialInstructions}
               onChange={handleChange}
               rows="4"
-              placeholder="Please describe the service you need in detail..."
+              placeholder="Please describe the booking you need in detail..."
             />
           </div>
 

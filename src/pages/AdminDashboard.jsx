@@ -13,6 +13,9 @@ export default function AdminDashboard() {
   const [sortOption, setSortOption] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [bookingCancel, setBookingCancel] = useState(false);
+  const [cancellationReason, setCancellationReason] = useState("");
+  const [bookingCancelId, setBookingCancelId] = useState(null);
 
   const [client, setClient] = useState(null);
   const timerRef = useRef();
@@ -41,7 +44,7 @@ export default function AdminDashboard() {
       setError(null);
       try {
         const [servicesRes, countRes] = await Promise.all([
-          Api.get("/getAllServices"),
+          Api.get("/getBookings"),
           Api.get("/countServiceRequest"),
         ]);
 
@@ -73,11 +76,23 @@ export default function AdminDashboard() {
     const status = e.target.getAttribute("data-action");
     console.log("ID:", id, "Status:", status);
 
+    if (status === "CANCELLED") {
+      setBookingCancel(true);
+      setBookingCancelId(id);
+      return;
+    }
+
     try {
+      setCancellationReason("");
       const res = await Api.put(
-        `/updateStatus/${id}`,
-        {},
-        { params: { status } }
+        `/bookingConfirmation/${id}`,
+        cancellationReason,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: { status },
+        }
       );
 
       if (res.status === 200) {
@@ -132,9 +147,9 @@ export default function AdminDashboard() {
     return [...services].sort((a, b) => {
       switch (option) {
         case "date-asc":
-          return new Date(a.requestedDate) - new Date(b.requestedDate);
+          return new Date(a.startTime) - new Date(b.startTime);
         case "date-desc":
-          return new Date(b.requestedDate) - new Date(a.requestedDate);
+          return new Date(b.startTime) - new Date(a.startTime);
         case "priority-high":
           const priorityOrder = { High: 1, Medium: 2, Low: 3 };
           return (
@@ -146,6 +161,33 @@ export default function AdminDashboard() {
           return 0;
       }
     });
+  };
+
+  const handleCancelBooking = async () => {
+    console.log("Cancelling booking .....");
+    try {
+      const res = await Api.put(
+        `/bookingConfirmation/${bookingCancelId}?status=cancelled`,
+        cancellationReason,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        setRefreshKey((prev) => prev + 1);
+        setShowActionModal(null);
+        setRefreshKey((prev) => prev + 1);
+        setBookingCancel(false);
+        setCancellationReason("");
+        console.log("Cancelled booking");
+      }
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      setError("Failed to update status. Please try again.");
+    }
   };
 
   const displayedServices = sortOption
@@ -197,8 +239,8 @@ export default function AdminDashboard() {
               <th>Category</th>
               <th>Service Name</th>
               <th>Requested Date</th>
+              <th>Description</th>
               <th>Frequency</th>
-              <th>Priority</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -234,17 +276,12 @@ export default function AdminDashboard() {
                   </td>
                   <td>{service.serviceName}</td>
                   <td>
-                    {formatDateTime(service.requestedDate).date} <br />
-                    <small>{formatDateTime(service.requestedDate).time}</small>
+                    {formatDateTime(service.startTime).date} <br />
+                    <small>{formatDateTime(service.startTime).time}</small>
                   </td>
-                  <td>{service.repeatFrequency}</td>
-                  <td>
-                    <span
-                      className={`priority-badge ${service.priority.toLowerCase()}`}
-                    >
-                      {service.priority}
-                    </span>
-                  </td>
+                  <td>{service.specialInstructions}</td>
+                  <td>{service.frequency}</td>
+
                   <td>
                     <span
                       className={`status-badge ${service.status.toLowerCase()}`}
@@ -263,8 +300,10 @@ export default function AdminDashboard() {
                       {showActionModal === index && (
                         <div className="action_modal" ref={modalRef}>
                           <ul onClick={(e) => handleActionClick(e, service.id)}>
+                            <li data-action="CONFIRMED">Confirm</li>
                             <li data-action="ASSIGNED">Assign</li>
                             <li data-action="COMPLETED">Completed</li>
+                            <li data-action="CANCELLED">Cancel</li>
                           </ul>
                         </div>
                       )}
@@ -282,6 +321,33 @@ export default function AdminDashboard() {
           </tbody>
         </table>
       </div>
+
+      {/* Cancellation reason  */}
+
+      {bookingCancel && (
+        <div>
+          <h3 className="cancellation-reason">Cancellation reason</h3>
+          <textarea
+            name="cancellationReason"
+            value={cancellationReason}
+            onChange={(e) => setCancellationReason(e.target.value)}
+          />
+
+          <span className="cancel" onClick={handleCancelBooking}>
+            Cancel
+          </span>
+          <span
+            onClick={() => setBookingCancel(false)}
+            style={{
+              marginInline: "1rem",
+              fontSize: "20px",
+              cursor: "pointer",
+            }}
+          >
+            {String.fromCharCode(10005)}
+          </span>
+        </div>
+      )}
 
       <div className="table-footer">
         Showing 1 to {displayedServices.length} of {countServices} entries

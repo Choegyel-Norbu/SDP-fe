@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../assets/css/Client.css";
 import api from "../services/Api";
 import { toast } from "react-toastify";
@@ -23,17 +23,13 @@ import TimePicker from "react-time-picker";
 export default function Client() {
   const navigate = useNavigate();
 
-  const [time, setTime] = useState("10:00");
-
-  const { userId, loggedIn } = useAuth();
+  const { userId, loggedIn, detailSet, clientDetailsSet } = useAuth();
   const [serviceForm, setServiceForm] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [clientDetailSet, setClientDetailSet] = useState(false);
-
-  const [selectedTime, setSelectedTime] = React.useState(null);
 
   const [clientSelectedService, setClientSelectedService] = useState(null);
 
@@ -56,7 +52,6 @@ export default function Client() {
     };
 
     clientSetCall();
-
     setServiceCategories(categoriesData.serviceCategories);
   }, []);
 
@@ -287,7 +282,7 @@ export default function Client() {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         toast.error(
-          "Oops! We couldn’t submit your request. Please try again or contact support if the issue persists.",
+          "We couldn’t submit your request. Please try again or contact support if the issue persists.",
           {
             position: "top-center",
             autoClose: 3000,
@@ -391,11 +386,7 @@ export default function Client() {
   return (
     <div>
       {showAlert && (
-        <Alert
-          variant="filled"
-          severity="success"
-          style={{ position: "fixed", width: "100%" }}
-        >
+        <Alert variant="filled" severity="success" style={{ width: "100%" }}>
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
@@ -416,9 +407,6 @@ export default function Client() {
         </div>
       </header>
 
-      {/* {serviceForm && (
-        
-      )} */}
       {clientDetailSet && (
         <div className="service-request-container" id="services">
           <h2 className="service-title">Service Categories</h2>
@@ -486,11 +474,48 @@ export default function Client() {
                         <div className="form-row">
                           <div className="form-group">
                             <label htmlFor="description">
-                              Select start time{" "}
+                              Select start date and time{" "}
                               <span style={{ color: "red" }}>*</span>
                             </label>
-
                             <DatePicker
+                              id="serviceDateTime"
+                              selected={
+                                bookingDetail.startTime
+                                  ? new Date(bookingDetail.startTime)
+                                  : null
+                              }
+                              onChange={(date) => {
+                                if (!date) return;
+
+                                // Convert selected date (JS Date) from local timezone to UTC ISO string
+                                const localDate = DateTime.fromJSDate(date, {
+                                  zone: "Asia/Thimphu",
+                                });
+                                console.log(
+                                  "Date time picked from picker - " + date
+                                );
+
+                                console.log(
+                                  "Date time to local time - " + localDate
+                                );
+                                const utcDateISO = localDate.toUTC().toISO();
+
+                                setBookingDetail((prev) => ({
+                                  ...prev,
+                                  startTime: utcDateISO, // Save as ISO UTC string
+                                }));
+                              }}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={15}
+                              dateFormat="MMMM d, yyyy h:mm aa"
+                              minDate={new Date()}
+                              placeholderText="Select end date and time"
+                              className="date-picker-input"
+                              required
+                            />
+
+                            {/* <DatePicker
                               selected={bookingDetail.timeStart}
                               onChange={(date) =>
                                 setBookingDetail((prev) => ({
@@ -505,14 +530,52 @@ export default function Client() {
                               dateFormat="h:mm aa"
                               className="date-picker-input"
                               placeholder="Select time"
-                            />
+                            /> */}
                           </div>
                           <div className="form-group">
                             <label htmlFor="description">
                               Select end date and time
                               <span style={{ color: "red" }}>*</span>
                             </label>
+
                             <DatePicker
+                              id="serviceDateTime"
+                              selected={
+                                bookingDetail.endTime
+                                  ? new Date(bookingDetail.endTime)
+                                  : null
+                              }
+                              onChange={(date) => {
+                                if (!date) return;
+
+                                // Convert selected date (JS Date) from local timezone to UTC ISO string
+                                const localDate = DateTime.fromJSDate(date, {
+                                  zone: "Asia/Thimphu",
+                                });
+                                console.log(
+                                  "Date time picked from picker - " + date
+                                );
+
+                                console.log(
+                                  "Date time to local time - " + localDate
+                                );
+                                const utcDateISO = localDate.toUTC().toISO();
+
+                                setBookingDetail((prev) => ({
+                                  ...prev,
+                                  endTime: utcDateISO, // Save as ISO UTC string
+                                }));
+                              }}
+                              showTimeSelect
+                              timeFormat="HH:mm"
+                              timeIntervals={15}
+                              dateFormat="MMMM d, yyyy h:mm aa"
+                              minDate={new Date()}
+                              placeholderText="Select end date and time"
+                              className="date-picker-input"
+                              required
+                            />
+                            {/* <DatePicker
                               selected={bookingDetail.timeEnd}
                               onChange={(date) =>
                                 setBookingDetail((prev) => ({
@@ -526,7 +589,7 @@ export default function Client() {
                               timeCaption="Time"
                               dateFormat="h:mm aa"
                               className="date-picker-input"
-                            />
+                            /> */}
                           </div>
                         </div>
                       </>

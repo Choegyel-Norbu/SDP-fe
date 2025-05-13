@@ -4,18 +4,18 @@ import "../assets/css/ClientDashboard.css";
 import api from "../services/Api";
 import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
-import ServiceEditModal from "../components/ServiceEditModal";
 import { Alert, AlertTitle, Tooltip } from "@mui/material";
 import { FaEdit } from "react-icons/fa";
+import ServiceEditModal from "../components/ServiceEditModal";
 
 export default function ClientDashboard({ onAlert }) {
   const { userId, email } = useAuth();
   const [client, setClient] = useState(null);
-  const [services, setServices] = useState([]);
+  const [booking, setBooking] = useState([]);
   const [showActionModal, setShowActionModal] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const modalRef = useRef(null);
-  const [editingService, setEditingService] = useState(null);
+  const [editingBooking, setEditingBooking] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
   const [clientRefresh, setClientRefresh] = useState(false);
@@ -24,7 +24,7 @@ export default function ClientDashboard({ onAlert }) {
 
   useEffect(() => {
     fetchClient();
-    fetchClientServices();
+    fetchClientBooking();
 
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -71,10 +71,10 @@ export default function ClientDashboard({ onAlert }) {
     }
   }, [client, clientRefresh]);
 
-  const fetchClientServices = async () => {
+  const fetchClientBooking = async () => {
     try {
-      const res = await api.get(`/getServicesForClient/${userId}`);
-      if (res.status === 200) setServices(res.data);
+      const res = await api.get(`/clientBookings/${userId}`);
+      if (res.status === 200) setBooking(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -116,10 +116,10 @@ export default function ClientDashboard({ onAlert }) {
   };
 
   // Update your edit handler
-  const handleEdit = (service) => {
-    console.log("Services @@@- " + service);
+  const handleEdit = (booking) => {
+    console.log("booking booking@@@- " + booking);
     setShowActionModal(false);
-    setEditingService(service);
+    setEditingBooking(booking);
     setShowActionModal(null);
   };
 
@@ -188,7 +188,7 @@ export default function ClientDashboard({ onAlert }) {
       const res = await api.delete(`/deleteServiceRequest/${serviceToDelete}`);
 
       if (res.status === 200) {
-        await fetchClientServices();
+        await fetchClientBooking();
         setShowDeleteService(false);
       }
     } catch (error) {
@@ -274,26 +274,25 @@ export default function ClientDashboard({ onAlert }) {
                 <th>Service Name</th>
                 <th>Requested Date</th>
                 <th>Frequency</th>
-                <th>Priority</th>
                 <th>Status</th>
+                <th>Remarks</th>
               </tr>
             </thead>
             <tbody>
-              {services.map((service, index) => (
+              {booking.map((booking, index) => (
                 <tr key={index}>
-                  <td>{service.serviceType}</td>
-                  <td>{service.serviceName}</td>
+                  <td>{booking.serviceType}</td>
+                  <td>{booking.serviceName}</td>
                   <td>
-                    {formatDateTime(service.requestedDate)?.date} <br />
-                    <small>{formatDateTime(service.requestedDate)?.time}</small>
+                    {formatDateTime(booking.startTime)?.date} <br />
+                    <small>{formatDateTime(booking.startTime)?.time}</small>
                   </td>
-                  <td>{service.repeatFrequency}</td>
-                  <td>{service.priority}</td>
+                  <td>{booking.frequency}</td>
                   <td>
                     <span
-                      className={`status-badge ${service.status.toLowerCase()}`}
+                      className={`status-badge ${booking.status.toLowerCase()}`}
                     >
-                      [{service.status}]
+                      [{booking.status}]
                     </span>
                   </td>
                   <td>
@@ -307,10 +306,10 @@ export default function ClientDashboard({ onAlert }) {
                       {showActionModal === index && (
                         <div className="action_modal" ref={modalRef}>
                           <ul>
-                            <li onClick={() => handleEdit(service)}>Edit</li>
+                            <li onClick={() => handleEdit(booking)}>Edit</li>
                           </ul>
                           <ul>
-                            <li onClick={() => handleRemove(service.id)}>
+                            <li onClick={() => handleRemove(booking.id)}>
                               Remove
                             </li>
                           </ul>
@@ -451,19 +450,21 @@ export default function ClientDashboard({ onAlert }) {
         </div>
       )}
 
-      {editingService && (
+      {editingBooking && (
         <ServiceEditModal
-          service={editingService}
-          onClose={() => setEditingService(null)}
-          onSave={async (updatedService) => {
-            console.log("Retrived date format " + updatedService.requestedDate);
+          booking={editingBooking}
+          onClose={() => setEditingBooking(null)}
+          onSave={async (updatedBooking) => {
             try {
-              const res = await api.put("/updateService", updatedService);
+              const res = await api.put("/updateBooking", updatedBooking);
 
               if (res.status === 200) {
-                await fetchClientServices();
-                onAlert(true);
-                setEditingService(null);
+                await fetchClientBooking();
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+                setShowError(false);
+                setEditingBooking(null);
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }
             } catch (error) {
               console.error("Full update error:", {

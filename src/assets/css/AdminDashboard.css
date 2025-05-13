@@ -83,6 +83,18 @@
   position: relative;
   cursor: pointer;
 }
+.cancellation-reason {
+  font-size: 16px;
+  font-weight: 600;
+}
+.cancel {
+  background-color: #800000;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  cursor: pointer;
+}
 
 .hover-dialog {
   position: absolute;
@@ -252,17 +264,25 @@
 }
 
 .status-badge.completed {
-  color: #28a745;
+  color: #32cd56;
   background-color: rgba(40, 167, 69, 0.1);
 }
 
 .status-badge.assigned {
-  color: #ffc107;
+  color: #ff6600;
   background-color: rgba(255, 193, 7, 0.1);
 }
 
-.status-badge.pending {
+.status-badge.cancelled {
   color: #ff0000;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+.status-badge.pending {
+  color: #cccc00;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+.status-badge.confirmed {
+  color: #0066ff;
   background-color: rgba(255, 193, 7, 0.1);
 }
 

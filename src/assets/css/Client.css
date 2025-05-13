@@ -890,16 +890,51 @@ button {
   }
 }
 
+@media (max-width: 780px) {
+  .frequency-option {
+    width: 70%;
+  }
+}
+
+@media (max-width: 610px) {
+  .frequency-option {
+    width: 100%;
+  }
+
+  .date-picker-input {
+    width: 100%;
+  }
+
+  .promo-code {
+    border-radius: 12px;
+    font-size: 14px;
+    width: 100% !important;
+  }
+  .confirm-booking {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
   .categories-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 15px;
+  }
+  .booking-review {
+    width: 100%;
+    padding: 0;
   }
 
   .form-row {
     flex-direction: column;
     gap: 0;
     background-color: #fff;
+  }
+}
+
+@media (max-width: 700px) {
+  .addon-section {
+    padding: 0;
   }
 }
 

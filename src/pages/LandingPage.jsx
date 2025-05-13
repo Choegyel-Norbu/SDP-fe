@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
 import BiotechIcon from "@mui/icons-material/Science";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+
 import {
   faArrowsSpin,
   faSliders,
@@ -195,7 +197,10 @@ export default function LandingPage() {
             Enjoy the ease of expert home services tailored to your needs. Count
             on us for dependable, high-quality results every time.
           </p>
-          <button className="quote-button" onClick={() => navigate("/client")}>
+          <button
+            className="quote-button"
+            onClick={() => navigate(loggedIn ? "/client" : "/login")}
+          >
             Request Your Own Service
           </button>
         </div>

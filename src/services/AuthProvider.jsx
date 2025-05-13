@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");
+  const [detailSet, setDetailSet] = useState(false);
 
   const [userId, setUserId] = useState(
     () => localStorage.getItem("userId") || ""
@@ -40,6 +41,10 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
+  const clientDetailsSet = (clientDetailSet) => {
+    setDetailSet(clientDetailSet);
+  };
+
   const logout = () => {
     console.log("Loggin out .....");
     setLoggedIn(false);
@@ -53,7 +58,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ loggedIn, login, logout, email, userId, role }}
+      value={{
+        loggedIn,
+        login,
+        logout,
+        email,
+        userId,
+        role,
+        clientDetailsSet,
+        detailSet,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -7,6 +7,7 @@
   border-bottom: 2px solid #f2f2f2;
   background-color: #fff;
 }
+
 .container_info h5 {
   font-size: 14px;
 }
@@ -318,10 +319,11 @@
   width: 100%;
   height: fit-content;
 }
-/* Main container */
-/* .login-container {
+
+.login-container {
   height: 100vh;
-} */
+  display: flex;
+}
 
 /* Form section */
 .form-section {
@@ -329,14 +331,34 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
+  background-color: #fff;
   padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+.btn-login {
+  border-radius: 30px !important;
+  margin: 1rem 0;
+}
+
+.invalid-feedback {
+  font-size: 12px;
+  color: red;
 }
 
 .login-form {
-  width: 100%;
-  max-width: 400px;
+  width: 30%;
   /* padding: 2rem; */
+}
+.login-form h2 {
+  font-size: 30px !important;
+  font-weight: 200;
+  color: #666666;
+  text-align: center;
+}
+
+.google-auth {
+  margin-bottom: 1rem;
 }
 
 /* Image section */
@@ -374,6 +396,11 @@
   border: 1px solid #dee2e6;
 }
 
+.login-form form input {
+  border-radius: 0 !important;
+  font-size: 14px;
+}
+
 .form-control:focus {
   border-color: #0077b6;
   box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
@@ -395,10 +422,43 @@
 /* ==================== */
 /* RESPONSIVE STYLES */
 /* ==================== */
+@media (max-width: 1100px) {
+  .login-form {
+    width: 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  .login-form {
+    width: 60%;
+  }
+}
+
+@media (max-width: 700px) {
+  .login-form {
+    width: 70%;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-form {
+    width: 90%;
+  }
+
+  .form-section h2 {
+    font-size: 30px !important;
+    font-weight: 200;
+    color: #666666;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
 @media (max-width: 553px) {
   .header_info h5 {
     display: none;
   }
+
   .container_info {
     width: 100%;
     display: flex;
@@ -418,6 +478,7 @@
     justify-content: flex-start;
     text-align: center; /* Optional: center text */
   }
+
   .contact-container {
     width: 100%;
     justify-content: space-between;

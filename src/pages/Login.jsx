@@ -279,7 +279,7 @@ export default function AuthForm() {
                   />
                   <button
                     type="button"
-                    className="btn btn-outline-secondary eye-btn"
+                    className="eye-btn"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
@@ -315,7 +315,7 @@ export default function AuthForm() {
                     />
                     <button
                       type="button"
-                      className="btn btn-outline-secondary"
+                      className="eye-btn"
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }

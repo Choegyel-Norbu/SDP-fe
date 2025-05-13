@@ -320,6 +320,11 @@
   height: fit-content;
 }
 
+.eye-btn {
+  color: #666666;
+  background-color: #fff;
+}
+
 .login-container {
   height: 100vh;
   display: flex;

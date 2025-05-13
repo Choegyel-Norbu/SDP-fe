@@ -965,11 +965,11 @@ button {
     display: none;
   }
 
-  .form-section h2 {
+  /* .form-section h2 {
     margin-top: 1rem;
     margin-bottom: 0;
     font-size: 20px;
-  }
+  } */
 
   .form-navigation {
     margin: 0.5rem 0;

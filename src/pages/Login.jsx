@@ -53,13 +53,6 @@ export default function AuthForm() {
     }
   };
 
-  // Error state
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
   useEffect(() => {
     setRegisterEmailStatus(registerFlag);
   });
@@ -77,6 +70,12 @@ export default function AuthForm() {
     return password.length >= 8;
   };
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const validateForm = () => {
     let valid = true;
     const newErrors = {
@@ -85,7 +84,6 @@ export default function AuthForm() {
       confirmPassword: "",
     };
 
-    // Email validation
     if (!formData.email) {
       newErrors.email = "Email is required";
       valid = false;
@@ -94,7 +92,6 @@ export default function AuthForm() {
       valid = false;
     }
 
-    // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
       valid = false;
@@ -103,7 +100,6 @@ export default function AuthForm() {
       valid = false;
     }
 
-    // Confirm password validation (only for register)
     if (isRegister) {
       if (!formData.confirmPassword) {
         newErrors.confirmPassword = "Please confirm your password";
@@ -113,7 +109,6 @@ export default function AuthForm() {
         valid = false;
       }
     }
-
     setErrors(newErrors);
     return valid;
   };
@@ -182,6 +177,8 @@ export default function AuthForm() {
           setApiError("User not found. Please check your email or register.");
         } else if (error.response.status === 401) {
           setApiError("Invalid credentials. Please check your password.");
+        } else if (error.response.status === 409) {
+          setApiError("The user already exits.");
         } else if (error.response.data && error.response.data.body) {
           setApiError(error.response.data.body);
         } else {
@@ -287,11 +284,6 @@ export default function AuthForm() {
                 </div>
                 {errors.password && (
                   <div className="invalid-feedback">{errors.password}</div>
-                )}
-                {isRegister && (
-                  <small className="text-muted">
-                    Must be at least 8 characters
-                  </small>
                 )}
               </div>
 

@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../assets/css/Landing.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
-import BiotechIcon from "@mui/icons-material/Science";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 import {
   faArrowsSpin,
@@ -13,9 +11,9 @@ import {
   faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
 
-import serviceCategories from "../data/ServiceCategories.json";
 import api from "../services/Api";
 import Footer from "./Footer";
+import Review from "../components/Review";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -24,6 +22,7 @@ export default function LandingPage() {
   const [logoutDialog, setLogoutDialog] = useState(false);
   const dialogRef = useRef();
   const [clientDetailSet, setClientDetailSet] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const menuRef = useRef(null);
   const footerRef = useRef(null);
@@ -185,7 +184,7 @@ export default function LandingPage() {
       <div className="hero-content">
         <div className="header-img-container">
           <img
-            src="https://thumbs.wbm.im/pw/small/e974318f69a98353476a7161b0b9e21e.png" // Your transparent image
+            src="https://w7.pngwing.com/pngs/871/688/png-transparent-sonny-s-carpet-cleaning-upholstery-oral-cleaning-thumbnail.png" // Your transparent image
             alt="Cleaner"
             className="header-img"
           />
@@ -422,6 +421,13 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <Review
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={(data) => console.log("Submitted:", data)}
+        client={{ id: 1, name: "Chogyal" }}
+      />
 
       <Footer ref={footerRef} />
     </div>

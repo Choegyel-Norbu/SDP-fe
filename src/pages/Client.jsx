@@ -12,13 +12,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
 import AddOns from "../data/AddOns.json";
 import Frequency from "../data/Frequency.json";
-import dayjs from "dayjs";
-
-import TimePicker from "react-time-picker";
-
-// import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Client() {
   const navigate = useNavigate();

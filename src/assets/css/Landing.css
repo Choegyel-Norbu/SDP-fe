@@ -13,9 +13,11 @@
 }
 .hero-header {
   display: flex;
+  position: sticky;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 0 1rem;
 }
 .subheading {
   color: #e5731b;
@@ -491,7 +493,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .hero {
-    padding: 1rem;
+    /* padding: 1rem; */
   }
   .nav-links {
     color: #000;

@@ -42,17 +42,18 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
+  width: fit-content;
   margin-bottom: 8px;
 }
 
 .otp-input {
-  width: 60px;
-  height: 60px;
+  /* width: 60px;
+  height: 60px; */
   text-align: center;
   font-size: 24px;
   font-weight: 600;
-  border: 2px solid #e0e0e0;
   border-radius: 12px;
+  border-bottom: 1 solid #000;
   outline: none;
   transition: all 0.3s;
   color: #2c3e50;

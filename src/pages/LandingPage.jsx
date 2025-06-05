@@ -95,7 +95,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="hero">
+    <div className="hero-container">
       <header className="hero-header">
         <div className="menu-toggle" onClick={toggleMenu} id="menuToggle">
           &#9776;

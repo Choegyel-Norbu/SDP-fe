@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "./Api";
 
 const AuthContext = createContext();
 
@@ -11,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");
-  const [detailSet, setDetailSet] = useState(false);
+  const [clientDetailSet, setclientDetailSet] = useState(false);
 
   const [userId, setUserId] = useState(
     () => localStorage.getItem("userId") || ""
@@ -29,9 +30,7 @@ export const AuthProvider = ({ children }) => {
   const login = (token, email, userid, role) => {
     if (!token) return;
     localStorage.setItem("token", token);
-    console.log("Setting user Id ....... ");
     localStorage.setItem("userId", userid);
-    console.log("User id set @@@- " + localStorage.getItem("userId"));
     localStorage.setItem("email", email);
     localStorage.setItem("role", role);
     setLoggedIn(true);
@@ -39,10 +38,18 @@ export const AuthProvider = ({ children }) => {
     setUserId(userid);
     setRole(role);
     navigate("/");
+
+    detailsSet(userId);
   };
 
-  const clientDetailsSet = (clientDetailSet) => {
-    setDetailSet(clientDetailSet);
+  const detailsSet = async (id) => {
+    console.log("Inside login inside client set");
+    const res = await api.get(`/clientSet/${id}`);
+    if (res.data) setclientDetailSet(true);
+
+    console.log(
+      "Inside AuthContext and checking client detail set --- " + clientDetailSet
+    );
   };
 
   const logout = () => {
@@ -65,8 +72,7 @@ export const AuthProvider = ({ children }) => {
         email,
         userId,
         role,
-        clientDetailsSet,
-        detailSet,
+        clientDetailSet,
       }}
     >
       {children}

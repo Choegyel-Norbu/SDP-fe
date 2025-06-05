@@ -385,11 +385,12 @@ export default function Client() {
       )}
       <header className="client-header-container">
         <div>
-          <h1 className="title">Share Your Service Offering</h1>
-          {serviceForm ? (
+          <h1 className="title">Let’s Get Your Space Sparkling!</h1>
+          {!serviceForm ? (
             <p className="subtitle">
-              Share the service details to help us deliver exactly what you're
-              looking for.
+              Tell us what you need, and we’ll take care of the rest. From
+              spotless homes to sparkling venues, choose the cleaning service
+              that fits your needs — fast, reliable, and tailored for you.
             </p>
           ) : (
             <p className="subtitle">
@@ -397,6 +398,9 @@ export default function Client() {
               for you.
             </p>
           )}
+        </div>
+        <div style={{ width: "40%", textAlign: "end" }}>
+          <a href="/">Home</a>
         </div>
       </header>
 

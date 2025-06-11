@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
   faArrowsSpin,
+  faLeftLong,
   faSliders,
   faUser,
   faUserShield,
@@ -144,7 +145,7 @@ export default function LandingPage() {
             className={`logout_dialog ${logoutDialog ? "show" : ""}`}
             ref={dialogRef}
           >
-            <div>
+            <div style={{ padding: "0.5rem", paddingTop: "1rem" }}>
               <span
                 className="fa fa-envelope"
                 style={{
@@ -153,29 +154,32 @@ export default function LandingPage() {
               ></span>
               <span style={{ marginLeft: "12px" }}>{email}</span>
             </div>
-            <div>
+            <div style={{ padding: "0.5rem" }}>
               <span
                 className="fa fa-chart-line"
                 style={{
                   color: "#66b3ff",
                 }}
               ></span>
-              <button
+              <div
                 onClick={() =>
                   navigate(clientDetailSet ? "/dashboard" : "/client")
                 }
+                style={{ display: "inline" }}
               >
                 Dashboard
-              </button>
+              </div>
             </div>
-            <div>
+            <div style={{ padding: "0.5rem" }}>
               <span
                 className="fa fa-sign-out"
                 style={{
                   color: "#66b3ff",
                 }}
               ></span>
-              <button onClick={handleLogout}>Logout</button>
+              <div onClick={handleLogout} style={{ display: "inline" }}>
+                Logout
+              </div>
             </div>
           </div>
         </div>
@@ -184,7 +188,7 @@ export default function LandingPage() {
       <div className="hero-content">
         <div className="header-img-container">
           <img
-            src="https://w7.pngwing.com/pngs/871/688/png-transparent-sonny-s-carpet-cleaning-upholstery-oral-cleaning-thumbnail.png" // Your transparent image
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpqtBpZyW9TlqQtKs-WpmNug6HQfL1rM8FGQ&s" // Your transparent image
             alt="Cleaner"
             className="header-img"
           />

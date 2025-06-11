@@ -16,13 +16,14 @@ import Frequency from "../data/Frequency.json";
 export default function Client() {
   const navigate = useNavigate();
 
-  const { userId, loggedIn, detailSet, clientDetailsSet } = useAuth();
+  const { userId } = useAuth();
   const [serviceForm, setServiceForm] = useState(false);
   const [serviceCategories, setServiceCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [clientDetailSet, setClientDetailSet] = useState(false);
+  const [showMenuItem, setShowMenuItem] = useState(false);
 
   const [clientSelectedService, setClientSelectedService] = useState(null);
 
@@ -168,6 +169,7 @@ export default function Client() {
         }, 6000);
         setServiceForm(true);
         setClientDetailSet(true);
+        localStorage.setItem("clientDetailSet", "true");
       } else {
         toast.error("Failed to recorded your information", {
           position: "top-center",
@@ -376,6 +378,25 @@ export default function Client() {
     }
   };
 
+  const menuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenuItem(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
+  const toggleMenu = () => {
+    setShowMenuItem((prev) => !prev);
+  };
+
   return (
     <div>
       {showAlert && (
@@ -383,8 +404,12 @@ export default function Client() {
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
+
       <header className="client-header-container">
-        <div>
+        <div className="menu-toggle" onClick={toggleMenu} id="menuToggle">
+          &#9776;
+        </div>
+        <div style={{ paddingRight: "2rem" }} className="title-container">
           <h1 className="title">Let’s Get Your Space Sparkling!</h1>
           {!serviceForm ? (
             <p className="subtitle">
@@ -399,12 +424,18 @@ export default function Client() {
             </p>
           )}
         </div>
-        <div style={{ width: "40%", textAlign: "end" }}>
-          <a href="/">Home</a>
+        <div style={{ width: "10%" }}>
+          <nav
+            className={`nav-links client-navLink ${showMenuItem ? "show" : ""}`}
+            id="navLinks"
+            ref={menuRef}
+          >
+            <a href="/">Home</a>
+          </nav>
         </div>
       </header>
 
-      {clientDetailSet && (
+      {localStorage.getItem("clientDetailSet") === "true" && (
         <div className="service-request-container" id="services">
           <h2 className="service-title">Service Categories</h2>
           <p
@@ -434,7 +465,7 @@ export default function Client() {
         </div>
       )}
 
-      {clientDetailSet ? (
+      {localStorage.getItem("clientDetailSet") === "true" && (
         <>
           {clientSelectedService && (
             <div className="service-request-container">
@@ -872,7 +903,9 @@ export default function Client() {
             </div>
           )}
         </>
-      ) : (
+      )}
+
+      {localStorage.getItem("clientDetailSet") !== "true" && (
         <div className="service-request-container">
           <div className="progress-indicator">
             <div className={`step ${currentSection >= 1 ? "active" : ""}`}>

@@ -136,8 +136,8 @@
 .logout_dialog {
   display: none;
   position: absolute;
-  top: 70px;
-  right: 40px;
+  top: 45px;
+  right: 35px;
   width: auto;
   padding-right: 1rem;
   background: #ffffff;
@@ -249,7 +249,7 @@
   .logout_dialog {
     position: absolute;
     top: 60px;
-    right: 20px;
+    right: 35px;
     width: 250px;
     background: #ffffff;
     border-radius: 3%;
@@ -266,6 +266,7 @@
     padding: 1rem;
     padding-left: 1.8rem;
     gap: 1.5rem;
+    z-index: 10;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
@@ -290,6 +291,53 @@
 
 /* Ensure dropdowns work on hover for desktop */
 @media (min-width: 992px) {
+  .container_info {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: center; /* Optional: center text */
+  }
+
+  .contact-container {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .image-section {
+    height: 40vh;
+  }
+
+  .form-section {
+    height: 60vh;
+  }
+  .eye-btn {
+    border: none;
+    color: #999999 !important;
+  }
+  .form-row {
+    background-color: #00b8e6;
+    flex-direction: column;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Container for form fields */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  /* Each form group */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
   .dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 0;
@@ -401,7 +449,7 @@
   border: 1px solid #dee2e6;
 }
 
-.login-form form input {
+.login-form form {
   border-radius: 0 !important;
   font-size: 14px;
 }
@@ -445,16 +493,6 @@
   }
 }
 
-@media (max-width: 576px) {
-  .login-form {
-    width: 90%;
-  }
-
-  .form-section h2 {
-    font-size: 30px !important;
-  }
-}
-
 @media (max-width: 553px) {
   .header_info h5 {
     display: none;
@@ -468,98 +506,5 @@
     padding: 1rem 0 0 0.5rem;
     border-bottom: 2px solid #f2f2f2;
     background-color: #fff;
-  }
-}
-
-@media (max-width: 992px) {
-  .container_info {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    text-align: center; /* Optional: center text */
-  }
-
-  .contact-container {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .image-section {
-    height: 40vh;
-  }
-
-  .form-section {
-    height: 60vh;
-  }
-  .eye-btn {
-    border: none;
-    color: #999999 !important;
-  }
-  .form-row {
-    /* width: 100%; */
-    /* display: flex; */
-    background-color: #00b8e6;
-    flex-direction: column;
-  }
-  /* Global reset (optional) */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Container for form fields */
-  .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-
-  /* Each form group */
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-group label {
-    margin-bottom: 8px;
-    font-weight: 500;
-    font-size: 14px;
-    color: #333;
-  }
-
-  /* Input style */
-  .form-group input {
-    padding: 12px 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 0.5rem;
-    font-size: 14px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .form-group input:focus {
-    outline: none;
-    border-color: #00b8e6;
-    box-shadow: 0 0 0 3px rgba(0, 184, 230, 0.2);
-  }
-
-  /*  ******************** Update the existing media query ******************** */
-  @media (max-width: 992px) {
-    /* Bootstrap's lg breakpoint - 1px */
-    .image-section {
-      height: 40vh;
-    }
-
-    .form-section {
-      height: auto; /* Change from 60vh to auto */
-      padding-top: 3rem; /* Add top padding */
-      padding-bottom: 3rem; /* Optional bottom padding */
-    }
-
-    .login-form {
-      padding: 1.5rem; /* Adjust form padding on mobile */
-    }
   }
 }

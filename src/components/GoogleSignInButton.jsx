@@ -3,7 +3,6 @@ import { auth, provider } from "../config/firebaseConfig";
 import axios from "axios";
 import { useState } from "react";
 import API_BASE_URL from "../config";
-import { useAuth } from "../services/AuthProvider";
 
 const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
   const [message, setMessage] = useState("");

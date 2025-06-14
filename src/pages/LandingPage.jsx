@@ -407,7 +407,7 @@ export default function LandingPage() {
         </div>
       </section>
       {/* Testimonial */}
-      <section className="review-section">
+      {/* <section className="review-section">
         <div className="review-container">
           <p className="section-label">Testimonial</p>
           <h2 className="section-title">What Our Clients Say</h2>
@@ -434,19 +434,8 @@ export default function LandingPage() {
             </div>
             <div className="review-card-rating"></div>
           </div>
-          <div className="review-card">
-            <div className="review-card-comment">
-              <em>
-                "After using your service, my productivity skyrocketed. What
-                used to take me days now takes hours. The value far exceeds the
-                cost. Truly game-changing!"
-              </em>
-              <div className="review-card-header"> - Tashi Wanmgo</div>
-            </div>
-            <div className="review-card-rating"></div>
-          </div>
         </div>
-      </section>
+      </section> */}
 
       <Review
         isOpen={showModal}

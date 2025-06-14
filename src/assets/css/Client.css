@@ -42,7 +42,7 @@ body {
 
 .subtitle {
   font-size: 14px;
-  color: var(--text-light);
+  color: #000;
 }
 
 .contact-help {
@@ -59,6 +59,13 @@ body {
   text-decoration: underline;
 }
 
+.service-category-container {
+  max-width: 83%;
+  margin: auto auto;
+  background: #fff;
+  border-radius: 8px;
+}
+
 /* Main Content Container */
 .service-request {
   max-width: 1200px;
@@ -72,7 +79,7 @@ body {
 
 .service-request-container {
   max-width: 80%;
-  margin: 2rem auto;
+  margin: 1rem auto;
   background: #fff;
   border-radius: 8px;
   /* box-shadow: var(--shadow); */
@@ -257,7 +264,7 @@ body {
 .booking-container {
   width: 100%;
   border: 1px solid #f2f2f2;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 .pricing-container {
   width: 100%;
@@ -667,7 +674,6 @@ button {
 
 .service-title {
   text-align: center;
-  margin-bottom: 30px;
   font-size: 18px;
 }
 
@@ -923,6 +929,15 @@ button {
     margin: 0;
     margin-bottom: 1rem;
   }
+  .service-category-container {
+    max-width: 98%;
+    margin: 3rem auto;
+    background: #fff;
+    border-radius: 8px;
+  }
+  .service-request-container {
+    margin-top: 4rem;
+  }
   .progress-indicator {
     display: none;
   }
@@ -964,9 +979,6 @@ button {
     flex-direction: column;
     gap: 0.5rem;
   }
-  .service-request-container {
-    margin: auto;
-  }
 }
 
 @media (max-width: 580px) {
@@ -998,7 +1010,9 @@ button {
   .service-request-container {
     display: block;
     max-width: 100%;
-    margin-top: 2rem;
+  }
+  .service-category-container {
+    margin-top: 4rem;
   }
   .form-section {
     width: 100%;

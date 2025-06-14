@@ -428,12 +428,12 @@ export default function Client() {
         </div>
       </header>
 
-      <div className="service-request-container" id="services">
+      <div className="service-category-container" id="services">
         <h2 className="service-title">Service Categories</h2>
         <p
           style={{
             fontSize: "14px",
-            color: "#555",
+            color: "#000",
             marginBottom: "2rem",
             padding: "15px",
           }}

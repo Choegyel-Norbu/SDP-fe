@@ -185,9 +185,7 @@ export default function LandingPage() {
                 }}
               ></span>
               <div
-                onClick={() =>
-                  navigate(clientDetailSet ? "/dashboard" : "/client")
-                }
+                onClick={() => navigate("/dashboard")}
                 style={{ display: "inline", cursor: "pointer" }}
               >
                 Dashboard

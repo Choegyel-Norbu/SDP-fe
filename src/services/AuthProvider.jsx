@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, email, userid, role) => {
+    console.log("Reached inside login after login with google ......");
     if (!token) return;
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userid);

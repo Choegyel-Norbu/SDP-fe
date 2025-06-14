@@ -10,7 +10,6 @@ import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
 import { Alert } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../services/Api";
 
 export default function AuthForm() {
   const { login } = useAuth();
@@ -23,7 +22,6 @@ export default function AuthForm() {
   const registerFlag = location.flag;
   const [registerEmailStatus, setRegisterEmailStatus] = useState(false);
 
-  // Form state
   const [formData, setFormData] = useState({
     email: "",
     password: "",

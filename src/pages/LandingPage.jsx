@@ -15,6 +15,7 @@ import {
 import api from "../services/Api";
 import Footer from "./Footer";
 import Review from "../components/Review";
+import LoginModal from "../components/LoginModal";
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function LandingPage() {
   const dialogRef = useRef();
   const [clientDetailSet, setClientDetailSet] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [loginShow, setLoginShow] = useState(false);
 
   const menuRef = useRef(null);
   const footerRef = useRef(null);
@@ -40,6 +42,14 @@ export default function LandingPage() {
 
     clientSetCall();
   }, []);
+
+  const toggleLogin = () => {
+    setLoginShow(!loginShow);
+  };
+
+  const closeLogin = () => {
+    setLoginShow(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -95,6 +105,14 @@ export default function LandingPage() {
     };
   }, []);
 
+  const serviceRequest = () => {
+    if (loggedIn) {
+      navigate("/client");
+    } else {
+      setLoginShow(true);
+    }
+  };
+
   return (
     <div className="hero-container">
       <header className="hero-header">
@@ -117,9 +135,14 @@ export default function LandingPage() {
         </nav>
         <div className="nav-end">
           <div className="quote-button-num"> + 0411 598 851</div>
-          {!loggedIn && (
+          {/* {!loggedIn && (
             <div className="login-register" onClick={() => navigate("/login")}>
               Login/Register
+            </div>
+          )} */}
+          {!loggedIn && (
+            <div className="login-register" onClick={toggleLogin}>
+              Login
             </div>
           )}
 
@@ -165,12 +188,12 @@ export default function LandingPage() {
                 onClick={() =>
                   navigate(clientDetailSet ? "/dashboard" : "/client")
                 }
-                style={{ display: "inline" }}
+                style={{ display: "inline", cursor: "pointer" }}
               >
                 Dashboard
               </div>
             </div>
-            <div style={{ padding: "0.5rem" }}>
+            <div style={{ padding: "0.5rem", cursor: "pointer" }}>
               <span
                 className="fa fa-sign-out"
                 style={{
@@ -184,6 +207,8 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
+
+      {loginShow && <LoginModal onClose={closeLogin} />}
 
       <div className="hero-content">
         <div className="header-img-container">
@@ -200,10 +225,7 @@ export default function LandingPage() {
             Enjoy the ease of expert home services tailored to your needs. Count
             on us for dependable, high-quality results every time.
           </p>
-          <button
-            className="quote-button"
-            onClick={() => navigate(loggedIn ? "/client" : "/login")}
-          >
+          <button className="quote-button" onClick={serviceRequest}>
             Request Your Own Service
           </button>
         </div>

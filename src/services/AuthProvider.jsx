@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");
   const [clientDetailSet, setclientDetailSet] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const [userId, setUserId] = useState(
     () => localStorage.getItem("userId") || ""
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = (token, email, userid, role) => {
+  const login = (token, email, userid, role, userName) => {
     console.log("Reached inside login after login with google ......");
     if (!token) return;
     localStorage.setItem("token", token);
@@ -37,10 +38,11 @@ export const AuthProvider = ({ children }) => {
     setLoggedIn(true);
     setEmail(email);
     setUserId(userid);
+    setUserName(userName);
     setRole(role);
     navigate("/");
 
-    detailsSet(userId);
+    // detailsSet(userId);
   };
 
   const detailsSet = async (id) => {
@@ -73,6 +75,7 @@ export const AuthProvider = ({ children }) => {
         email,
         userId,
         role,
+        userName,
         clientDetailSet,
       }}
     >

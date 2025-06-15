@@ -68,7 +68,8 @@ const LoginModal = ({ onClose }) => {
           res.data.token,
           res.data.userDTO.email,
           res.data.userDTO.id,
-          res.data.userDTO.role
+          res.data.userDTO.role,
+          res.data.userDTO.name
         );
       } else {
         throw new Error(response.data.message || "OTP verification failed");
@@ -85,12 +86,15 @@ const LoginModal = ({ onClose }) => {
     setError("");
 
     try {
-      const response = await axios.post("/api/auth/resend-otp", { email });
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/sendOtp?email=${encodeURIComponent(email)}`
+      );
 
-      if (response.data.success) {
-        setMessage(`New OTP sent to ${email}`);
+      if (response.status === 201) {
+        setStep("otp");
+        setMessage(`OTP resent to ${email}`);
       } else {
-        throw new Error(response.data.message || "Failed to resend OTP");
+        throw new Error("Failed to send OTP");
       }
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -309,6 +313,7 @@ const LoginModal = ({ onClose }) => {
                   cursor: "pointer",
                   transition: "background-color 0.2s",
                   opacity: loading ? 0.7 : 1,
+                  paddingInline: "0.5rem",
                 }}
                 disabled={loading}
               >

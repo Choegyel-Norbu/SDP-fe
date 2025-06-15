@@ -545,6 +545,7 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
+                          onFocus={(e) => (e.target.readOnly = true)}
                           readOnly
                         />
                       </div>
@@ -590,6 +591,7 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
+                          onFocus={(e) => (e.target.readOnly = true)}
                           readOnly
                         />
                         {/* <DatePicker

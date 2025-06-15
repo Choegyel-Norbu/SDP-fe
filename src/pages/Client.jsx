@@ -545,24 +545,8 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
+                          readOnly
                         />
-
-                        {/* <DatePicker
-                              selected={bookingDetail.timeStart}
-                              onChange={(date) =>
-                                setBookingDetail((prev) => ({
-                                  ...prev,
-                                  timeStart: date,
-                                }))
-                              }
-                              showTimeSelect
-                              showTimeSelectOnly
-                              timeIntervals={15}
-                              timeCaption="Time"
-                              dateFormat="h:mm aa"
-                              className="date-picker-input"
-                              placeholder="Select time"
-                            /> */}
                       </div>
                       <div className="form-group">
                         <label htmlFor="description">
@@ -606,6 +590,7 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
+                          readOnly
                         />
                         {/* <DatePicker
                               selected={bookingDetail.timeEnd}

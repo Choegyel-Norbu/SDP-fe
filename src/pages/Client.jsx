@@ -545,8 +545,7 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
-                          onFocus={(e) => (e.target.readOnly = true)}
-                          readOnly
+                          onKeyDown={(e) => e.preventDefault()}
                         />
                       </div>
                       <div className="form-group">
@@ -591,8 +590,7 @@ export default function Client() {
                           placeholderText="Select end date and time"
                           className="date-picker-input"
                           required
-                          onFocus={(e) => (e.target.readOnly = true)}
-                          readOnly
+                          onKeyDown={(e) => e.preventDefault()}
                         />
                         {/* <DatePicker
                               selected={bookingDetail.timeEnd}

@@ -100,7 +100,7 @@
 
 .menu-toggle {
   display: none;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 .cus-nav-item {
@@ -224,9 +224,6 @@
   margin-top: auto;
   align-self: flex-start;
   transition: color 0.3s ease;
-}
-.service-icon {
-  margin-inline: 0.5rem;
 }
 
 .service-link:hover {

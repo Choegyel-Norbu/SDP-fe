@@ -156,8 +156,9 @@ export default function LandingPage() {
                 className="fa fa-user"
                 style={{
                   color: "#66b3ff",
-                  backgroundColor: "#e6e6e6",
+                  backgroundColor: "#fff",
                   borderRadius: "50%",
+                  fontSize: "1.2rem",
                 }}
               ></span>
             </button>

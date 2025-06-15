@@ -174,6 +174,7 @@ export default function LandingPage() {
                 className="fa fa-envelope"
                 style={{
                   color: "#66b3ff",
+                  marginLeft: "1rem",
                 }}
               ></span>
               <span style={{ marginLeft: "12px" }}>{email}</span>
@@ -183,6 +184,7 @@ export default function LandingPage() {
                 className="fa fa-chart-line"
                 style={{
                   color: "#66b3ff",
+                  marginLeft: "1rem",
                 }}
               ></span>
               <div
@@ -197,6 +199,8 @@ export default function LandingPage() {
                 className="fa fa-sign-out"
                 style={{
                   color: "#66b3ff",
+                  marginLeft: "1rem",
+                  marginBottom: "0.5rem",
                 }}
               ></span>
               <div onClick={handleLogout} style={{ display: "inline" }}>

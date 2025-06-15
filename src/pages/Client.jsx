@@ -442,18 +442,7 @@ export default function Client() {
 
       <div className="service-category-container" id="services">
         <h2 className="service-title">Service Categories</h2>
-        <p
-          style={{
-            fontSize: "14px",
-            color: "#000",
-            marginBottom: "2rem",
-            padding: "15px",
-          }}
-        >
-          Let’s start by selecting what type of cleaning you need today. Whether
-          it's a sparkling kitchen or a spotless bathroom, choose the service
-          that fits your needs best.
-        </p>
+
         <div className="categories-grid">
           {serviceCategories.map((item, index) => (
             <div

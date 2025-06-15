@@ -78,7 +78,7 @@ body {
 /* ==================== */
 
 .service-request-container {
-  max-width: 80%;
+  max-width: 85%;
   margin: 1rem auto;
   background: #fff;
   border-radius: 8px;
@@ -186,8 +186,10 @@ body {
 }
 
 .service-icon {
-  font-size: 30px;
+  font-size: 1.2rem;
   color: #00b8e6;
+  margin-bottom: 0.3rem;
+  margin-inline: 0.5rem;
 }
 
 .service-rate {
@@ -680,16 +682,21 @@ button {
 .categories-grid {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
   padding: 0 15px;
+  margin-bottom: 1rem;
 }
 
 .category-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 10px;
   transition: var(--transition);
   cursor: pointer;
   border: 1px solid var(--border-color);
@@ -703,8 +710,14 @@ button {
 .category-title {
   margin: 0 0 15px 0;
   font-size: 14px;
-  border-bottom: 2px solid #00b300;
+  text-align: center;
+  /* border-bottom: 2px solid #00b300; */
   padding-bottom: 8px;
+}
+
+._icon {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
 }
 
 /* ==================== */
@@ -899,6 +912,9 @@ button {
   .frequency-option {
     width: 70%;
   }
+  .select-native {
+    width: 70% !important;
+  }
 }
 
 @media (max-width: 610px) {
@@ -908,6 +924,9 @@ button {
 
   .date-picker-input {
     width: 100%;
+  }
+  .select-native {
+    width: 100% !important;
   }
 
   .promo-code {
@@ -931,13 +950,12 @@ button {
   }
   .service-category-container {
     max-width: 98%;
-    margin: 3rem auto;
+    margin: 0 auto;
     background: #fff;
+    margin-top: 3rem;
     border-radius: 8px;
   }
-  .service-request-container {
-    margin-top: 4rem;
-  }
+
   .progress-indicator {
     display: none;
   }
@@ -1017,6 +1035,12 @@ button {
   .form-section {
     width: 100%;
     padding: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .service-category-container {
+    margin-top: 6rem;
   }
 }
 

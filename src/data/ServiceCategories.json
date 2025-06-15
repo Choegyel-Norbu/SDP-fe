@@ -2,6 +2,7 @@
   "serviceCategories": [
     {
       "category": "Residential Cleaning",
+      "categoryIcon": "🏠",
       "services": [
         {
           "id": 1,
@@ -26,6 +27,7 @@
     },
     {
       "category": "Commercial Cleaning",
+      "categoryIcon": "🏢",
       "services": [
         {
           "id": 2,
@@ -62,6 +64,7 @@
     },
     {
       "category": "Industrial & Specialized Cleaning",
+      "categoryIcon": "🏭",
       "services": [
         {
           "id": 3,
@@ -92,6 +95,7 @@
     },
     {
       "category": "Event & Venue Cleaning",
+      "categoryIcon": "🎉",
       "services": [
         {
           "id": 4,
@@ -122,6 +126,7 @@
     },
     {
       "category": "Eco-Friendly & Sanitization",
+      "categoryIcon": "♻️",
       "services": [
         {
           "id": 5,

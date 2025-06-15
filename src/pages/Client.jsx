@@ -24,6 +24,7 @@ export default function Client() {
   const [showAlert, setShowAlert] = useState(false);
   const [clientDetailSet, setClientDetailSet] = useState(false);
   const [showMenuItem, setShowMenuItem] = useState(false);
+  const selectedCategoryRef = useRef(null);
 
   const [clientSelectedService, setClientSelectedService] = useState(null);
 
@@ -64,6 +65,14 @@ export default function Client() {
       },
     }));
     setIsDialogOpen(false);
+    setTimeout(() => {
+      if (selectedCategoryRef.current) {
+        selectedCategoryRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }, 0);
   };
 
   const [clientDetail, setClientDetail] = useState({
@@ -406,7 +415,12 @@ export default function Client() {
       )}
 
       <header className="client-header-container">
-        <div className="menu-toggle" onClick={toggleMenu} id="menuToggle">
+        <div
+          className="menu-toggle"
+          onClick={toggleMenu}
+          id="menuToggle"
+          style={{ marginTop: "0.5rem" }}
+        >
           &#9776;
         </div>
         <div style={{ paddingRight: "2rem" }} className="title-container">
@@ -450,6 +464,7 @@ export default function Client() {
               onClick={() => handleCardClick(item)}
               onMouseEnter={() => setSelectedCategory(item)}
             >
+              <span className="_icon">{item.categoryIcon}</span>
               <h4 className="category-title">{item.category}</h4>
             </div>
           ))}
@@ -457,7 +472,7 @@ export default function Client() {
       </div>
 
       {clientSelectedService && (
-        <div className="service-request-container">
+        <div className="service-request-container" ref={selectedCategoryRef}>
           <div className="avail-section">
             <div>
               <div className="avail-details">
@@ -1047,7 +1062,7 @@ export default function Client() {
           </button>
           {selectedCategory && (
             <>
-              <h3>{selectedCategory.category}</h3>
+              <h5>{selectedCategory.category}</h5>
               <div className="services-list">
                 {selectedCategory.services.map((service, i) => (
                   <div

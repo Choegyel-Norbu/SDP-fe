@@ -100,8 +100,8 @@ export default function Client() {
     numberOfBedrooms: "",
     numberOfBathrooms: "",
     addOns: [],
-    timeStart: "",
-    timeEnd: "",
+    startTime: "",
+    endTime: "",
   });
 
   const [currentSection, setCurrentSection] = useState(1);
@@ -226,8 +226,6 @@ export default function Client() {
     numberOfBedrooms: "",
     numberOfBathrooms: "",
     addOns: [],
-    timeStart: "",
-    timeEnd: "",
   };
 
   const [review, setReview] = useState(true);
@@ -791,11 +789,10 @@ export default function Client() {
                 <div className="review-row">
                   <span className="label">Start Time:</span>
                   <span>
-                    {bookingDetail.timeStart
-                      ? bookingDetail.timeStart.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
+                    {bookingDetail.startTime
+                      ? DateTime.fromISO(bookingDetail.startTime)
+                          .setZone("Asia/Thimphu")
+                          .toFormat("MMMM d, yyyy h:mm a")
                       : "Not selected"}
                   </span>
                 </div>
@@ -803,11 +800,10 @@ export default function Client() {
                 <div className="review-row">
                   <span className="label">End Time:</span>
                   <span>
-                    {bookingDetail.timeEnd
-                      ? bookingDetail.timeEnd.toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
+                    {bookingDetail.endTime
+                      ? DateTime.fromISO(bookingDetail.endTime)
+                          .setZone("Asia/Thimphu")
+                          .toFormat("MMMM d, yyyy h:mm a")
                       : "Not selected"}
                   </span>
                 </div>

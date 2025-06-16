@@ -62,14 +62,16 @@ const LoginModal = ({ onClose }) => {
       console.log("UserDTO @@@ - " + res.data.userDTO.email);
       if (res.status === 200) {
         setMessage("Login successful!");
-
-        setTimeout(() => onClose(), 1500);
+        setTimeout(() => {
+          onClose();
+        }, 1000);
         login(
           res.data.token,
           res.data.userDTO.email,
           res.data.userDTO.id,
           res.data.userDTO.role,
-          res.data.userDTO.name
+          "",
+          false
         );
       } else {
         throw new Error(response.data.message || "OTP verification failed");

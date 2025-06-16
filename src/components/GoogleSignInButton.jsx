@@ -29,7 +29,9 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
           res.data.token,
           res.data.userDTO.email,
           res.data.userDTO.id,
-          res.data.userDTO.role
+          res.data.userDTO.role,
+          res.data.userDTO.name,
+          res.data.userDTO.registerFlag
         );
         onClose();
       }

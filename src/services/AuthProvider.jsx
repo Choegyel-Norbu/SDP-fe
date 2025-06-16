@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => localStorage.getItem("role") || "");
   const [clientDetailSet, setclientDetailSet] = useState(false);
   const [userName, setUserName] = useState("");
+  const [registerFlag, setRegisterFlag] = useState(false);
 
   const [userId, setUserId] = useState(
     () => localStorage.getItem("userId") || ""
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = (token, email, userid, role, userName) => {
+  const login = (token, email, userid, role, userName, flag) => {
     console.log("Reached inside login after login with google ......");
     if (!token) return;
     localStorage.setItem("token", token);
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }) => {
     setUserId(userid);
     setUserName(userName);
     setRole(role);
+    setRegisterFlag(flag);
     navigate("/");
 
     // detailsSet(userId);
@@ -76,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         userId,
         role,
         userName,
+        registerFlag,
         clientDetailSet,
       }}
     >

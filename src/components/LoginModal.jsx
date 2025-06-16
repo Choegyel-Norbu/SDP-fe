@@ -71,7 +71,8 @@ const LoginModal = ({ onClose }) => {
           res.data.userDTO.id,
           res.data.userDTO.role,
           "",
-          false
+          false,
+          res.data.userDTO.detailSet
         );
       } else {
         throw new Error(response.data.message || "OTP verification failed");

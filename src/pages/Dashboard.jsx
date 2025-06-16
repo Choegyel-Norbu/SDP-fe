@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import api from "../services/Api";
 
 export default function Dashboard() {
-  const { role, userId, userName, email, clientDetailSet } = useAuth();
+  const { role, userId, userName, email, clientDetailSet, setclientDetailSet } =
+    useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -34,6 +35,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     console.log("User role " + role);
+    console.log("Client detail set --- " + clientDetailSet);
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -96,6 +98,7 @@ export default function Dashboard() {
                 setTimeout(() => {
                   setShowAlert(false);
                 }, 6000);
+                setclientDetailSet(true);
                 localStorage.setItem("clientDetailSet", "true");
               } else {
                 toast.error("Failed to recorded your information", {

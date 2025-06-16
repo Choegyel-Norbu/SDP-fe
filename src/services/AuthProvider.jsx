@@ -69,6 +69,7 @@ export const AuthProvider = ({ children }) => {
         userName,
         registerFlag,
         clientDetailSet,
+        setclientDetailSet,
       }}
     >
       {children}

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import api from "../services/Api";
 
 export default function Dashboard() {
-  const { role, userId } = useAuth();
+  const { role, userId, userName, email, clientDetailSet } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -76,49 +76,52 @@ export default function Dashboard() {
           <div className="profile-avatar"></div>
         </div>
       </nav>
-      <ClientDetailsForm
-        onComplete={async (clientDetail) => {
-          console.log("Inside Dashboard from onComplete function......");
-          const payload = {
-            ...clientDetail,
-            userId: userId,
-          };
+      {!clientDetailSet && (
+        <ClientDetailsForm
+          onComplete={async (clientDetail) => {
+            console.log("Inside Dashboard from onComplete function......");
+            const payload = {
+              ...clientDetail,
+              userId: userId,
+            };
 
-          try {
-            const res = await api.post("/addClient", payload, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            if (res.status === 200) {
-              setShowAlert(true);
-              setTimeout(() => {
-                setShowAlert(false);
-              }, 6000);
-              localStorage.setItem("clientDetailSet", "true");
-            } else {
-              toast.error("Failed to recorded your information", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "light",
+            try {
+              const res = await api.post("/addClient", payload, {
+                headers: {
+                  "Content-Type": "application/json",
+                },
               });
+              if (res.status === 200) {
+                setShowAlert(true);
+                setTimeout(() => {
+                  setShowAlert(false);
+                }, 6000);
+                localStorage.setItem("clientDetailSet", "true");
+              } else {
+                toast.error("Failed to recorded your information", {
+                  position: "top-center",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: "light",
+                });
+              }
+            } catch (error) {
+              console.error("Error saving client:", error);
             }
-          } catch (error) {
-            console.error("Error saving client:", error);
-          }
-        }}
-      />
-      {/* <div onClick={() => setShowMobileNav(false)}>
+          }}
+        />
+      )}
+
+      <div onClick={() => setShowMobileNav(false)}>
         {role === "ADMIN" ? (
           <AdminDashboard />
         ) : (
           <ClientDashboard onAlert={handleAlert} />
         )}
-      </div> */}
+      </div>
     </div>
   );
 }

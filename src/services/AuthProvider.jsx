@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = (token, email, userid, role, userName, flag) => {
+  const login = (token, email, userid, role, userName, flag, detailSet) => {
     console.log("Reached inside login after login with google ......");
     if (!token) return;
     localStorage.setItem("token", token);
@@ -42,19 +42,8 @@ export const AuthProvider = ({ children }) => {
     setUserName(userName);
     setRole(role);
     setRegisterFlag(flag);
+    setclientDetailSet(detailSet);
     navigate("/");
-
-    // detailsSet(userId);
-  };
-
-  const detailsSet = async (id) => {
-    console.log("Inside login inside client set");
-    const res = await api.get(`/clientSet/${id}`);
-    if (res.data) setclientDetailSet(true);
-
-    console.log(
-      "Inside AuthContext and checking client detail set --- " + clientDetailSet
-    );
   };
 
   const logout = () => {

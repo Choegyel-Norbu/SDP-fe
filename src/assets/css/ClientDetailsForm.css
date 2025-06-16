@@ -1,21 +1,27 @@
 .client-details-container {
   max-width: 1200px;
-  margin: 2rem auto;
   padding: 0 1rem;
+  padding: 2rem 1rem;
+  max-width: 85%;
+  margin: auto auto;
+  background-color: #fff;
 }
-
-.client-details-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+.detail-form input {
+  border-radius: 0 !important;
 }
-
-.form-header {
-  text-align: center;
-  margin-bottom: 2rem;
+.detail-form input::placeholder {
+  color: #999999;
+  font-size: 14px;
 }
-
+.detail-form label {
+  font-size: 14px;
+}
+.card-title {
+  font-weight: 550;
+}
+.card-subtitle {
+  font-size: 14px;
+}
 .form-title {
   color: #333;
   font-size: 1.8rem;
@@ -91,19 +97,20 @@
   text-align: center;
 }
 
-.submit-button {
-  background-color: #4a90e2;
-  color: white;
+.detail-btn {
+  color: #fff;
   border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  font-size: 14px;
+  background-color: #0099ff;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.5s ease-in-out;
 }
 
-.submit-button:hover {
-  background-color: #3a7bc8;
+.detail-btn:hover {
+  background-color: #33adff;
+  color: #fff;
 }
 
 @media (max-width: 768px) {
@@ -121,6 +128,7 @@
   .client-details-container {
     margin: 1rem auto;
     padding: 0 0.5rem;
+    max-width: 90%;
   }
 
   .client-details-card {

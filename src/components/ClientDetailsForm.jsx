@@ -85,23 +85,18 @@ const ClientDetailsForm = ({ onComplete }) => {
   };
 
   return (
-    <div className="container my-5">
+    <div className="client-details-container">
       {/* Added Bootstrap container and margin */}
-      <div className="card p-4 shadow">
+      <div className=" ">
         {/* Bootstrap card for styling */}
         <div className="text-center mb-4">
-          <h2 className="card-title">Provide Your Details</h2>
-          <p className="card-subtitle text-muted">
-            Kindly enter your information
-          </p>
+          <h5 className="card-title">Provide Your Details</h5>
+          {/* <p className="card-subtitle">Kindly enter your information</p> */}
         </div>
-        <form className="client-details-form">
+        <form className="detail-form">
           {!registerFlag && (
             <div className="row">
-              {/* Bootstrap row for grid */}
-
               <div className="col-md-6 mb-3">
-                {/* First Name - takes half width on medium screens and up */}
                 <label htmlFor="firstName" className="form-label">
                   First Name
                 </label>
@@ -241,13 +236,8 @@ const ClientDetailsForm = ({ onComplete }) => {
             </div>
           </div>
 
-          <div className="d-grid gap-2 mt-4">
-            {/* Bootstrap utility classes for button */}
-            <button
-              type="button"
-              className="btn btn-primary btn-lg"
-              onClick={validateForm}
-            >
+          <div>
+            <button className="detail-btn" type="button" onClick={validateForm}>
               Submit Details
             </button>
           </div>

@@ -58,9 +58,9 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-.avatar-placeholder {
-  width: 80px;
-  height: 80px;
+.google-avatar {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: var(--accent-color);
   margin-right: 1.5rem;
@@ -71,11 +71,19 @@ body {
   font-size: 2rem;
   font-weight: bold;
 }
-
+.client-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.2rem;
+}
 .client-name h2 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: var(--text-color);
-  margin-bottom: 0.5rem;
+  margin: 0;
+}
+.client-name p {
+  margin: 0 !important;
 }
 
 /* Info Items */
@@ -95,6 +103,7 @@ body {
 }
 
 .info-value {
+  font-size: 14px;
   color: var(--text-color);
 }
 
@@ -339,7 +348,12 @@ body {
     text-align: center;
   }
 
-  .avatar-placeholder {
+  .edit-btn {
+    margin-top: 1rem;
+    margin-left: 0 !important;
+  }
+
+  .google-avatar {
     margin-right: 0;
     margin-bottom: 1rem;
   }

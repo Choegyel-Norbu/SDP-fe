@@ -40,6 +40,8 @@ export default function LandingPage() {
       console.log("Client set status - " + res.data);
     };
 
+    console.log("Logged in status " + loggedIn);
+
     clientSetCall();
   }, []);
 

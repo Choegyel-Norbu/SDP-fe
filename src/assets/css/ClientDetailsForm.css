@@ -34,13 +34,7 @@
   margin: 0;
 }
 
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -0.75rem 1rem;
-}
-
-.form-col {
+/* .form-col {
   padding: 0 0.75rem;
   margin-bottom: 1rem;
   flex: 1 0 0%;
@@ -54,7 +48,7 @@
 .form-col-third {
   flex: 0 0 auto;
   width: 33.333333%;
-}
+} */
 
 .form-label {
   display: block;

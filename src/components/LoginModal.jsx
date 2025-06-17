@@ -166,7 +166,7 @@ const LoginModal = ({ onClose }) => {
               marginBottom: "16px",
             }}
           >
-            CodeAstra
+            SDP
           </h2>
           <p style={{ color: "#6b7280", marginTop: "4px", fontSize: "14px" }}>
             {step === "email"

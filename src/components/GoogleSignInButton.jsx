@@ -25,7 +25,6 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
       if (res.status === 200) {
         console.log("Success");
         onClose();
-
         onLoginSuccess({
           token: res.data.token,
           email: res.data.userDTO.email,

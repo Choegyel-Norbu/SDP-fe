@@ -24,7 +24,7 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
 
       if (res.status === 200) {
         console.log("Success");
-
+        onClose();
         onLoginSuccess({
           token: res.data.token,
           email: res.data.userDTO.email,
@@ -35,9 +35,6 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
           flag: res.data.userDTO.registerFlag,
           detailSet: res.data.userDTO.detailSet,
         });
-        setTimeout(() => {
-          onClose();
-        }, 1000);
       }
     } catch (error) {
       setMessage(` Google Sign-In failed: ${error.message}`);

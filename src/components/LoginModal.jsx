@@ -65,15 +65,16 @@ const LoginModal = ({ onClose }) => {
         setTimeout(() => {
           onClose();
         }, 1000);
-        login(
-          res.data.token,
-          res.data.userDTO.email,
-          res.data.userDTO.id,
-          res.data.userDTO.role,
-          "",
-          false,
-          res.data.userDTO.detailSet
-        );
+        login({
+          token: res.data.token,
+          email: res.data.userDTO.email,
+          userid: res.data.userDTO.id,
+          role: res.data.userDTO.role,
+          userName: res.data.userDTO.name,
+          pictureURL: res.data.userDTO.pictureURL,
+          flag: res.data.userDTO.registerFlag,
+          detailSet: res.data.userDTO.detailSet,
+        });
       } else {
         throw new Error(response.data.message || "OTP verification failed");
       }

@@ -9,7 +9,7 @@ import { FaEdit } from "react-icons/fa";
 import ServiceEditModal from "../components/ServiceEditModal";
 
 export default function ClientDashboard({ onAlert }) {
-  const { userId, email } = useAuth();
+  const { userId, email, pictureURL, userName, registerFlag } = useAuth();
   const [client, setClient] = useState(null);
   const [booking, setBooking] = useState([]);
   const [showActionModal, setShowActionModal] = useState(null);
@@ -32,6 +32,11 @@ export default function ClientDashboard({ onAlert }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    console.log("User name = " + userName);
+    console.log("Register flag = " + registerFlag);
+  });
 
   const fetchClient = async () => {
     try {
@@ -218,11 +223,15 @@ export default function ClientDashboard({ onAlert }) {
           <div class="dashboard-content">
             <div class="client-card">
               <div class="client-basic-info">
-                <div class="avatar-placeholder"></div>
+                <img src={pictureURL} className="google-avatar" alt="Profile" />
                 <div class="client-name">
-                  <h2 id="client-name">
-                    {client.firstName} {client.lastName}
-                  </h2>
+                  {registerFlag ? (
+                    <h2>{userName}</h2>
+                  ) : (
+                    <h2 id="client-name">
+                      {client.firstName} {client.lastName}
+                    </h2>
+                  )}
                   <p style={{ fontSize: "14px" }}>Email: {email}</p>
                 </div>
               </div>
@@ -248,6 +257,7 @@ export default function ClientDashboard({ onAlert }) {
                     arrow
                     style={{ marginLeft: "1rem" }}
                     onClick={() => setShowEditModal(true)}
+                    className="edit-btn"
                   >
                     <FaEdit
                       className="text-xl text-blue-500"

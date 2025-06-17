@@ -9,11 +9,12 @@ import { toast } from "react-toastify";
 import api from "../services/Api";
 
 export default function Dashboard() {
-  const { role, userId, userName, email, clientDetailSet, setclientDetailSet } =
-    useAuth();
+  const { role, userId, clientDetailSet, setclientDetailSet } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
+
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const toggleMobileNav = (e) => {
     e.stopPropagation();
@@ -34,8 +35,11 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    console.log("User role " + role);
-    console.log("Client detail set --- " + clientDetailSet);
+    console.log("Client details set CONTEXT@@@ - " + clientDetailSet);
+    console.log(
+      "Client details set LOCAL @@@ - " +
+        localStorage.getItem("cleintDetailSet")
+    );
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -74,9 +78,9 @@ export default function Dashboard() {
         </div>
 
         {/* Right Side */}
-        <div className="nav-right">
+        {/* <div className="nav-right">
           <div className="profile-avatar"></div>
-        </div>
+        </div> */}
       </nav>
       {!clientDetailSet && (
         <ClientDetailsForm
@@ -99,7 +103,7 @@ export default function Dashboard() {
                   setShowAlert(false);
                 }, 6000);
                 setclientDetailSet(true);
-                localStorage.setItem("clientDetailSet", "true");
+                setFormSubmitted(true);
               } else {
                 toast.error("Failed to recorded your information", {
                   position: "top-center",
@@ -118,13 +122,15 @@ export default function Dashboard() {
         />
       )}
 
-      <div onClick={() => setShowMobileNav(false)}>
-        {role === "ADMIN" ? (
-          <AdminDashboard />
-        ) : (
-          <ClientDashboard onAlert={handleAlert} />
-        )}
-      </div>
+      {clientDetailSet && (
+        <div onClick={() => setShowMobileNav(false)}>
+          {role === "ADMIN" ? (
+            <AdminDashboard />
+          ) : (
+            <ClientDashboard onAlert={handleAlert} />
+          )}
+        </div>
+      )}
     </div>
   );
 }

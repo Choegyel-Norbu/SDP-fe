@@ -10,11 +10,11 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const idToken = await result.user.getIdToken(); // ✅ Get Firebase ID token
+      const idToken = await result.user.getIdToken();
 
       const res = await axios.post(
         `${API_BASE_URL}/auth/login_google`,
-        { idToken }, // ✅ Send as an object, not a string
+        { idToken },
         {
           headers: {
             "Content-Type": "application/json",
@@ -25,18 +25,22 @@ const GoogleSignInButton = ({ onClose, onLoginSuccess }) => {
       if (res.status === 200) {
         console.log("Success");
 
-        onLoginSuccess(
-          res.data.token,
-          res.data.userDTO.email,
-          res.data.userDTO.id,
-          res.data.userDTO.role,
-          res.data.userDTO.name,
-          res.data.userDTO.registerFlag
-        );
-        onClose();
+        onLoginSuccess({
+          token: res.data.token,
+          email: res.data.userDTO.email,
+          userid: res.data.userDTO.id,
+          role: res.data.userDTO.role,
+          userName: res.data.userDTO.name,
+          pictureURL: res.data.userDTO.pictureURL,
+          flag: res.data.userDTO.registerFlag,
+          detailSet: res.data.userDTO.detailSet,
+        });
+        setTimeout(() => {
+          onClose();
+        }, 1000);
       }
     } catch (error) {
-      setMessage(`❌ Google Sign-In failed: ${error.message}`);
+      setMessage(` Google Sign-In failed: ${error.message}`);
     }
   };
 

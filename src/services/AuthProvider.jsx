@@ -1,77 +1,102 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "./Api";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(() => {
-    return Boolean(localStorage.getItem("token"));
+  const [authState, setAuthState] = useState(() => {
+    try {
+      return {
+        loggedIn: Boolean(localStorage.getItem("token")),
+        token: localStorage.getItem("token") || null,
+        email: localStorage.getItem("email") || "",
+        role: localStorage.getItem("role") || "",
+        clientDetailSet: localStorage.getItem("clientDetailSet") === "true",
+        userName: localStorage.getItem("userName") || "",
+        registerFlag: localStorage.getItem("registerFlag") === "true",
+        pictureURL: localStorage.getItem("pictureURL") || "",
+        userId: localStorage.getItem("userId") || "",
+      };
+    } catch (error) {
+      console.error("Failed to read from localStorage", error);
+      return defaultAuthState;
+    }
   });
 
-  const [email, setEmail] = useState(() => localStorage.getItem("email") || "");
-  const [role, setRole] = useState(() => localStorage.getItem("role") || "");
-  const [clientDetailSet, setclientDetailSet] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [registerFlag, setRegisterFlag] = useState(false);
-
-  const [userId, setUserId] = useState(
-    () => localStorage.getItem("userId") || ""
-  );
-
+  // Single effect for storage changes
   useEffect(() => {
-    // Optional: Add listener for storage changes to keep state in sync
-    const handleStorageChange = () => {
-      setLoggedIn(Boolean(localStorage.getItem("token")));
+    const handleStorageChange = (e) => {
+      if (e.key === "token") {
+        setAuthState((prev) => ({
+          ...prev,
+          loggedIn: Boolean(localStorage.getItem("token")),
+        }));
+      }
     };
+
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const login = (token, email, userid, role, userName, flag, detailSet) => {
-    console.log("Reached inside login after login with google ......");
-    if (!token) return;
-    localStorage.setItem("token", token);
-    localStorage.setItem("userId", userid);
-    localStorage.setItem("email", email);
-    localStorage.setItem("role", role);
-    setLoggedIn(true);
-    setEmail(email);
-    setUserId(userid);
-    setUserName(userName);
-    setRole(role);
-    setRegisterFlag(flag);
-    setclientDetailSet(detailSet);
-    navigate("/");
+  const login = (authData) => {
+    try {
+      // Store only what's absolutely necessary
+      localStorage.setItem("token", authData.token);
+      localStorage.setItem("userId", authData.userid);
+      localStorage.setItem("email", authData.email);
+      localStorage.setItem("role", authData.role || "");
+      localStorage.setItem("userName", authData.userName || "");
+      localStorage.setItem("pictureURL", authData.pictureURL || "");
+      localStorage.setItem("registerFlag", Boolean(authData.flag).toString());
+      localStorage.setItem(
+        "clientDetailSet",
+        Boolean(authData.detailSet).toString()
+      );
+
+      // Update state
+      setAuthState({
+        loggedIn: true,
+        token: authData.token,
+        email: authData.email,
+        userId: authData.userid,
+        userName: authData.userName || "",
+        role: authData.role || "",
+        pictureURL: authData.pictureURL || "",
+        registerFlag: Boolean(authData.flag),
+        clientDetailSet: Boolean(authData.detailSet),
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to save auth data", error);
+    }
   };
 
   const logout = () => {
-    console.log("Loggin out .....");
-    setLoggedIn(false);
-    setEmail("");
-    setUserId("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("email");
-    localStorage.removeItem("role");
+    try {
+      // Clear all auth-related items
+      console.log("Loggin out .....");
+      setAuthState({
+        loggedIn: false,
+        email: "",
+        userId: null,
+      });
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("pictureURL");
+      localStorage.removeItem("registerFlag");
+      localStorage.removeItem("clientDetailSet");
+    } catch (error) {
+      console.error("Failed to clear auth data", error);
+    }
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        loggedIn,
-        login,
-        logout,
-        email,
-        userId,
-        role,
-        userName,
-        registerFlag,
-        clientDetailSet,
-        setclientDetailSet,
-      }}
-    >
+    <AuthContext.Provider value={{ ...authState, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

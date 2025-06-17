@@ -7,8 +7,10 @@ import { Alert } from "@mui/material";
 import ClientDetailsForm from "../components/ClientDetailsForm";
 import { toast } from "react-toastify";
 import api from "../services/Api";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { role, userId, clientDetailSet, setclientDetailSet } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
@@ -102,8 +104,8 @@ export default function Dashboard() {
                 setTimeout(() => {
                   setShowAlert(false);
                 }, 6000);
-                setclientDetailSet(true);
-                setFormSubmitted(true);
+                // setclientDetailSet(true);
+                navigate("/");
               } else {
                 toast.error("Failed to recorded your information", {
                   position: "top-center",

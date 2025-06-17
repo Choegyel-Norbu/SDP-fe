@@ -274,7 +274,7 @@ export default function ClientDashboard({ onAlert }) {
         ) : (
           <h1>Undefined client</h1>
         )}
-        <h2 className="table-title">Client service history</h2>
+        <h2 className="table-title">Service history</h2>
 
         <div className="table-container">
           <table className="patients-table">
@@ -345,38 +345,42 @@ export default function ClientDashboard({ onAlert }) {
             </div>
 
             <form onSubmit={handleSubmit} className="dashboard-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>First Name</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={updateClientDetail.firstName}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Last Name</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={updateClientDetail.lastName}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Contact Number</label>
-                  <input
-                    type="text"
-                    name="phoneNumber"
-                    value={updateClientDetail.phoneNumber}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
+              {/* <div className="form-row"> */}
+              {!registerFlag && (
+                <>
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={updateClientDetail.firstName}
+                      onChange={handleChange}
+                      className="form-control"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={updateClientDetail.lastName}
+                      onChange={handleChange}
+                      className="form-control"
+                    />
+                  </div>
+                </>
+              )}
+              <div className="form-group">
+                <label>Contact Number</label>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={updateClientDetail.phoneNumber}
+                  onChange={handleChange}
+                  className="form-control"
+                />
               </div>
+              {/* </div> */}
               <div className="form-group">
                 <label>State</label>
                 <input

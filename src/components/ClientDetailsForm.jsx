@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../assets/css/ClientDetailsForm.css";
 import { useAuth } from "../services/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const ClientDetailsForm = ({ onComplete }) => {
   const { userId, registerFlag } = useAuth();

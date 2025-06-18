@@ -6,6 +6,8 @@ import { useAuth } from "../services/AuthProvider";
 import Footer from "./Footer";
 import { Alert, AlertTitle, Tooltip } from "@mui/material";
 import { FaEdit } from "react-icons/fa";
+import { DotLoader } from "react-spinners";
+
 import ServiceEditModal from "../components/ServiceEditModal";
 
 export default function ClientDashboard({ onAlert }) {
@@ -21,6 +23,7 @@ export default function ClientDashboard({ onAlert }) {
   const [clientRefresh, setClientRefresh] = useState(false);
   const [showDeleteService, setShowDeleteService] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchClient();
@@ -41,7 +44,10 @@ export default function ClientDashboard({ onAlert }) {
   const fetchClient = async () => {
     try {
       const res = await api.get(`/getClientWithId/${userId}`);
-      if (res.status === 200) setClient(res.data);
+      if (res.status === 200) {
+        setClient(res.data);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -207,10 +213,26 @@ export default function ClientDashboard({ onAlert }) {
     <div>
       <div class="dashboard">
         {showAlert && (
-          <Alert severity="success">
+          <Alert
+            severity="success"
+            style={{
+              position: "fixed",
+              top: "20px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: 9999,
+              width: "100%",
+            }}
+          >
             <AlertTitle>Success</AlertTitle>
-            Here is a gentle confirmation that your action was successful.
+            Your profile details were updated successfully. The latest changes
+            have been saved.
           </Alert>
+        )}
+        {isLoading && (
+          <div style={{ width: "90px", height: "90px", margin: "auto auto" }}>
+            <DotLoader color="#000000" size={40} />
+          </div>
         )}
 
         {showError && (
@@ -236,7 +258,7 @@ export default function ClientDashboard({ onAlert }) {
                 </div>
               </div>
 
-              <div class="contact-info">
+              <div class="contact-info" id="contact-number">
                 <div class="info-item">
                   <span class="info-label">Phone:</span>
                   <span class="info-value" id="phone-number">

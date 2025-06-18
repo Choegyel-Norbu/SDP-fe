@@ -53,7 +53,6 @@ body {
 .client-basic-info {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid #eee;
 }
@@ -89,6 +88,9 @@ body {
 /* Info Items */
 .contact-info {
   margin-bottom: 1rem;
+}
+#contact-number {
+  padding-top: 1rem;
 }
 
 .info-item {

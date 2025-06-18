@@ -4,7 +4,7 @@ import api from "../services/Api";
 import { toast } from "react-toastify";
 import categoriesData from "../data/ServiceCategories.json";
 import Footer from "./Footer";
-import { Alert } from "@mui/material";
+import { Alert, AlertTitle } from "@mui/material";
 import { useAuth } from "../services/AuthProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -407,8 +407,20 @@ export default function Client() {
   return (
     <div>
       {showAlert && (
-        <Alert variant="filled" severity="success" style={{ width: "100%" }}>
-          Here is a gentle confirmation that your action was successful.
+        <Alert
+          severity="success"
+          style={{
+            position: "fixed",
+            top: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 9999,
+            width: "100%",
+          }}
+        >
+          <AlertTitle>Success</AlertTitle>
+          Thank you! Your booking has been submitted and is now pending
+          confirmation.
         </Alert>
       )}
 

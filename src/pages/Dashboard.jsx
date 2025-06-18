@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { role, userId, clientDetailSet, setclientDetailSet } = useAuth();
+  const { role, userId, clientDetailSet } = useAuth();
   const [showMobileNav, setShowMobileNav] = useState(false);
   const navRef = useRef(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -59,6 +59,7 @@ export default function Dashboard() {
           Here is a gentle confirmation that your action was successful.
         </Alert>
       )}
+
       <nav className="navbar" ref={navRef}>
         {/* Left Side */}
         <div className="nav-left">

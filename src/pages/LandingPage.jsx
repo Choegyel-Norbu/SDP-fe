@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../assets/css/Landing.css";
-import "../assets/css/loader.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
